@@ -1,9 +1,12 @@
 import "./global.css";
 import "./main.css";
+// import "./styles/side.css";
+import "./side.css";
 import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import AddBookModal from "./components/AddBookModal";
 import Auth from "./components/Auth"; // Import Auth.jsx
+import Sidebar from "./components/TempSidebar";
 
 const App = () => {
   const [theme, setTheme] = useState("light");
@@ -52,26 +55,39 @@ const App = () => {
             </div>
           </main>
         </div>
-      ) : (
-        <>
-          <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
-          <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
-          <MainContent />
-        </>
-      )}
+      ) : 
+  //     (
+  //       <>
+  //         <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
+  //         <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
+  //         <MainContent />
+  //       </>
+  //     )}
+  //   </div>
+  // );
+  (
+    <div className="app-container flex">
+      <Sidebar /> ✅ Added Sidebar
+      <div className="content flex-grow">
+        <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
+        <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
+        {/* <MainContent /> */}
+      </div>
     </div>
+  )}
+</div>
   );
 };
 
-const MainContent = () => (
-  <div className="p-6 text-center">
-    <h2 className="text-2xl font-semibold">Welcome to My Bookshelf</h2>
-    <p className="text-gray-600">This is a simple bookshelf application where you can manage your books.</p>
-    <div className="mt-6 p-6 bg-gray-100 rounded-lg">
-      <p className="text-gray-500">Your books will appear here</p>
-    </div>
-  </div>
-);
+// const MainContent = () => (
+//   <div className="p-6 text-center">
+//     <h2 className="text-2xl font-semibold">Welcome to My Bookshelf</h2>
+//     <p className="text-gray-600">This is a simple bookshelf application where you can manage your books.</p>
+//     <div className="mt-6 p-6 bg-gray-100 rounded-lg">
+//       <p className="text-gray-500">Your books will appear here</p>
+//     </div>
+//   </div>
+// );
 
 const SiteHeader = ({ toggleTheme, theme }) => (
   <header className="gheader">

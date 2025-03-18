@@ -4,41 +4,64 @@ const Auth = ({ setIsAuthenticated }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Default credentials
-  const defaultEmail = "test@example.com";
-  const defaultPassword = "password123";
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      const form = new FormData(e.target);
-      const email = form.get("email");
-      const password = form.get("password");
+    const form = new FormData(e.target);
+    const email = form.get("email");
+    const password = form.get("password");
 
-      // Check credentials
-      if (email === defaultEmail && password === defaultPassword) {
-        setIsAuthenticated(true); // Redirect to main page
+    // Determine API endpoint based on login or register
+    const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
+
+    // Prepare user data
+    const userData = { email, password };
+
+    if (activeTab === "register") {
+      userData.first_name = form.get("firstName");
+      userData.last_name = form.get("lastName");
+      userData.date_of_birth = form.get("dateOfBirth");
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000${endpoint}`, { // FIXED STRING INTERPOLATION
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        if (activeTab === "login") {
+          setIsAuthenticated(true);
+        } else {
+          setActiveTab("login"); // Switch to login tab after successful registration
+        }
       } else {
-        alert("Invalid email or password. Try again!");
+        alert(data.message);
       }
-
+    } catch (error) {
+      console.error("Authentication error:", error);
+      alert("Server error. Please try again.");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <div className="auth-form">
       <div className="tabs">
-        <button 
-          className={`tab ${activeTab === "login" ? "active" : ""}`} 
+        <button
+          className={`tab ${activeTab === "login" ? "active" : ""}`} // FIXED CLASSNAME SYNTAX
           onClick={() => setActiveTab("login")}
         >
           Login
         </button>
-        <button 
-          className={`tab ${activeTab === "register" ? "active" : ""}`} 
+        <button
+          className={`tab ${activeTab === "register" ? "active" : ""}`} // FIXED CLASSNAME SYNTAX
           onClick={() => setActiveTab("register")}
         >
           Register
@@ -50,23 +73,11 @@ const Auth = ({ setIsAuthenticated }) => {
           <>
             <div className="form-group">
               <label>Email</label>
-              <input 
-                type="email" 
-                name="email" 
-                defaultValue={defaultEmail} 
-                className="input" 
-                required 
-              />
+              <input type="email" name="email" className="input" required />
             </div>
             <div className="form-group">
               <label>Password</label>
-              <input 
-                type="password" 
-                name="password" 
-                defaultValue={defaultPassword} 
-                className="input" 
-                required 
-              />
+              <input type="password" name="password" className="input" required />
             </div>
           </>
         ) : (

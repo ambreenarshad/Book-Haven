@@ -13,9 +13,11 @@ const bookSchema = new mongoose.Schema({
     start_date: String,
     end_date: String,
     add_date: String,
+    cover_image: String,  // Stores Cloudinary image URL
     bookid: Number
-} ,{ collection: "Book" });
+}, { collection: "Book" });
 
+// Apply auto-increment plugin
 bookSchema.plugin(AutoIncrement, { inc_field: "bookid" });
-module.exports = mongoose.models.Book || mongoose.model("Book", bookSchema);
 
+module.exports = mongoose.model("Book", bookSchema);

@@ -249,6 +249,13 @@ body {
   resize: vertical;
 }
 
+.modal-content {
+  flex-grow: 1;
+  overflow-y: auto; /* Enables vertical scrolling */
+  padding: 20px;
+  max-height: 70vh; /* Adjust for modal header and footer */
+}
+
 /* Buttons */
 .modal-footer {
   display: flex;
@@ -298,4 +305,14 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.input-error {
+  border: 1px solid red;
+  background-color: #ffe6e6;
+}
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 5px;
 }

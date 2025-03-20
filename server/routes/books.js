@@ -21,11 +21,24 @@ const upload = multer({ storage });
 router.get("/", async (req, res) => {
     try {
         const books = await Book.find();
-        // console.log("Fetched books from DB:", books); // Debugging log
         res.json({ books });
     } catch (error) {
         console.error("Error fetching books:", error);
         res.status(500).json({ message: "Error fetching books", error });
+    }
+});
+
+// Get Single Book by ID
+router.get("/:id", async (req, res) => {
+    try {
+        const book = await Book.findOne({ bookid: req.params.id }) || await Book.findById(req.params.id);
+        if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+        res.json({ book });
+    } catch (error) {
+        console.error("Error fetching book:", error);
+        res.status(500).json({ message: "Error fetching book details", error });
     }
 });
 

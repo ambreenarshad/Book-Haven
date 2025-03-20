@@ -1,26 +1,28 @@
 import "./global.css";
 import "./main.css";
-// import "./styles/side.css";
-import "./side.css";
+import "./side.css"; 
+import "./allbooks.css"; 
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import AddBookModal from "./components/AddBookModal";
-import Auth from "./components/Auth"; // Import Auth.jsx
+import Auth from "./components/Auth";
 import Sidebar from "./components/TempSidebar";
+import PlaceholderPage from "./components/PlaceholderPage";
+import AllBooks from "./components/AllBooks";
+import BookDetails from "./components/BookDetails";
 
 const App = () => {
   const [theme, setTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Load Theme from Local Storage
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") || "light";
     setTheme(storedTheme);
     document.documentElement.classList.toggle("dark", storedTheme === "dark");
   }, []);
 
-  // Toggle Dark Mode
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -28,66 +30,56 @@ const App = () => {
     document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
-  // Open/Close Add Book Modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
-      {!isAuthenticated ? (
-        <div className="app">
-          <SiteHeader toggleTheme={toggleTheme} theme={theme} />
-          <main className="main flex flex-col justify-center p-4">
-            <div className="w-full flex flex-col">
-              <div className="w-full max-w-md text-left mb-8">
-                <h1 className="text-3xl font-bold text-zinc-900 dark:text-white move-welcome">
-                  Welcome
-                </h1>
-                <p className="mt-2 text-zinc-600 dark:text-zinc-400 move-signin">
-                  Sign in to your account to continue
-                </p>
+    <Router>
+      <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
+        {!isAuthenticated ? (
+          <div className="app">
+            <SiteHeader toggleTheme={toggleTheme} theme={theme} />
+            <main className="main flex flex-col justify-center p-4">
+              <div className="w-full flex flex-col">
+                <div className="w-full max-w-md text-left mb-8">
+                  <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
+                    Welcome
+                  </h1>
+                  <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+                    Sign in to your account to continue
+                  </p>
+                </div>
+                <div className="w-full max-w-md">
+                  <Auth setIsAuthenticated={setIsAuthenticated} />
+                </div>
               </div>
+            </main>
+          </div>
+        ) : (
+          <div className="app-container flex">
+            <Sidebar />
+            <div className="content flex-grow">
+              <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
+              <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
 
-              {/* Use Auth Component */}
-              <div className="w-full max-w-md">
-                <Auth setIsAuthenticated={setIsAuthenticated} />
-              </div>
+              <Routes>
+                <Route path="/" element={<PlaceholderPage title="Dashboard" />} /> {/* ✅ Dashboard should be here */}
+                <Route path="/all-books" element={<AllBooks />} /> {/* ✅ AllBooks should be here */}
+                <Route path="/book/:id" element={<BookDetails />} />
+                <Route path="/currently-reading" element={<PlaceholderPage title="Currently Reading" />} />
+                <Route path="/completed" element={<PlaceholderPage title="Completed" />} />
+                <Route path="/to-read" element={<PlaceholderPage title="To Read" />} />
+                <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
+                <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
+                <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
+              </Routes>
             </div>
-          </main>
-        </div>
-      ) : 
-  //     (
-  //       <>
-  //         <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
-  //         <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
-  //         <MainContent />
-  //       </>
-  //     )}
-  //   </div>
-  // );
-  (
-    <div className="app-container flex">
-      <Sidebar /> ✅ Added Sidebar
-      <div className="content flex-grow">
-        <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
-        <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
-        {/* <MainContent /> */}
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
+    </Router>
   );
 };
-
-// const MainContent = () => (
-//   <div className="p-6 text-center">
-//     <h2 className="text-2xl font-semibold">Welcome to My Bookshelf</h2>
-//     <p className="text-gray-600">This is a simple bookshelf application where you can manage your books.</p>
-//     <div className="mt-6 p-6 bg-gray-100 rounded-lg">
-//       <p className="text-gray-500">Your books will appear here</p>
-//     </div>
-//   </div>
-// );
 
 const SiteHeader = ({ toggleTheme, theme }) => (
   <header className="gheader">

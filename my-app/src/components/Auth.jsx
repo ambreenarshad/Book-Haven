@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Auth = ({ setIsAuthenticated }) => {
+const Auth = ({ setIsAuthenticated, onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +25,7 @@ const Auth = ({ setIsAuthenticated }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, { // FIXED STRING INTERPOLATION
+      const response = await fetch(`http://localhost:8000${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -36,9 +36,9 @@ const Auth = ({ setIsAuthenticated }) => {
       if (response.ok) {
         alert(data.message);
         if (activeTab === "login") {
+          sessionStorage.setItem("reader_id", data.reader_id); // Store reader_id
           setIsAuthenticated(true);
-        } else {
-          setActiveTab("login"); // Switch to login tab after successful registration
+          if (onLogin) onLogin(data.reader_id); // Call onLogin function
         }
       } else {
         alert(data.message);
@@ -55,13 +55,13 @@ const Auth = ({ setIsAuthenticated }) => {
     <div className="auth-form">
       <div className="tabs">
         <button
-          className={`tab ${activeTab === "login" ? "active" : ""}`} // FIXED CLASSNAME SYNTAX
+          className={`tab ${activeTab === "login" ? "active" : ""}`}
           onClick={() => setActiveTab("login")}
         >
           Login
         </button>
         <button
-          className={`tab ${activeTab === "register" ? "active" : ""}`} // FIXED CLASSNAME SYNTAX
+          className={`tab ${activeTab === "register" ? "active" : ""}`}
           onClick={() => setActiveTab("register")}
         >
           Register

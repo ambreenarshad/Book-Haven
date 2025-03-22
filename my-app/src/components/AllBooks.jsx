@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StarRating = ({ rating }) => {
     return (
@@ -12,40 +13,62 @@ const StarRating = ({ rating }) => {
     );
 };
 
-const AllBooks = () => {
+const AllBooks = ({ statusFilter }) => {
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:8000/book")
-            .then((res) => res.json())
-            .then((data) => {
-                setBooks(data.books);
-                setFilteredBooks(data.books); // Initialize filtered books with all books
-            })
-            .catch((error) => console.error("Error fetching books:", error));
-    }, []);
+        const fetchBooks = async () => {
+            try {
+                const readerId = sessionStorage.getItem("reader_id"); // Get reader_id from localStorage
+    
+                if (!readerId) {
+                    console.error("No reader ID found.");
+                    return;
+                }
+    
+                const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`);
+                let fetchedBooks = response.data.books;
+    
+                if (statusFilter) {
+                    fetchedBooks = fetchedBooks.filter(book => book.reading_status === statusFilter);
+                }
+    
+                setBooks(fetchedBooks);
+                setFilteredBooks(fetchedBooks);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching books:", error);
+                setLoading(false);
+            }
+        };
+    
+        fetchBooks();
+    }, [statusFilter]);
+    
 
-    // Filter books based on search query
     useEffect(() => {
         if (searchQuery.trim() === "") {
             setFilteredBooks(books);
         } else {
             setFilteredBooks(
                 books.filter((book) =>
-                    book.book_name.toLowerCase().includes(searchQuery.toLowerCase())
-                ||
-                book.author_name.toLowerCase().includes(searchQuery.toLowerCase())
+                    book.book_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    book.author_name.toLowerCase().includes(searchQuery.toLowerCase())
                 )
             );
         }
     }, [searchQuery, books]);
 
+    if (loading) return <p>Loading books...</p>;
+    if (filteredBooks.length === 0) return <p>No books found for {statusFilter || "all books"}.</p>;
+
     return (
         <div className="all-books">
-            <h1>All Books</h1>
+            <h1>{statusFilter ? `${statusFilter} Books` : "All Books"}</h1>
             <p>Browse and manage your entire book collection.</p>
 
             {/* Search Input */}
@@ -59,49 +82,45 @@ const AllBooks = () => {
 
             {/* Book List */}
             <div className="book-list">
-                {filteredBooks.length > 0 ? (
-                    filteredBooks.map((book) => {
-                        const progress = book.total_pages
-                            ? ((book.current_page || 0) / book.total_pages) * 100
-                            : 0;
-                        const progressText = book.total_pages
-                            ? `${book.current_page || 0} / ${book.total_pages} pages`
-                            : "Not Started";
+                {filteredBooks.map((book) => {
+                    const progress = book.total_pages
+                        ? ((book.currently_read || 0) / book.total_pages) * 100
+                        : 0;
+                    const progressText = book.total_pages
+                        ? `${book.currently_read || 0} / ${book.total_pages} pages`
+                        : "Not Started";
 
-                        return (
-                            <div
-                                key={book.bookid || book._id}
-                                className="book-card"
-                                onClick={() => navigate(`/book/${book.bookid || book._id}`)}
-                                style={{ cursor: "pointer" }} // Make clickable
-                            >
-                                <img
-                                    src={book.cover_image || "https://via.placeholder.com/150"}
-                                    alt={book.book_name}
-                                    className="book-cover"
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = "/empty.png";
-                                    }}
-                                />
-                                <div className="book-info">
-                                    <h3>{book.book_name}</h3>
-                                    <p>{book.author_name}, {book.year_of_publication}</p>
-                                    <StarRating rating={book.book_rating || 0} />
-                                    <div className={`status-badge ${book.reading_status}`}>
-                                        {book.reading_status}
-                                    </div>
-                                    <p>Progress: {progressText}</p>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-                                    </div>
+                    return (
+                        <div
+                            key={book.bookid || book._id}
+                            className="book-card"
+                            onClick={() => navigate(`/book/${book.bookid || book._id}`)}
+                            style={{ cursor: "pointer" }}
+                        >
+                            <img
+                                src={book.cover_image || "https://via.placeholder.com/150"}
+                                alt={book.book_name}
+                                className="book-cover"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "/empty.jpeg";
+                                }}
+                            />
+                            <div className="book-info">
+                                <h3>{book.book_name}</h3>
+                                <p>{book.author_name}, {book.year_of_publication}</p>
+                                <StarRating rating={book.book_rating || 0} />
+                                <div className={`status-badge ${book.reading_status}`}>
+                                    {book.reading_status}
+                                </div>
+                                <p>Progress: {progressText}</p>
+                                <div className="progress-bar">
+                                    <div className="progress-fill" style={{ width: `${progress}%` }}></div>
                                 </div>
                             </div>
-                        );
-                    })
-                ) : (
-                    <p className="no-books">No books available.</p>
-                )}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

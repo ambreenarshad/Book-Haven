@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const booksRoutes = require("./routes/books");
 const readersRoutes = require("./routes/readers");
 const tagRoutes = require("./routes/tags");
+const readingGoalsRoutes = require("./routes/readingGoals");
 
 require("dotenv").config();
 
@@ -17,7 +18,9 @@ connectDB();
 // Routes
 app.use("/book", booksRoutes);
 app.use("/reader", readersRoutes);
+app.use("/reading-goals", readingGoalsRoutes); //
 app.use("/tags", tagRoutes);
+
 app.listen(8000, () => {
     console.log("Server started on port 8000");
 });

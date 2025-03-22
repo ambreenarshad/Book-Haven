@@ -2,8 +2,12 @@ import "./global.css";
 import "./main.css";
 import "./side.css"; 
 import "./allbooks.css"; 
+import "./BookDetails.css"; // Import the CSS file
+import "./GenrePage.css";
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import AddBookModal from "./components/AddBookModal";
 import Auth from "./components/Auth";
@@ -11,16 +15,32 @@ import Sidebar from "./components/TempSidebar";
 import PlaceholderPage from "./components/PlaceholderPage";
 import AllBooks from "./components/AllBooks";
 import BookDetails from "./components/BookDetails";
+import Dashboard from "./components/DashBoard";
+import Genre from "./components/Genre";
+
 
 const App = () => {
   const [theme, setTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [currentReaderId, setCurrentReaderId] = useState(null);
+  const handleLogin = (readerId) => {
+    console.log("Logging in with Reader ID:", readerId); // Debugging
+    setIsAuthenticated(true);
+    setCurrentReaderId(readerId);
+    sessionStorage.setItem("reader_id", readerId); // Store in localStorage
+  };
+  
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") || "light";
     setTheme(storedTheme);
     document.documentElement.classList.toggle("dark", storedTheme === "dark");
+    const storedReaderId = sessionStorage.getItem("reader_id");
+    console.log("Retrieved Reader ID from localStorage:", storedReaderId); // Debugging
+    if (storedReaderId) {
+      setIsAuthenticated(true);
+      setCurrentReaderId(storedReaderId);
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -42,15 +62,15 @@ const App = () => {
             <main className="main flex flex-col justify-center p-4">
               <div className="w-full flex flex-col">
                 <div className="w-full max-w-md text-left mb-8">
-                  <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
+                  <h1 className="Welcome-h1">
                     Welcome
                   </h1>
-                  <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+                  <p className="AccountSignIn">
                     Sign in to your account to continue
                   </p>
                 </div>
                 <div className="w-full max-w-md">
-                  <Auth setIsAuthenticated={setIsAuthenticated} />
+                  <Auth setIsAuthenticated={setIsAuthenticated} onLogin={handleLogin} />
                 </div>
               </div>
             </main>
@@ -60,18 +80,19 @@ const App = () => {
             <Sidebar />
             <div className="content flex-grow">
               <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
-              <AddBookModal isOpen={isModalOpen} closeModal={closeModal} />
+              <AddBookModal isOpen={isModalOpen} closeModal={closeModal}  readerId={currentReaderId} />
 
               <Routes>
-                <Route path="/" element={<PlaceholderPage title="Dashboard" />} /> {/* ✅ Dashboard should be here */}
+                <Route path="/" element={<Dashboard />} />
                 <Route path="/all-books" element={<AllBooks />} /> {/* ✅ AllBooks should be here */}
                 <Route path="/book/:id" element={<BookDetails />} />
-                <Route path="/currently-reading" element={<PlaceholderPage title="Currently Reading" />} />
-                <Route path="/completed" element={<PlaceholderPage title="Completed" />} />
-                <Route path="/to-read" element={<PlaceholderPage title="To Read" />} />
-                <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
+                <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
+                <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
+                <Route path="/wishlist" element={<AllBooks statusFilter="To Read"/>} />
                 <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
                 <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
+                <Route path="/genre" element={<Genre />} /> {/* Add the new Genre route */}
+                
               </Routes>
             </div>
           </div>

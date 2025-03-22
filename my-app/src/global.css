@@ -51,8 +51,22 @@ body {
 }
 
 /* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  color: white;
+  padding: 0.025rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* z-index: 1000; */
+}
+
 .gheader {
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 50;
   width: 100%;
@@ -67,8 +81,6 @@ body {
   align-items: center;
   justify-content: space-between;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
   background-color: var(--card);
   border-radius: var(--radius); /* Optional: Add rounded corners */
  
@@ -79,6 +91,7 @@ body {
   font-weight: bold;
   color: var(--foreground);
   text-decoration: none;
+  padding-left: 3rem !important;
 }
 
 /* Main Content Styles */
@@ -90,11 +103,11 @@ body {
   padding: 2rem;
 }
 
-.move-welcome {
+.Welcome-h1 {
   padding-left: 9rem !important; /* Adjust the value as needed */
 }
 
-.move-signin {
+.AccountSignIn {
   padding-left: 6rem !important; /* Adjust the value as needed */
 }
 
@@ -251,21 +264,13 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
   width: 36px;
   height: 36px;
+  
 }
 
 .theme-toggle:hover {
   background-color: var(--primary);
   color: var(--primary-foreground);
   transform: scale(1.1);
-}
-
-/* Move Toggle Button to the Right */
-.header .theme-toggle {
-  margin-left: auto;
 }

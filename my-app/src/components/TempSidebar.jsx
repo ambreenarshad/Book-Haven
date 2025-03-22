@@ -6,10 +6,11 @@ const Sidebar = () => {
     { name: "All Books", path: "/all-books" },
     { name: "Currently Reading", path: "/currently-reading" },
     { name: "Completed", path: "/completed" },
-    { name: "To Read", path: "/to-read" },
     { name: "Wishlist", path: "/wishlist" },
     { name: "Lent Out", path: "/lent-out" },
-    { name: "Borrowed", path: "/borrowed" }
+    { name: "Borrowed", path: "/borrowed" },
+    { name: "Genre", path: "/genre" },
+    
   ];
 
   return (

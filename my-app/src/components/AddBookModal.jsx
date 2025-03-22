@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
+import { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-
-const AddBookModal = ({ isOpen, closeModal }) => {
+ 
+const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [genre, setGenre] = useState("");
   const [totalPages, setTotalPages] = useState("");
+  const [currentlyRead, setCurrentlyRead] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
   const [status, setStatus] = useState("");
   const [isWishlist, setIsWishlist] = useState(false);
@@ -18,9 +20,22 @@ const AddBookModal = ({ isOpen, closeModal }) => {
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState({});
   const [coverFile, setCoverFile] = useState(null);
+  console.log("Reader ID in AddBookModal:", readerId); // Debugging
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   
-  if (!isOpen) return null;
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
+
+
+  useEffect(() => {
+    if (isWishlist) {
+      setStatus("To Read");
+    } else {
+      setStatus(""); // Reset if not Wishlist
+    }
+  }, [isWishlist]);
+  if (!isOpen) return null;
   const handleCloseModal = () => {
     setTitle("");
     setAuthor("");
@@ -36,6 +51,8 @@ const AddBookModal = ({ isOpen, closeModal }) => {
     setTagInput("");
     setNotes("");
     setErrors({});
+    setStartDate(""); // Reset start date
+    setEndDate("");
     closeModal();
   };
 
@@ -46,7 +63,7 @@ const AddBookModal = ({ isOpen, closeModal }) => {
       setCoverName(file.name);
     }
   };
-
+  
   const removeTag = (index) => {
     setTags(tags.filter((_, i) => i !== index));
   };
@@ -67,26 +84,63 @@ const AddBookModal = ({ isOpen, closeModal }) => {
     if (!year) newErrors.year = "Year of publication is required.";
     if (!isWishlist && !status) newErrors.status = "Status is required.";
   
+      // Validate dates based on status
+      if (status === "Reading" && (!currentlyRead || currentlyRead < 1)) {
+        newErrors.currentlyRead = "Please enter pages read for 'Reading' status.";
+      }
+      if (status === "Completed" && currentlyRead !== totalPages) {
+        newErrors.currentlyRead = "For 'Completed' status, pages read must be equal to total pages.";
+      }
+     
+
+      if (status === "Reading" || status === "Completed") {
+        if (!startDate) {
+          newErrors.startDate = "Start date is required.";
+        } else if (startDate > today) {
+          newErrors.startDate = "Start date cannot be in the future.";
+        }
+      }
+
+      if (status === "Completed") {
+        if (!endDate) {
+          newErrors.endDate = "End date is required.";
+        } else if (endDate > today) {
+          newErrors.endDate = "End date cannot be in the future.";
+        } else if (startDate && endDate < startDate) {
+          newErrors.endDate = "End date cannot be earlier than start date.";
+        }
+      }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+    console.log("Submitting with Reader ID:", readerId); // Debugging
+
+    if (!readerId) {
+      alert("Error: Reader ID is missing. Please log in again.");
+      return;
+    }
     const formData = new FormData();
     formData.append("book_name", title);
     formData.append("author_name", author);
     formData.append("genre", genre);
     formData.append("total_pages", totalPages);
     formData.append("year_of_publication", year);
-    formData.append("reading_status", isWishlist ? "Wishlist" : status);
+    formData.append("reading_status", isWishlist ? "To Read" : status);
     formData.append("book_rating", rating);
     formData.append("book_review", notes);
-    formData.append("start_date", ""); // Optional, add later
-    formData.append("end_date", "");   // Optional, add later
-    formData.append("add_date", new Date().toISOString());
+    formData.append("start_date", startDate || ""); // Add start_date
+    formData.append("end_date", endDate || ""); // Add end_date
+    formData.append("add_date", today);
+    formData.append("currently_read", currentlyRead || "0");
   
     if (coverFile) {
       formData.append("cover_image", coverFile); // Attach file
+    }
+    // Add readerId to associate the book with a specific reader
+    if (readerId) {
+      formData.append("readerid", readerId);
     }
   
     try {
@@ -196,11 +250,80 @@ const AddBookModal = ({ isOpen, closeModal }) => {
           <>
             <select className="input-field" value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">Select Status</option>
-              <option>To Read</option>
               <option>Reading</option>
               <option>Completed</option>
             </select>
             {errors.status && <p className="error-text">{errors.status}</p>}
+
+
+    {/* Start Date Input (Required for Reading and Completed) */}
+    {/* {(status === "Reading" || status === "Completed") && (
+      
+      <input
+        type="date"
+        placeholder="Start Date"
+        className="input-field"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+      />
+    )} */}
+ {/* Show Currently Read input if status is 'Reading' or 'Completed' */}
+{(status === "Reading") && (
+  <>
+    <p className="date-heading">Start Date</p>
+    <input
+        type="date"
+        placeholder="Start Date"
+        className="input-field"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+      />
+    <p className="date-heading">Pages Read</p>
+    <input
+      type="number"
+      placeholder="Enter pages read"
+      className={`input-field ${errors.currentlyRead ? "input-error" : ""}`}
+      value={currentlyRead}
+      onChange={(e) => {
+        const value = parseInt(e.target.value, 10);
+        if (!isNaN(value) && value <= totalPages) {
+          setCurrentlyRead(value);
+        }
+      }}
+    />
+    
+    {errors.currentlyRead && <p className="error-text">{errors.currentlyRead}</p>}
+  </>
+)}
+
+    {/* End Date Input (Required for Completed) */}
+{status === "Completed" && (
+  <>
+    <p className="date-heading">Start Date</p>
+    <input
+      type="date"
+      placeholder="Start Date"
+      className="input-field"
+      value={startDate}
+      onChange={(e) => setStartDate(e.target.value)}
+    />
+
+    <p className="date-heading">End Date</p>
+    <input
+      type="date"
+      placeholder="End Date"
+      className="input-field"
+      value={endDate}
+      onChange={(e) => {
+        setEndDate(e.target.value);
+        setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
+      }}
+    />
+
+    {errors.endDate && <p className="error-text">{errors.endDate}</p>}
+  </>
+)}
+
 
             {/* Star Rating (Optional) */}
             <div className="rating-container">
@@ -226,6 +349,7 @@ const AddBookModal = ({ isOpen, closeModal }) => {
             ></textarea>
           </>
         )}
+        
 
         {/* Tags Input (Optional) */}
         <div className="tag-input-container">

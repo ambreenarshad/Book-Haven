@@ -13,24 +13,25 @@ router.get("/", async (req, res) => {
     }
 });
 
-// **Login Route**
+// *Login Route*
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const reader = await Reader.findOne({ email, password }); 
+        const reader = await Reader.findOne({ email, password });
         if (!reader) {
             return res.status(400).json({ message: "Invalid email or password." });
         }
 
-        res.json({ message: "Login successful" });
+        // Return reader_id along with a success message
+        res.json({ message: "Login successful", reader_id: reader.reader_id });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Server error" });
     }
 });
 
-// **Register Route**
+// *Register Route*
 router.post("/register", async (req, res) => {
     const { first_name, last_name, email, password, date_of_birth } = req.body;
 

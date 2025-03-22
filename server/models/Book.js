@@ -7,14 +7,16 @@ const bookSchema = new mongoose.Schema({
     genre: String,
     total_pages: Number,
     year_of_publication: Number,
-    reading_status: String,
+    reading_status: { type: String, default: "Not Started" },
     book_rating: Number,
     book_review: String,
     start_date: String,
     end_date: String,
     add_date: String,
     cover_image: String,  // Stores Cloudinary image URL
-    bookid: Number
+    currently_read: { type: Number, default: 0 },  // ✅ Add this field
+    bookid: Number,
+    readerid: Number
 }, { collection: "Book" });
 
 // Apply auto-increment plugin

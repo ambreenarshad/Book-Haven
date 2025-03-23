@@ -1,4 +1,4 @@
-/* Genre Page Styles */
+Genre Page Styles
 .genre-container {
     padding: 2rem;
     max-width: 1200px;
@@ -32,6 +32,7 @@
     transition: all 0.2s ease;
     border: 2px solid transparent;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 2px solid #515050;
   }
   
   .genre-card:hover {
@@ -68,9 +69,9 @@
   
   .books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
-  }
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 13.75px;
+    justify-content:center;}
   
   .book-card {
     background-color: var(--card-bg);
@@ -83,6 +84,7 @@
     flex-direction: column;
     height: 100%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* border: 2px solid #a4a2a2; */
   }
   
   .book-card:hover {
@@ -148,7 +150,7 @@
     color: #e74c3c;
   }
   
-  /* Media Queries */
+  
   @media (min-width: 768px) {
     .genre-content {
       flex-direction: row;
@@ -167,19 +169,53 @@
     }
   }
   
-  /* Dark mode adjustments */
+  
   :root {
-    --primary-color: #4a90e2;
+    --primary-color: #121212;
     --primary-light: rgba(74, 144, 226, 0.1);
     --card-bg: #fff;
     --text-color: #333;
     --secondary-text: #666;
   }
   
+
+  /* .dark {
+    --primary-color: #0e0e0e;
+    --primary-light: rgba(227, 231, 234, 0.796);
+    --card-bg: #e3dfdf;
+    --text-color: #222020;
+    --secondary-text: #242323; 
+  } */
+
   .dark {
-    --primary-color: #61a5ff;
-    --primary-light: rgba(97, 165, 255, 0.15);
-    --card-bg: #2a2a2a;
-    --text-color: #eee;
-    --secondary-text: #bbb;
+    
+    --primary-color: #0e0e0e;
+    --primary-light: rgba(227, 231, 234, 0.796);
+    --card-bg: #505050; /* Your white-ish background for cards */
+    /* --card-bg: #e3dfdf; */
+    --text-color: #161515; /* General text color */
+    --secondary-text: #242323; /* Secondary text color */
+    --genre-heading-color: #f8f6f6; /* New variable for genre headings */
+    --genre-description-color: #000000; /* New variable for genre descriptions */
+    /* --genre-description-color: #4b4b4b; */
   }
+
+  .dark .genre-name {
+    color: var(--genre-heading-color);
+  }
+  
+  .dark .genre-books h2 {
+    color: var(--genre-heading-color);
+  }
+
+  .dark .page-title {
+    color: #eeeaea; /* Change to your desired color */
+  }
+  
+  /* Styling for genre text in dark mode */
+  .dark .genre-count {
+    color: var(--genre-description-color);
+  }
+  /* .dark .book-card {
+    border: 2px solid #737373;
+  } */

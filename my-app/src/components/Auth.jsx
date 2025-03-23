@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../global.css";
 
 const Auth = ({ setIsAuthenticated, onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");

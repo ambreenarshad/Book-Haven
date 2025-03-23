@@ -1,9 +1,9 @@
-import "./global.css";
-import "./main.css";
-import "./side.css"; 
-import "./allbooks.css"; 
-import "./BookDetails.css"; // Import the CSS file
-import "./GenrePage.css";
+
+
+ 
+
+ // Import the CSS file
+
 
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -106,11 +106,12 @@ const SiteHeader = ({ toggleTheme, theme }) => (
   <header className="gheader">
     <div className="container">
       <a href="/" className="logo">BookHaven</a>
-      <button onClick={toggleTheme} className="theme-toggle">
-        {theme === "light" ? "🌙" : "☀"}
-      </button>
+      <div className="theme-toggle-container">
+        <button onClick={toggleTheme} className="theme-toggle">
+          {theme === "light" ? "🌙" : "☀"}
+        </button>
+      </div>
     </div>
-  </header>
+</header>
 );
-
 export default App;

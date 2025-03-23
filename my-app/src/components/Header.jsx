@@ -1,6 +1,6 @@
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
-
+import "../main.css";
 const Header = ({ toggleTheme, isDarkMode, openModal }) => {
   return (
     <header className="header">

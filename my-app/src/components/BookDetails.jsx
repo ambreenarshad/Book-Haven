@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import "../BookDetails.css";
 import ReadingTimerDialog from "./ReadingTimerDialog"; // Import the modal
 
 const BookDetails = () => {
@@ -44,20 +45,6 @@ const BookDetails = () => {
         setIsUpdating(false);
     };
 
-    const updateProgress = async (newPagesRead) => {
-        const updatedPages = book.currently_read + newPagesRead;
-        try {
-            await fetch(`http://localhost:8000/book/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ currently_read: updatedPages }),
-            });
-
-            setBook((prev) => ({ ...prev, currently_read: updatedPages }));
-        } catch (error) {
-            console.error("Error updating reading progress:", error);
-        }
-    };
 
     if (!book) {
         return <p>Loading book details...</p>;
@@ -68,70 +55,77 @@ const BookDetails = () => {
             <button onClick={() => navigate(-1)} className="bookDetails-back-button">← Back</button>
             <h1 className="BookDetails-h1">{book.book_name}</h1>
             <div className="book-container">
-                <img
-                    src={book.cover_image || "https://via.placeholder.com/150"}
-                    alt={book.book_name}
-                    className="book-cover-large"
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/empty.jpeg";
-                    }}
+    <div className="book-image-container">
+        <img
+            src={book.cover_image || "https://via.placeholder.com/150"}
+            alt={book.book_name}
+            className="book-cover-large"
+            onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/empty.jpeg";
+            }}
+        />
+        {/* Log Reading Session Button */}
+        <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
+                    ⏱ Log Reading Session
+                </button>
+                {/* Timer Dialog */}
+                {isTimerOpen && (
+                    <ReadingTimerDialog 
+                    onClose={() => setIsTimerOpen(false)} 
+                    bookId={book.bookid}  // ✅ Ensure `book.bookid` is passed correctly
+                    
                 />
-
-
-                <div className="mybook-info">
-                    <p><strong>Author:</strong> {book.author_name}</p>
-                    <p><strong>Genre:</strong> {book.genre}</p>
-                    <p><strong>Year of Publication:</strong> {book.year_of_publication}</p>
-                    <p><strong>Pages:</strong> {book.total_pages}</p>
-                    <p><strong>Pages Read:</strong> {book.currently_read} / {book.total_pages}</p>
-
-                    {/* Rating */}
-                    <p><strong>Rating:</strong>  
-                        {[...Array(5)].map((_, index) => (
-                            <span 
-                                key={index} 
-                                onClick={() => setRating(index + 1)} 
-                                style={{ cursor: "pointer", marginLeft: "5px" }}
-                            >
-                                {index < rating ? <FaStar color="gold" /> : <FaRegStar color="gray" />}
-                            </span>
-                        ))}
-                    </p>
-
-                    {/* Review */}
-                    <p><strong>Review:</strong></p>
-                    <textarea
-                        value={review}
-                        onChange={(e) => setReview(e.target.value)}
-                        className="review-textarea"
-                        rows="2"
-                    ></textarea>
-                    <button 
-                        onClick={updateReview} 
-                        className="save-review-button"
-                        disabled={isUpdating}
-                    >
-                        {isUpdating ? "Saving..." : "Save"}
-                    </button>
-                    <p><strong>Started:</strong> {book.start_date}</p>
-                    <p><strong>Completed:</strong> {book.end_date }</p>
-                    <p><strong>Added on:</strong> {book.add_date}</p>
-                </div>
-            </div>
-            {/* Log Reading Session Button */}
-            <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
-                ⏱ Log Reading Session
-            </button>
-            {/* Timer Dialog */}
-            {isTimerOpen && (
-                <ReadingTimerDialog 
-                onClose={() => setIsTimerOpen(false)} 
-                bookId={book.bookid}  // ✅ Ensure `book.bookid` is passed correctly
                 
-            />
-            
-            )}
+                )}
+
+    </div>
+
+    <div className="mybook-info">
+        <p><strong>Author:</strong> {book.author_name}</p>
+        <p><strong>Genre:</strong> {book.genre}</p>
+        <p><strong>Year of Publication:</strong> {book.year_of_publication}</p>
+        <p><strong>Pages:</strong> {book.total_pages}</p>
+        <p><strong>Pages Read:</strong> {book.currently_read} / {book.total_pages}</p>
+
+        {/* Rating */}
+        <p className="rating-container">
+            <strong>Rating:</strong>
+            {[...Array(5)].map((_, index) => {
+                const starIndex = index + 1;
+                return (
+                    <span 
+                        key={starIndex} 
+                        onClick={() => setRating(starIndex)} 
+                        className={`star ${starIndex <= rating ? "filled" : "empty"}`}
+                    >
+                        {starIndex <= rating ? <FaStar /> : <FaRegStar />}
+                    </span>
+                );
+            })}
+        </p>
+
+        {/* Review */}
+        <p><strong>Review:</strong></p>
+        <textarea
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
+            className="review-textarea"
+            rows="2"
+        ></textarea>
+        <button 
+            onClick={updateReview} 
+            className="save-review-button"
+            disabled={isUpdating}
+        >
+            {isUpdating ? "Saving..." : "Save"}
+        </button>
+        <p><strong>Started:</strong> {book.start_date}</p>
+        <p><strong>Completed:</strong> {book.end_date }</p>
+        <p><strong>Added on:</strong> {book.add_date}</p>
+    </div>
+    </div>
+
             
         </div>
     );

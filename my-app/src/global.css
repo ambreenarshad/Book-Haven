@@ -18,20 +18,21 @@
 }
 
 .dark {
-  --background: #0a0a0a; /* Dark background for the page */
+  --background: #000000; /* Dark background for the page */
+  /* --background: #0a0a0a; */
   --foreground: #fafafa; /* Light text color */
-  --card:#fafafa13 ; /* Grey background for cards/containers */
+  --card:#fafafa13 ; 
   /* /#fafafa13/ */
-  --card-foreground: #fafafa; /* Light text color for cards */
-  --primary: #fafafa; /* Light primary color */
-  --primary-foreground: #000000db; /* Dark text color on primary elements */
-  --secondary: #262626; /* Dark grey for secondary elements */
-  --secondary-foreground: #fafafa; /* Light text color on secondary elements */
-  --muted: #262626; /* Dark grey for muted elements */
-  --muted-foreground: #a3a3a3; /* Light grey for muted text */
-  --border: #262626; /* Dark grey for borders */
-  --input: #353434; /* Dark grey for input fields */
-  --destructive: #7f1d1d; /* Dark red for destructive actions */
+  --card-foreground: #fafafa;
+  --primary: #fafafa; 
+  --primary-foreground: #000000db; 
+  --secondary: #262626; 
+  --secondary-foreground: #fafafa; 
+  --muted: #262626;
+  --muted-foreground: #a3a3a3; 
+  --border: #262626;
+  --input: #353434; 
+  --destructive: #7f1d1d; 
   --destructive-foreground: #fafafa;
 }
 
@@ -55,7 +56,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: black;
+  /* background-color: black; */
+  background-color: var(--header-bg);
+  /* background-color: #333333; */
   color: white;
   padding: 0.025rem 2rem;
   position: fixed;
@@ -63,6 +66,14 @@ body {
   left: 0;
   width: 100%;
   /* z-index: 1000; */
+}
+
+:root {
+  --header-bg: black; /* Default header background (black) */
+}
+
+.dark {
+  --header-bg: #333333; /* Grey background for dark mode */
 }
 
 .gheader {
@@ -76,15 +87,14 @@ body {
   padding: 0.5rem 0;
 }
 
+
 .gheader .container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
-  background-color: var(--card);
-  border-radius: var(--radius); /* Optional: Add rounded corners */
- 
+  align-items: center;
+  width: 100%;
 }
+
 
 .gheader .logo {
   font-size: 1.25rem;
@@ -254,7 +264,6 @@ body {
   text-decoration: underline;
 }
 
-/* Theme Toggle Button */
 .theme-toggle {
   background-color: var(--secondary);
   color: var(--foreground);
@@ -268,6 +277,14 @@ body {
   height: 36px;
   
 }
+
+.theme-toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 40px;
+}
+
+
 
 .theme-toggle:hover {
   background-color: var(--primary);

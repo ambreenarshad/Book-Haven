@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import "../allbooks.css"; 
 const StarRating = ({ rating }) => {
     return (
         <div className="star-rating">
@@ -63,24 +63,16 @@ const AllBooks = ({ statusFilter }) => {
         }
     }, [searchQuery, books]);
 
-    if (loading) return <p>Loading books...</p>;
-    if (filteredBooks.length === 0) return <p>No books found for {statusFilter || "all books"}.</p>;
+    const renderBookList = () => {
+        if (loading) {
+            return <p>Loading books...</p>;
+        }
+        
+        if (filteredBooks.length === 0) {
+            return <p>No books found for {statusFilter || "all books"}.</p>;
+        }
 
-    return (
-        <div className="all-books">
-            <h1>{statusFilter ? `${statusFilter} Books` : "All Books"}</h1>
-            <p>Browse and manage your entire book collection.</p>
-
-            {/* Search Input */}
-            <input
-                type="text"
-                placeholder="Search books..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-bar"
-            />
-
-            {/* Book List */}
+        return (
             <div className="book-list">
                 {filteredBooks.map((book) => {
                     const progress = book.total_pages
@@ -103,7 +95,7 @@ const AllBooks = ({ statusFilter }) => {
                                 className="book-cover"
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = "/empty.jpeg";
+                                    e.target.src = "/empty.png";
                                 }}
                             />
                             <div className="book-info">
@@ -122,6 +114,25 @@ const AllBooks = ({ statusFilter }) => {
                     );
                 })}
             </div>
+        );
+    };
+
+    return (
+        <div className="all-books">
+            <h1>{statusFilter ? `${statusFilter} Books` : "All Books"}</h1>
+            <p>Browse and manage your entire book collection.</p>
+
+            {/* Search Input */}
+            <input
+                type="text"
+                placeholder="Search books..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-bar"
+            />
+
+            {/* Book List or Status Messages */}
+            {renderBookList()}
         </div>
     );
 };

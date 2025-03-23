@@ -1,16 +1,27 @@
+import "../side.css"; 
 import { Link } from "react-router-dom";
+// Import icons from react-icons
+import { 
+  MdDashboard, 
+  MdMenuBook, 
+  MdAutoStories, 
+  MdCheckCircle, 
+  MdBookmark, 
+  MdShare, 
+  MdDownload, 
+  MdCategory 
+} from "react-icons/md";
 
 const Sidebar = () => {
   const categories = [
-    { name: "Dashboard", path: "/" },
-    { name: "All Books", path: "/all-books" },
-    { name: "Currently Reading", path: "/currently-reading" },
-    { name: "Completed", path: "/completed" },
-    { name: "Wishlist", path: "/wishlist" },
-    { name: "Lent Out", path: "/lent-out" },
-    { name: "Borrowed", path: "/borrowed" },
-    { name: "Genre", path: "/genre" },
-    
+    { name: "Dashboard", path: "/", icon: <MdDashboard /> },
+    { name: "All Books", path: "/all-books", icon: <MdMenuBook /> },
+    { name: "Currently Reading", path: "/currently-reading", icon: <MdAutoStories /> },
+    { name: "Completed", path: "/completed", icon: <MdCheckCircle /> },
+    { name: "Wishlist", path: "/wishlist", icon: <MdBookmark /> },
+    { name: "Lent Out", path: "/lent-out", icon: <MdShare /> },
+    { name: "Borrowed", path: "/borrowed", icon: <MdDownload /> },
+    { name: "Genre", path: "/genre", icon: <MdCategory /> },
   ];
 
   return (
@@ -19,7 +30,10 @@ const Sidebar = () => {
       <ul>
         {categories.map((category, index) => (
           <li key={index}>
-            <Link to={category.path}>{category.name}</Link>
+            <Link to={category.path}>
+              <span className="icon">{category.icon}</span>
+              <span className="label">{category.name}</span>
+            </Link>
           </li>
         ))}
       </ul>

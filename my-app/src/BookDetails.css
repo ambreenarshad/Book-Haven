@@ -1,8 +1,52 @@
+/* Light Mode (Default) */
+:root {
+    --background: #ffffff;
+    --foreground: #222;
+    --card-bg: #f1f1f1;
+    --button-bg: black;
+    --button-text: white;
+    --button-hover-bg: #333;
+    --border-color: #ccc;
+    --input-bg: #ffffff;
+    --input-border: #ccc;
+    --input-focus-border: #555;
+    --star-filled: gold;
+    --star-empty: gray;
+    --text-color: #222;
+    --secondary-text: #666;
+}
+
+/* Dark Mode */
+.dark {
+    --background: #1a1a1a;
+    --foreground: #f1f1f1; /* White text in dark mode */
+    --card-bg: #333;
+    --button-bg: white;
+    --button-text: black;
+    --button-hover-bg: #ddd;
+    --border-color: #555;
+    --input-bg: #444;
+    --input-border: #666;
+    --input-focus-border: #888;
+    --star-filled: gold;
+    --star-empty: #666;
+    --text-color: #f1f1f1; /* White text in dark mode */
+    --secondary-text: #bbb;
+}
+
+/* General Styles */
+.book-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
 .book-details {
     max-width: 1000px;
     margin: 20px auto;
     font-family: Arial, sans-serif;
-    color: #222;
+    color: var(--foreground);
 }
 
 .bookDetails-back-button {
@@ -11,7 +55,7 @@
     gap: 5px;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    color: var(--foreground); /* Use --foreground for text color */
     background: none;
     border: none;
     cursor: pointer;
@@ -19,13 +63,14 @@
 }
 
 .bookDetails-back-button:hover {
-    color: #666;
+    color: var(--button-bg);
 }
 
 .BookDetails-h1 h1 {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
+    color: var(--foreground);
 }
 
 .book-container {
@@ -38,7 +83,7 @@
     width: 200px;
     height: 280px;
     border-radius: 8px;
-    background: #f1f1f1;
+    background: var(--card-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,30 +94,32 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    color: var(--foreground); /* Ensure text color is set for the container */
 }
 
 .mybook-info p {
     margin: 0;
     font-size: 16px;
+    color: var(--foreground); /* Use --foreground for text color */
 }
 
 .mybook-info strong {
     font-weight: bold;
-    color: #222;
+    color: var(--foreground); /* Use --foreground for text color */
 }
 
 .save-review-button {
     margin-left: 10px;
     padding: 5px 10px;
-    background-color: black;
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
 
 .save-review-button:hover {
-    background-color: #333;
+    background-color: var(--button-hover-bg);
 }
 
 .review-textarea {
@@ -81,34 +128,59 @@
     max-height: 150px;
     padding: 8px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
-    resize: vertical; /* Allows resizing */
-    overflow-y: auto; /* Enables scrollbar if needed */
+    resize: vertical;
+    overflow-y: auto;
+    background-color: var(--input-bg);
+    color: var(--foreground);
 }
 
 .review-textarea:focus {
-    border-color: #555;
+    border-color: var(--input-focus-border);
     outline: none;
 }
+
 .log-reading-button {
-    background: black;
-    color: white;
-    padding: 10px 15px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    padding: 10px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
-    max-width: 250px;
-    margin: 20px auto;
+    max-width: 210px;
+    margin: 1px 1px;
     display: block;
     text-align: center;
+    z-index: 1;
 }
 
 .log-reading-button:hover {
-    background: #333;
+    background: var(--button-hover-bg);
 }
 
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.2s ease-in-out;
+}
+
+.star.filled {
+    color: var(--star-filled);
+}
+
+.star.empty {
+    color: var(--star-empty);
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {
         flex-direction: column;

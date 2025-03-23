@@ -2,7 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
- 
+import "../main.css";
+
 const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");

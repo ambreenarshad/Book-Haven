@@ -98,7 +98,9 @@
 .status-badge.To-Read { background-color: lightgray; }
 .status-badge.Wishlist { background-color: red; }
 
-.progress-bar {
+
+
+/* .progress-bar {
     height: 8px;
     width: 100%;
     background-color: #ddd;
@@ -112,13 +114,51 @@
     background-color: #000;
     border-radius: 4px;
     transition: width 0.3s ease-in-out;
+} */
+
+
+.progress-bar {
+    height: 8px;
+    width: 100%;
+    background-color: var(--progress-bar-bg); /* Use CSS variable */
+    border-radius: 4px;
+    margin-top: 8px;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--progress-fill-bg); /* Use CSS variable */
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Default (Light Mode) */
+:root {
+    --progress-bar-bg: #ddd; /* Light gray for progress bar */
+    --progress-fill-bg: #000; /* Black for progress fill */
+
+    --search-bar-bg: white;
+    --search-bar-border: #ccc;
+    --search-bar-text: black;
+}
+
+/* Dark Mode */
+.dark {
+    --progress-bar-bg: #000; /* Black for progress bar */
+    --progress-fill-bg: #fff; /* White for progress fill */
+
+    --search-bar-bg: white; /* White background in dark mode */
+    --search-bar-border: #666;
+    --search-bar-text: black; /* Black text in dark mode */
+    
 }
 
 .all-books h1 , p {
     text-align: left;
 }
 
-.search-bar {
+/* .search-bar {
     width: 100%;
     max-width: 300px;
     padding: 10px;
@@ -127,9 +167,24 @@
     border-radius: 5px;
     font-size: 16px;
     margin-left: 1150px;
+} */
+
+.search-bar {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--search-bar-border);
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 1150px;
+    background-color: var(--search-bar-bg);
+    color: var(--search-bar-text);
 }
+
 
 /* Different status colors */
 .status-badge.Reading { background-color: rgb(245, 238, 238); }
 .status-badge.Completed { background-color: rgb(245, 238, 238); }
 .status-badge.To-Read {  background-color: rgb(245, 238, 238); }
+.status-badge.Wishlist { background-color: red;}

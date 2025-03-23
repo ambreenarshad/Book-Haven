@@ -1,109 +1,155 @@
 .dashboard-container {
-    padding: 20px;
+  padding: 20px;
+
+}
+
+.dashboard-heading {
+  font-size: 34px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.ReadingGoals {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+  background-color: #f9f9f9; /* Light gray background */
+  border-radius: 10px; /* Rounded corners */
+  border: 2px solid #ddd; /* Light gray border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  text-align: center; /* Center text inside the container */
+}
+  
+  .ReadingGoals-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
   }
   
-  .dashboard-heading {
-    font-size: 34px;
+  .ReadingGoals-progress-fill {
+    height: 100%;
+    background-color: black;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  .ReadingGoals-h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.ReadingGoals-p {
     font-weight: bold;
-    text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+}
+  
+  span {
+    float: right;
+    font-size: 14px;
   }
   
-  .ReadingGoals {
+/* Center align the edit button */
+.edit-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-button:hover {
+  background-color: gray;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
     padding: 20px;
-    max-width: 600px;
-    margin: auto;
-    background-color: #f9f9f9; /* Light gray background */
-    border-radius: 10px; /* Rounded corners */
-    border: 2px solid #ddd; /* Light gray border */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    text-align: center; /* Center text inside the container */
-  }
-    
-    .ReadingGoals-progress-bar {
-      width: 100%;
-      height: 10px;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-    
-    .ReadingGoals-progress-fill {
-      height: 100%;
-      background-color: black;
-      transition: width 0.5s ease-in-out;
-    }
-    
-    .ReadingGoals-h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
-  }
-  
-  .ReadingGoals-p {
-      font-weight: bold;
-      margin-bottom: 15px;
-  }
-    
-    span {
-      float: right;
-      font-size: 14px;
-    }
-    
-  /* Center align the edit button */
-  .edit-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal input {
+    padding: 5px;
+    width: 100%;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-buttons button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
     background-color: black;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .edit-button:hover {
-    background-color: gray;
-  }
-  
-  .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-  }
-  
-  .modal-content {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-  }
-  
-  .modal input {
-      padding: 5px;
-      width: 100%;
-  }
-  
-  .modal-buttons {
-      display: flex;
-      justify-content: space-between;
-  }
-  
-  .modal-buttons button {
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      background-color: black;
-      color: white;
-  }
-  
-  .modal-buttons button:hover {
-    background-color: gray;
-  }
+}
+
+.modal-buttons button:hover {
+  background-color: gray;
+}
+
+
+/* Dark mode styles */
+.dark .ReadingGoals {
+  background-color: #2a2a2a; /* Dark background */
+  border-color: #444; /* Darker border */
+  color: #f5f5f5; /* Light text for contrast */
+}
+
+.dark .ReadingGoals-progress-bar {
+  background-color: #444; /* Darker background for progress bar */
+}
+
+.dark .ReadingGoals-progress-fill {
+  background-color: #f5f5f5; /* Light colored fill for contrast */
+}
+
+.dark .edit-button {
+  background-color: #f5f5f5; /* Light background */
+  color: #222; /* Dark text */
+}
+
+.dark .edit-button:hover {
+  background-color: #ccc; /* Slightly darker on hover */
+}
+
+.dark .modal {
+  background-color: #2a2a2a; /* Dark background */
+  color: #f5f5f5; /* Light text */
+}
+
+.dark .modal input {
+  background-color: #444; /* Dark input background */
+  color: #f5f5f5; /* Light text */
+  border: 1px solid #555;
+}
+
+.dark .modal-buttons button {
+  background-color: #f5f5f5; /* Light buttons */
+  color: #222; /* Dark text */
+}
+
+.dark .modal-buttons button:hover {
+  background-color: #ccc; /* Slightly darker on hover */
+}

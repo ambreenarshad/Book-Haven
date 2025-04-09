@@ -5,6 +5,7 @@ const Dashboard = () => {
   const [goals, setGoals] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // Toggle edit modal
   const [updatedGoals, setUpdatedGoals] = useState({}); // Store updated values
+  const [summary, setSummary] = useState(null);
   const readerId = sessionStorage.getItem("reader_id");
 
   useEffect(() => {
@@ -21,7 +22,15 @@ const Dashboard = () => {
         setUpdatedGoals(data); // Set initial values for editing
       })
       .catch((err) => console.error("Error fetching goals:", err));
-  }, [readerId]);
+
+      fetch(`http://localhost:8000/dashboard/summary/${readerId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched Summary:", data);
+        setSummary(data);
+      })
+      .catch((err) => console.error("Error fetching summary:", err));
+    }, [readerId]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -81,11 +90,23 @@ const Dashboard = () => {
   if (!goals) {
     return <div>Loading...</div>;
   }
-
+  if (!summary) {
+    return <div>Loading summary...</div>;
+  }
+  
   return (
   <div className="dashboard-container">
     {/* Left-aligned heading */}
     <h1 className="dashboard-heading">Dashboard</h1>
+    
+    <div className="book-summary">
+      <h2 className="summary-heading">📚 Book Summary</h2>
+      <p className="summary-item">Total Books: <strong>{summary.totalBooks}</strong></p>
+      <p className="summary-item">Completed: <strong>{summary.completedBooks}</strong></p>
+      <p className="summary-item">Currently Reading: <strong>{summary.currentlyReading}</strong></p>
+    </div>
+    
+
     <div className="ReadingGoals">
       <h2 className="ReadingGoals-h2">📖 Reading Goals</h2>
       <p className="ReadingGoals-p">Track your reading progress based on completed books</p>

@@ -1,5 +1,3 @@
-import { useNavigate, useLocation } from "react-router-dom";
-
 const PlaceholderPage = ({ title }) => {
   return (
     <div className="page">

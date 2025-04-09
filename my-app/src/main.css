@@ -1,17 +1,17 @@
-/* Global Styles */
+/*Global Styles*/
 body {
   font-family: "Arial", sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Header Styles */
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: rgb(0, 0, 0);
-  color: white;
+  color: white ;
   padding: 0.025rem 2rem;
   position: fixed;
   top: 0;
@@ -34,7 +34,7 @@ body {
 .header-buttons button {
   background: none;
   border: none;
-  color: white;
+  color: white ;
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.3s ease-in-out;
@@ -43,32 +43,32 @@ body {
 .header-buttons button:hover {
   color: gray;
 }
-/* Input Fields */
+
 .cover-name {
   text-align: center;
   font-size: 0.9rem;
-  margin: 5px 0; /* Reduce height */
+  margin: 5px 0; 
 }
 .input-field {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc ;
   border-radius: 5px;
 }
 
 .input-field.small {
-  flex: 1; /* Ensures both fields take up equal width */
+  flex: 1; 
 }
 
 .flex-row {
   display: flex;
   justify-content: space-between;
-  gap: 10px; /* Adds space between the fields */
+  gap: 10px; 
   width: 100%;
 }
 
-/* Library/Wishlist Radio Buttons */
+
 .radio-container {
   display: flex;
   justify-content: center;
@@ -77,38 +77,38 @@ body {
 }
 
 
-/* Toggle Button */
+
 .toggle-container {
   display: flex;
   justify-content: center;
-  gap: 15px; /* Add space between buttons */
+  gap: 15px; 
   margin: 10px 0;
   width: 100;
 }
 .toggle-button {
   flex: 1;
-  padding: 10px 20px; /* Adjust padding */
-  border: 1px solid #000; /* Black border */
+  padding: 10px 20px; 
+  border: 1px solid #000; 
   cursor: pointer;
-  background: #000; /* Black background */
-  color: white; /* White text */
+  background: #000; 
+  color: white ;
   border-radius: 5px;
   transition: background 0.3s ease-in-out;
   text-align: center;
 }
 
 .toggle-button:hover {
-  background: #333; /* Dark gray on hover */
+  background: #333; 
 }
 
 .toggle-button.active {
-  background: #000; /* Keep it black when active */
-  color: white;
+  background: #000; 
+  color: white ;
 }
 
 .star {
-  font-size: 24px; /* Increase star size */
-  color: #ccc;
+  font-size: 24px; 
+  color: #ccc ;
   transition: color 0.3s ease-in-out;
   cursor: pointer;
 }
@@ -118,15 +118,15 @@ body {
   color: gold;
 }
 
-/* Textarea */
+
 .textarea {
   height: 80px;
   resize: none;
 }
 
-/* Tags Input */
+
 .tag {
-  background: #ddd;
+  background: #ddd ;
   padding: 4px 8px;
   border-radius: 5px;
   font-size: 0.9rem;
@@ -153,25 +153,25 @@ body {
   flex-grow: 1;
 }
 
-/* Add Tag Button */
+
 .add-tag-btn {
   background: black;
-  color: white;
+  color: white ;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
   transition: background 0.3s ease-in-out;
-  width: 100px; /* Ensure a proper width without looking odd */
+  width: 100px;
   text-align: center;
-  margin-top: -11px; /* Moves it slightly upwards */
+  margin-top: -11px; 
 }
 
 .add-tag-btn:hover {
-  background: #333; /* Lighter black on hover */
+  background: #333;
 }
 
-/* Display Tags */
+
 .tags-display {
   display: flex;
   gap: 5px;
@@ -181,13 +181,13 @@ body {
 }
 
 .tag {
-  background: #ddd;
+  background: #ddd ;
   padding: 4px 8px;
   border-radius: 5px;
   font-size: 0.9rem;
 }
 
-/* Modal Overlay */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -201,9 +201,8 @@ body {
   z-index: 1000;
 }
 
-/* Modal Container */
 .modal-container {
-  background: white;
+  background: white ;
   padding: 20px;
   width: 400px;
   border-radius: 10px;
@@ -214,7 +213,7 @@ body {
   flex-direction: column;
 }
 
-/* Close Button */
+
 .close-button {
   position: absolute;
   top: 10px;
@@ -225,17 +224,18 @@ body {
   cursor: pointer;
 }
 
-/* Title */
+
 .modal-title {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 15px;
+  color: black !important;
 }
 .close-button:hover {
   color: gray;
 }
 
-/* Form Styling */
+
 .modal-container input,
 .modal-container select,
 .modal-container textarea {
@@ -252,39 +252,39 @@ body {
 
 .modal-content {
   flex-grow: 1;
-  overflow-y: auto; /* Enables vertical scrolling */
+  overflow-y: auto; 
   padding: 20px;
-  max-height: 70vh; /* Adjust for modal header and footer */
+  max-height: 70vh; 
 }
 
-/* Buttons */
+
 .modal-footer {
   display: flex;
   justify-content: space-between;
-  gap: 15px; /* Adds space between Cancel and Add Book */
+  gap: 15px; 
   width: 100%;
 }
 
 .modal-footer button {
   border: none;
   cursor: pointer;
-  flex: 1; /* Ensures both buttons take equal width */
+  flex: 1;
   padding: 10px;
   border-radius: 5px;
 }
 
 .modal-footer .cancel-btn {
-  background-color: gray;
-  color: white;
+  background-color: rgb(59, 58, 58);
+  color: white ;
 }
 
 .modal-footer .add-btn {
   background-color: black;
-  color: white;
+  color: white ;
 }
 
 .modal-footer .cancel-btn:hover {
-  background-color: darkgray;
+  background-color: rgb(45, 44, 44);
 }
 
 .modal-footer .add-btn:hover {
@@ -292,7 +292,7 @@ body {
 }
 
 .cancel-btn {
-  background: #ccc;
+  background: #ccc ;
   padding: 8px 15px;
   border: none;
   border-radius: 5px;
@@ -301,7 +301,7 @@ body {
 
 .add-btn {
   background: #4caf50;
-  color: white;
+  color: white ;
   padding: 8px 15px;
   border: none;
   border-radius: 5px;
@@ -316,4 +316,52 @@ body {
   color: red;
   font-size: 12px;
   margin-bottom: 5px;
+}
+
+
+/* Add this to your global styles */
+.input-field {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc ;
+  border-radius: 5px;
+  background-color: white ; /* Default light mode background */
+  color: black; /* Default light mode text color */
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .input-field {
+    background-color: white !important; /* Force white background in dark mode */
+    color: black !important; /* Force black text in dark mode */
+    border: 1px solid #555; 
+    /* border: 1px solid #e5e4e4; */
+  }
+
+  /* If you have any specific input types or classes */
+  .modal-container input,
+  .modal-container select,
+  .modal-container textarea {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .textarea {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .tag-input {
+    background-color: white !important;
+    color: black !important;
+  }
+}
+
+.cover-upload input[type="file"] {
+  background-color: white !important;
+  color: black;
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
 }

@@ -1,9 +1,10 @@
+import "../main.css";
+
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import "../main.css";
-
+ 
 const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -26,7 +27,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const [endDate, setEndDate] = useState("");
   
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
-
 
 
   useEffect(() => {
@@ -64,6 +64,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       setCoverName(file.name);
     }
   };
+
   
   const removeTag = (index) => {
     setTags(tags.filter((_, i) => i !== index));
@@ -178,6 +179,8 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           {coverName && <p className="cover-name">Uploaded: {coverName}</p>}
         </div>
 
+
+
         {/* Form Fields (Required) */}
         <input
           type="text"
@@ -251,6 +254,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           <>
             <select className="input-field" value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">Select Status</option>
+              <option>To Read</option>
               <option>Reading</option>
               <option>Completed</option>
             </select>

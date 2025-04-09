@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Tag = require("../models/Tag"); // Import the Tag model
+const Tag = require("../models/Tags"); // Import the Tag model
 
 // ✅ Create a new tag
 router.post("/", async (req, res) => {

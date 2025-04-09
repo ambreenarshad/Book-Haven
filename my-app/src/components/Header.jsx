@@ -1,10 +1,11 @@
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import "../main.css";
+
 const Header = ({ toggleTheme, isDarkMode, openModal }) => {
   return (
     <header className="header">
-      <h1 className="header-title">MyBookshelf</h1>
+      <h1 className="header-title">BookHaven</h1>
       <div className="header-buttons">
         {/* Add Book Button */}
         <button onClick={openModal}>

@@ -45,7 +45,6 @@ const BookDetails = () => {
         setIsUpdating(false);
     };
 
-
     if (!book) {
         return <p>Loading book details...</p>;
     }
@@ -123,6 +122,7 @@ const BookDetails = () => {
         <p><strong>Started:</strong> {book.start_date}</p>
         <p><strong>Completed:</strong> {book.end_date }</p>
         <p><strong>Added on:</strong> {book.add_date}</p>
+    
     </div>
     </div>
 

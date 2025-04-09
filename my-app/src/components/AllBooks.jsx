@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../allbooks.css"; 
+import "../allbooks.css"
+
 const StarRating = ({ rating }) => {
     return (
         <div className="star-rating">
@@ -31,7 +33,7 @@ const AllBooks = ({ statusFilter }) => {
                 }
     
                 const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`);
-                let fetchedBooks = response.data.books;
+                let fetchedBooks = response.data.books.filter(book => book.reading_status !== "Trash");
     
                 if (statusFilter) {
                     fetchedBooks = fetchedBooks.filter(book => book.reading_status === statusFilter);
@@ -89,13 +91,31 @@ const AllBooks = ({ statusFilter }) => {
                             onClick={() => navigate(`/book/${book.bookid || book._id}`)}
                             style={{ cursor: "pointer" }}
                         >
+                            <FaTrash
+                                className="trash-icon"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // prevent navigation
+                                    if (window.confirm("Are you sure you want to delete this book?")) {
+                                        axios.post("http://localhost:8000/book/trash", {
+                                            bookId: book.bookid,
+                                            readerId: sessionStorage.getItem("reader_id")
+                                        })
+                                        .then(() => {
+                                            setBooks(books.filter(b => b.bookid !== book.bookid));
+                                            setFilteredBooks(filteredBooks.filter(b => b.bookid !== book.bookid));
+                                        })
+                                        .catch(err => console.error("Error trashing book:", err));
+                                    }
+                                }}
+                                title="Move to Trash"
+                            />
                             <img
                                 src={book.cover_image || "https://via.placeholder.com/150"}
                                 alt={book.book_name}
                                 className="book-cover"
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = "/empty.png";
+                                    e.target.src = "/empty.jpeg";
                                 }}
                             />
                             <div className="book-info">
@@ -113,6 +133,7 @@ const AllBooks = ({ statusFilter }) => {
                         </div>
                     );
                 })}
+
             </div>
         );
     };

@@ -1,12 +1,6 @@
-
-
- 
-
- // Import the CSS file
-
-
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//import "./app.css";
 
 import Header from "./components/Header";
 import AddBookModal from "./components/AddBookModal";
@@ -17,8 +11,7 @@ import AllBooks from "./components/AllBooks";
 import BookDetails from "./components/BookDetails";
 import Dashboard from "./components/DashBoard";
 import Genre from "./components/Genre";
-
-
+import Trash from "./components/Trash";
 const App = () => {
   const [theme, setTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -88,11 +81,12 @@ const App = () => {
                 <Route path="/book/:id" element={<BookDetails />} />
                 <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
                 <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
-                <Route path="/wishlist" element={<AllBooks statusFilter="To Read"/>} />
+                <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
+                <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
                 <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
                 <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
                 <Route path="/genre" element={<Genre />} /> {/* Add the new Genre route */}
-                
+                <Route path="/trash" element={<Trash />} />
               </Routes>
             </div>
           </div>
@@ -112,6 +106,7 @@ const SiteHeader = ({ toggleTheme, theme }) => (
         </button>
       </div>
     </div>
-</header>
+  </header>
 );
+
 export default App;

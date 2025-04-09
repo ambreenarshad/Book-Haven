@@ -1,0 +1,51 @@
+.gheader {
+    position: fixed;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    background-color: var(--background);
+    border-bottom: 1px solid var(--border);
+  
+    padding: 0.5rem 0;
+  }
+  
+  .gheader .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .gheader .logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--foreground);
+    text-decoration: none;
+    padding-left: 3rem !important;
+  }
+  /* Theme Toggle Button */
+.gheader .theme-toggle {
+    background-color: var(--secondary);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 36px;
+    height: 36px;
+    padding-right: auto;
+  }
+  
+ .gheader .theme-toggle:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    transform: scale(1.1);
+  }
+
+  .theme-toggle-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+  }

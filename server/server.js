@@ -5,7 +5,8 @@ const booksRoutes = require("./routes/books");
 const readersRoutes = require("./routes/readers");
 const tagRoutes = require("./routes/tags");
 const readingGoalsRoutes = require("./routes/readingGoals");
-
+const cron = require("node-cron");
+const deleteOldTrash = require("./deleteOldTrash");
 require("dotenv").config();
 
 const app = express();
@@ -21,6 +22,12 @@ app.use("/reader", readersRoutes);
 app.use("/reading-goals", readingGoalsRoutes); //
 app.use("/tags", tagRoutes);
 
+// Run every day at 1 AM
+cron.schedule("0 1 * * *", () => {
+    console.log("Running daily trash cleanup...");
+    deleteOldTrash();
+  });
+  
 app.listen(8000, () => {
     console.log("Server started on port 8000");
 });

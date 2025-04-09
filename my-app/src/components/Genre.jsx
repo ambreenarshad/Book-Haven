@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "../GenrePage.css"; // We'll create this CSS file next
+import "../GenrePage.css"; 
 
 const Genre = () => {
   const [genres, setGenres] = useState([]);
@@ -23,7 +23,7 @@ const Genre = () => {
         const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`);
         
         // Extract unique genres
-        const allBooks = response.data.books;
+        const allBooks = response.data.books.filter(book => book.reading_status !== "Trash");
         setBooks(allBooks);
         
         // Create array of unique genres

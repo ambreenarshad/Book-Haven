@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// *Login Route*
+// **Login Route**
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// *Register Route*
+// **Register Route**
 router.post("/register", async (req, res) => {
     const { first_name, last_name, email, password, date_of_birth } = req.body;
 

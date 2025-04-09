@@ -3,6 +3,7 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const express = require("express");
 const Book = require("../models/Book");
+const Trash = require("../models/Trash"); // Add this line at the top
 
 const router = express.Router();
 
@@ -31,6 +32,33 @@ router.get("/", async (req, res) => {
     } catch (error) {
         console.error("Error fetching books:", error);
         res.status(500).json({ message: "Error fetching books", error });
+    }
+});
+
+// GET /book/trash?readerid=123
+router.get("/trash", async (req, res) => {
+    const readerid = req.query.readerid;
+    try {
+        const trashedBooks = await Trash.find({ readerId: readerid });
+
+        // Fetch full book details for each trashed book
+        const booksWithDetails = await Promise.all(
+            trashedBooks.map(async (trash) => {
+                const book = await Book.findOne({ bookid: trash.bookId });
+                if (!book) return null; // skip if book not found
+                return {
+                    ...trash.toObject(),
+                    ...book.toObject()
+                };
+            })
+        );
+        
+        res.status(200).json(booksWithDetails.filter(Boolean));
+        
+    } catch (err) {
+        // Log the actual error for debugging
+        console.error("Error fetching trash:", err);
+        res.status(500).json({ message: "Error fetching trash", error: err });
     }
 });
 
@@ -153,5 +181,86 @@ router.put("/:id/update-pages", async (req, res) => {
     }
 });
 
+// 🗑️ Move a book to trash
+router.post("/trash", async (req, res) => {
+    const { bookId, readerId } = req.body;
+
+    try {
+        // Check if book exists
+        const book = await Book.findOne({ bookid: bookId, readerid: readerId });
+        if (!book) {
+            return res.status(404).json({ error: "Book not found" });
+        }
+
+        // Check if already in trash
+        const alreadyTrashed = await Trash.findOne({ bookId, readerId });
+        if (alreadyTrashed) {
+            return res.status(409).json({ message: "Book is already in trash" });
+        }
+
+        // Save in Trash collection
+        const trashEntry = new Trash({
+            bookId,
+            readerId,
+            prevReadingStatus: book.reading_status, // 👈 store the current reading status
+        });
+        await trashEntry.save();
+
+        // Optionally mark the book as "Trash" (you can also use this to filter in frontend)
+        book.reading_status = "Trash";
+        await book.save();
+
+        res.status(200).json({ message: "Book moved to trash successfully" });
+    } catch (error) {
+        console.error("Error moving book to trash:", error);
+        res.status(500).json({ error: "Server error while moving book to trash" });
+    }
+});
+
+// Restore Multiple Trashed Books
+router.post("/trash/restore", async (req, res) => {
+    const { bookIds } = req.body; // Array of book IDs to restore
+    try {
+        // Fetch trashed books to restore their original reading status
+        const trashedBooks = await Trash.find({ bookId: { $in: bookIds } });
+        
+        if (trashedBooks.length !== bookIds.length) {
+            return res.status(404).json({ message: "One or more books not found in trash" });
+        }
+
+        // Restore each book
+        for (const trashedBook of trashedBooks) {
+            const book = await Book.findOne({ bookid: trashedBook.bookId });
+            if (!book) {
+                return res.status(404).json({ message: `Book with ID ${trashedBook.bookId} not found` });
+            }
+
+            // Restore the original reading status
+            book.reading_status = trashedBook.prevReadingStatus;
+            await book.save();
+
+            // Delete from trash after restoring
+            await Trash.deleteOne({ bookId: trashedBook.bookId });
+        }
+
+        res.status(200).json({ message: "Books restored successfully" });
+    } catch (error) {
+        console.error("Error restoring books:", error);
+        res.status(500).json({ message: "Error restoring books", error });
+    }
+});
+
+// In your controller
+router.post("/trash/delete", async (req, res) => {
+    const { bookIds } = req.body;
+    try {
+      await Trash.deleteMany({ bookId: { $in: bookIds } });
+      await Book.deleteMany({ bookid: { $in: bookIds } });
+      res.status(200).send("Books permanently deleted.");
+    } catch (err) {
+      res.status(500).send("Error deleting books.");
+    }
+  });
+  
 
 module.exports = router;

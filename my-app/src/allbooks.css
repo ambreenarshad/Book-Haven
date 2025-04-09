@@ -20,6 +20,7 @@
 }
 .book-card {
     background: white;
+    position: relative;
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -177,11 +178,22 @@
     border: 1px solid var(--search-bar-border);
     border-radius: 5px;
     font-size: 16px;
-    margin-left: 1150px;
+    margin-left: 800px;
     background-color: var(--search-bar-bg);
     color: var(--search-bar-text);
 }
 
+.trash-icon {
+    color: rgb(15, 14, 14);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+    cursor: pointer;
+}
+.trash-icon:hover {
+    color: rgb(115, 112, 112);
+}
 
 /* Different status colors */
 .status-badge.Reading { background-color: rgb(245, 238, 238); }

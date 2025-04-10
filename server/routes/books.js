@@ -4,6 +4,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const express = require("express");
 const Book = require("../models/Book");
 const Trash = require("../models/Trash"); // Add this line at the top
+const Tags = require("../models/Tag");
 
 const router = express.Router();
 
@@ -81,7 +82,7 @@ router.post("/add", upload.single("cover_image"), async (req, res) => {
     try {
         console.log("Received Data:", req.body);
         console.log("Received File:", req.file); // Check if file is correctly received
-        const { book_name, author_name, genre, total_pages, year_of_publication, reading_status, book_rating, book_review, start_date, end_date, add_date, readerid,currently_read } = req.body;
+        const { book_name, author_name, genre, total_pages, year_of_publication, reading_status, book_rating, book_review, start_date, end_date, add_date, readerid,currently_read, tags } = req.body;
 
         if (!readerid) {
             return res.status(400).json({ message: "Reader ID is required" });
@@ -104,8 +105,28 @@ router.post("/add", upload.single("cover_image"), async (req, res) => {
             currently_read
         });
 
-        await newBook.save();
-        res.status(201).json({ message: "Book added successfully!", book: newBook });
+        const savedBook = await newBook.save();
+
+        // Save tags if they exist
+        if (tags && tags.length > 0) {
+            // Parse tags if they're sent as a string (e.g., "tag1,tag2")
+            const tagsArray = typeof tags === 'string' ? tags.split(',') : tags;
+            
+            // Create tag documents for each tag
+            const tagPromises = tagsArray.map(tag => {
+                return new Tags({
+                    bookid: savedBook.bookid, // Use the auto-generated bookid
+                    tag: tag.trim() // Trim whitespace
+                }).save();
+            });
+
+            await Promise.all(tagPromises);
+        }
+
+        res.status(201).json({ 
+            message: "Book added successfully!", 
+            book: savedBook 
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to add book", error });

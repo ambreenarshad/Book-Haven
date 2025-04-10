@@ -31,23 +31,6 @@ const Trash = () => {
     };
     fetchTrash();
   }, []);
-
-//   const handleRestore = async (bookId) => {
-//     const confirmRestore = window.confirm("Are you sure you want to restore this book?");
-//     if (!confirmRestore) return;
-  
-//     try {
-//       // 🔥 FIX: Wrap in array and use correct key: bookIds
-//       await axios.post("http://localhost:8000/book/trash/restore", { bookIds: [bookId] });
-  
-//       // ✅ Update UI state
-//       setTrashedBooks((prev) => prev.filter((book) => book.bookId !== bookId));
-//       setSelectedBooks((prev) => prev.filter((id) => id !== bookId)); // Unselect
-//     } catch (err) {
-//       console.error("Restore failed:", err.response?.data || err.message);
-//       alert("Restore failed. Check the console for details.");
-//     }
-//   };
   
   const handleBulkRestore = async () => {
     if (selectedBooks.length === 0) {

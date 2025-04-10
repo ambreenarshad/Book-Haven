@@ -63,14 +63,18 @@ router.get("/trash", async (req, res) => {
     }
 });
 
-// Get Single Book by ID
+// Get Single Book by ID + Tags
 router.get("/:id", async (req, res) => {
     try {
         const book = await Book.findOne({ bookid: req.params.id }) || await Book.findById(req.params.id);
         if (!book) {
             return res.status(404).json({ message: "Book not found" });
         }
-        res.json({ book });
+
+        // Fetch tags related to this book
+        const tags = await Tags.find({ bookid: book.bookid });
+
+        res.json({ book, tags });
     } catch (error) {
         console.error("Error fetching book:", error);
         res.status(500).json({ message: "Error fetching book details", error });
@@ -271,17 +275,19 @@ router.post("/trash/restore", async (req, res) => {
     }
 });
 
-// In your controller
 router.post("/trash/delete", async (req, res) => {
     const { bookIds } = req.body;
     try {
       await Trash.deleteMany({ bookId: { $in: bookIds } });
       await Book.deleteMany({ bookid: { $in: bookIds } });
-      res.status(200).send("Books permanently deleted.");
-    } catch (err) {
-      res.status(500).send("Error deleting books.");
-    }
-  });
+      await Tags.deleteMany({ bookid: { $in: bookIds } });
+
+    res.status(200).send("Books and related tags permanently deleted.");
+  } catch (err) {
+    console.error("Error deleting books and tags:", err);
+    res.status(500).send("Error deleting books and related tags.");
+  }
+});
   
 
 module.exports = router;

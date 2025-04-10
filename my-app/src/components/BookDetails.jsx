@@ -11,6 +11,7 @@ const BookDetails = () => {
     const [review, setReview] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
     const [isTimerOpen, setIsTimerOpen] = useState(false); // Modal state
+    const [tags, setTags] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,6 +19,7 @@ const BookDetails = () => {
             .then((res) => res.json())
             .then((data) => {
                 setBook(data.book);
+                setTags(data.tags || []);
                 setRating(data.book.book_rating || 0);
                 setReview(data.book.book_review || "");
             })
@@ -122,7 +124,16 @@ const BookDetails = () => {
         <p><strong>Started:</strong> {book.start_date}</p>
         <p><strong>Completed:</strong> {book.end_date }</p>
         <p><strong>Added on:</strong> {book.add_date}</p>
-    
+        {/* Render Tags */}
+        {tags.length > 0 && (
+            <div className="tag-container">
+                {tags.map((tagObj, index) => (
+                    <span key={index} className="tag-pill">
+                        {tagObj.tag}
+                    </span>
+                ))}
+            </div>
+        )}
     </div>
     </div>
 

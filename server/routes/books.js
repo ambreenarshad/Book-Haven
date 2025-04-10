@@ -4,6 +4,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const express = require("express");
 const Book = require("../models/Book");
 const Trash = require("../models/Trash"); // Add this line at the top
+const Tags = require("../models/Tag");
 
 const router = express.Router();
 
@@ -62,14 +63,18 @@ router.get("/trash", async (req, res) => {
     }
 });
 
-// Get Single Book by ID
+// Get Single Book by ID + Tags
 router.get("/:id", async (req, res) => {
     try {
         const book = await Book.findOne({ bookid: req.params.id }) || await Book.findById(req.params.id);
         if (!book) {
             return res.status(404).json({ message: "Book not found" });
         }
-        res.json({ book });
+
+        // Fetch tags related to this book
+        const tags = await Tags.find({ bookid: book.bookid });
+
+        res.json({ book, tags });
     } catch (error) {
         console.error("Error fetching book:", error);
         res.status(500).json({ message: "Error fetching book details", error });
@@ -81,7 +86,7 @@ router.post("/add", upload.single("cover_image"), async (req, res) => {
     try {
         console.log("Received Data:", req.body);
         console.log("Received File:", req.file); // Check if file is correctly received
-        const { book_name, author_name, genre, total_pages, year_of_publication, reading_status, book_rating, book_review, start_date, end_date, add_date, readerid,currently_read } = req.body;
+        const { book_name, author_name, genre, total_pages, year_of_publication, reading_status, book_rating, book_review, start_date, end_date, add_date, readerid,currently_read, tags } = req.body;
 
         if (!readerid) {
             return res.status(400).json({ message: "Reader ID is required" });
@@ -104,8 +109,28 @@ router.post("/add", upload.single("cover_image"), async (req, res) => {
             currently_read
         });
 
-        await newBook.save();
-        res.status(201).json({ message: "Book added successfully!", book: newBook });
+        const savedBook = await newBook.save();
+
+        // Save tags if they exist
+        if (tags && tags.length > 0) {
+            // Parse tags if they're sent as a string (e.g., "tag1,tag2")
+            const tagsArray = typeof tags === 'string' ? tags.split(',') : tags;
+            
+            // Create tag documents for each tag
+            const tagPromises = tagsArray.map(tag => {
+                return new Tags({
+                    bookid: savedBook.bookid, // Use the auto-generated bookid
+                    tag: tag.trim() // Trim whitespace
+                }).save();
+            });
+
+            await Promise.all(tagPromises);
+        }
+
+        res.status(201).json({ 
+            message: "Book added successfully!", 
+            book: savedBook 
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to add book", error });
@@ -250,17 +275,19 @@ router.post("/trash/restore", async (req, res) => {
     }
 });
 
-// In your controller
 router.post("/trash/delete", async (req, res) => {
     const { bookIds } = req.body;
     try {
       await Trash.deleteMany({ bookId: { $in: bookIds } });
       await Book.deleteMany({ bookid: { $in: bookIds } });
-      res.status(200).send("Books permanently deleted.");
-    } catch (err) {
-      res.status(500).send("Error deleting books.");
-    }
-  });
+      await Tags.deleteMany({ bookid: { $in: bookIds } });
+
+    res.status(200).send("Books and related tags permanently deleted.");
+  } catch (err) {
+    console.error("Error deleting books and tags:", err);
+    res.status(500).send("Error deleting books and related tags.");
+  }
+});
   
 
 module.exports = router;

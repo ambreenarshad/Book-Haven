@@ -4,7 +4,6 @@ const cron = require("node-cron");
 const connectDB = require("./config/db");
 const booksRoutes = require("./routes/books");
 const readersRoutes = require("./routes/readers");
-const tagRoutes = require("./routes/tags");
 const readingGoalsRoutes = require("./routes/readingGoals");
 const timerRoutes = require("./routes/timer");
 const dashboardRoutes = require("./routes/dashboard")
@@ -22,7 +21,6 @@ connectDB();
 app.use("/book", booksRoutes);
 app.use("/reader", readersRoutes);
 app.use("/reading-goals", readingGoalsRoutes); 
-app.use("/tags", tagRoutes);
 app.use("/timer", timerRoutes);
 app.use("/dashboard", dashboardRoutes);
 

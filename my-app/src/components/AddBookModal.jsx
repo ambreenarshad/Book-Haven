@@ -1,5 +1,4 @@
 import "../main.css";
-
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -25,9 +24,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   console.log("Reader ID in AddBookModal:", readerId); // Debugging
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
-
 
   useEffect(() => {
     if (isWishlist) {
@@ -64,7 +61,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       setCoverName(file.name);
     }
   };
-
   
   const removeTag = (index) => {
     setTags(tags.filter((_, i) => i !== index));
@@ -94,7 +90,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
         newErrors.currentlyRead = "For 'Completed' status, pages read must be equal to total pages.";
       }
      
-
       if (status === "Reading" || status === "Completed") {
         if (!startDate) {
           newErrors.startDate = "Start date is required.";
@@ -136,7 +131,8 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     formData.append("end_date", endDate || ""); // Add end_date
     formData.append("add_date", today);
     formData.append("currently_read", currentlyRead || "0");
-  
+    formData.append("tags", tags); // Add tags to form data
+
     if (coverFile) {
       formData.append("cover_image", coverFile); // Attach file
     }
@@ -178,8 +174,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           <input type="file" accept="image/*" onChange={handleCoverUpload} />
           {coverName && <p className="cover-name">Uploaded: {coverName}</p>}
         </div>
-
-
 
         {/* Form Fields (Required) */}
         <input
@@ -232,7 +226,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           />
         </div>
 
-
         {/* Wishlist or Library Toggle */}
         <div className="toggle-container">
           <button
@@ -254,24 +247,11 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           <>
             <select className="input-field" value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">Select Status</option>
-              <option>To Read</option>
               <option>Reading</option>
               <option>Completed</option>
             </select>
             {errors.status && <p className="error-text">{errors.status}</p>}
 
-
-    {/* Start Date Input (Required for Reading and Completed) */}
-    {/* {(status === "Reading" || status === "Completed") && (
-      
-      <input
-        type="date"
-        placeholder="Start Date"
-        className="input-field"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-      />
-    )} */}
  {/* Show Currently Read input if status is 'Reading' or 'Completed' */}
 {(status === "Reading") && (
   <>
@@ -329,7 +309,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   </>
 )}
 
-
             {/* Star Rating (Optional) */}
             <div className="rating-container">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -355,7 +334,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           </>
         )}
         
-
         {/* Tags Input (Optional) */}
         <div className="tag-input-container">
           <input

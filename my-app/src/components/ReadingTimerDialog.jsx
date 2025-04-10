@@ -8,7 +8,7 @@ const ReadingTimerDialog = ({ onClose, bookId }) => {
     const [isRunning, setIsRunning] = useState(false);
     const [isSaving, setIsSaving] = useState(false);  // Loading state for save button
     const [startTime, setStartTime] = useState(null);
-
+    const readerId = sessionStorage.getItem("reader_id");
     useEffect(() => {
         let timer;
         if (isRunning && timeLeft !== null && timeLeft > 0) {
@@ -74,6 +74,7 @@ const ReadingTimerDialog = ({ onClose, bookId }) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    reader_id: readerId,
                     bookId,
                     duration: plannedDuration,
                     real_time: actualTime,

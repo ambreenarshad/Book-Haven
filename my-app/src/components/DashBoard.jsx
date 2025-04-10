@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
 import "../DashBoard.css";
+import { 
+  MdDashboard, 
+  MdMenuBook, 
+  MdAutoStories, 
+  MdCheckCircle,
+  MdFlag,
+  MdTimeline
+} from "react-icons/md";
+import { LuLibrary } from "react-icons/lu";
+
+import { Line } from "react-chartjs-2"; // Importing the Line chart from react-chartjs-2
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+// Register the components with Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
   const [goals, setGoals] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // Toggle edit modal
   const [updatedGoals, setUpdatedGoals] = useState({}); // Store updated values
   const [summary, setSummary] = useState(null);
+  const [pagesChartData, setPagesChartData] = useState(null);
+  const [minutesChartData, setMinutesChartData] = useState(null);
+
+
   const readerId = sessionStorage.getItem("reader_id");
 
   useEffect(() => {
@@ -23,14 +42,58 @@ const Dashboard = () => {
       })
       .catch((err) => console.error("Error fetching goals:", err));
 
-      fetch(`http://localhost:8000/dashboard/summary/${readerId}`)
+    fetch(`http://localhost:8000/dashboard/summary/${readerId}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Summary:", data);
         setSummary(data);
       })
       .catch((err) => console.error("Error fetching summary:", err));
-    }, [readerId]);
+
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`);
+          const data = await response.json();
+      
+          if (response.ok) {
+            const labels = data.map(item => item.date);
+            const totalPages = data.map(item => item.totalPages);
+            const totalMinutes = data.map(item => item.totalMinutes);
+      
+            setPagesChartData({
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Total Pages Read',
+                  data: totalPages,
+                  borderColor: 'rgb(4, 3, 6)',
+                  fill: false,
+                  tension: 0.1,
+                },
+              ],
+            });
+      
+            setMinutesChartData({
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Total Minutes Read',
+                  data: totalMinutes,
+                  borderColor: 'rgb(4, 3, 6)',
+                  fill: false,
+                  tension: 0.1,
+                },
+              ],
+            });
+          } else {
+            console.error("Failed to fetch data:", data.message || 'Unknown error');
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData()
+  }, [readerId]); // Runs when readerId changes
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -93,49 +156,78 @@ const Dashboard = () => {
   if (!summary) {
     return <div>Loading summary...</div>;
   }
-  
+  if (!pagesChartData || !minutesChartData) {
+    return <div>Loading chart data...</div>;
+  }
+
   return (
-  <div className="dashboard-container">
-    {/* Left-aligned heading */}
-    <h1 className="dashboard-heading">Dashboard</h1>
+    <div className="dashboard-container">
+      {/* Left-aligned heading */}
+      <h1 className="dashboard-heading">Dashboard</h1>
     
-    <div className="book-summary">
-      <h2 className="summary-heading">📚 Book Summary</h2>
-      <p className="summary-item">Total Books: <strong>{summary.totalBooks}</strong></p>
-      <p className="summary-item">Completed: <strong>{summary.completedBooks}</strong></p>
-      <p className="summary-item">Currently Reading: <strong>{summary.currentlyReading}</strong></p>
-    </div>
-    
-
-    <div className="ReadingGoals">
-      <h2 className="ReadingGoals-h2">📖 Reading Goals</h2>
-      <p className="ReadingGoals-p">Track your reading progress based on completed books</p>
-
-      <GoalProgress title="Yearly Goal" current={goals.yearly_progress} total={goals.yearly_goal} />
-      <GoalProgress title="Monthly Goal" current={goals.monthly_progress} total={goals.monthly_goal} />
-      <GoalProgress title="Weekly Goal" current={goals.weekly_progress} total={goals.weekly_goal} />
-
-      {/* Edit Goals Button */}
-      <button className="edit-button" onClick={handleEditClick}>Edit Goals</button>
-
-      {/* Modal for Editing Goals */}
-      {isEditing && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Edit Your Goals</h3>
-            <label>Yearly Goal: <input type="number" name="yearly_goal" value={updatedGoals.yearly_goal} onChange={handleChange} /></label>
-            <label>Monthly Goal: <input type="number" name="monthly_goal" value={updatedGoals.monthly_goal} onChange={handleChange} /></label>
-            <label>Weekly Goal: <input type="number" name="weekly_goal" value={updatedGoals.weekly_goal} onChange={handleChange} /></label>
-            
-            <div className="modal-buttons">
-              <button onClick={handleSave}>Save</button>
-              <button onClick={handleClose}>Cancel</button>
-            </div>
+      <div className="book-summary">
+        <h2 className="summary-heading">
+          <LuLibrary style={{ fontSize: '1.6rem', color: 'black', marginBottom: '-2px' }}/> Reading Statistics </h2>
+        <div className="summary-cards">
+          <div className="summary-card">
+            <p className="summary-title">
+              <MdMenuBook style={{ marginBottom: '-2px' }}/> Total Books</p>
+            <p className="summary-value">{summary.totalBooks}</p>
+          </div>
+          <div className="summary-card">
+            <p className="summary-title">
+              <MdCheckCircle style={{ marginBottom: '-2px' }}/> Completed</p>
+            <p className="summary-value">{summary.completedBooks}</p>
+          </div>
+          <div className="summary-card">
+            <p className="summary-title">
+              <MdAutoStories style={{ marginBottom: '-2px' }}/> Currently Reading</p>
+            <p className="summary-value">{summary.currentlyReading}</p>
           </div>
         </div>
-      )}
+        <div className="charts-container">
+          <div className="chart-container">
+            <h3>Total Pages Read per Day</h3>
+            <Line data={pagesChartData} options={{ responsive: true, plugins: { title: { display: true, text: 'Pages Read per Day' } } }} />
+          </div>
+
+          <div className="chart-container">
+            <h3>Total Minutes of Reading per Day</h3>
+            <Line data={minutesChartData} options={{ responsive: true, plugins: { title: { display: true, text: 'Minutes of Reading per Day' } } }} />
+          </div>
+        </div>
+      </div> 
+
+      <div className="ReadingGoals">
+        <h2 className="ReadingGoals-h2">
+          <MdFlag style={{ fontSize: '1.6rem', color: 'black', marginBottom: '-2px' }}/>Reading Goals</h2>
+        <p className="ReadingGoals-p">Track your reading progress based on completed books</p>
+
+        <GoalProgress title="Yearly Goal" current={goals.yearly_progress} total={goals.yearly_goal} />
+        <GoalProgress title="Monthly Goal" current={goals.monthly_progress} total={goals.monthly_goal} />
+        <GoalProgress title="Weekly Goal" current={goals.weekly_progress} total={goals.weekly_goal} />
+
+        {/* Edit Goals Button */}
+        <button className="edit-button" onClick={handleEditClick}>Edit Goals</button>
+
+        {/* Modal for Editing Goals */}
+        {isEditing && (
+          <div className="modal">
+            <div className="modal-content">
+              <h3>Edit Your Goals</h3>
+              <label>Yearly Goal: <input type="number" name="yearly_goal" value={updatedGoals.yearly_goal} onChange={handleChange} /></label>
+              <label>Monthly Goal: <input type="number" name="monthly_goal" value={updatedGoals.monthly_goal} onChange={handleChange} /></label>
+              <label>Weekly Goal: <input type="number" name="weekly_goal" value={updatedGoals.weekly_goal} onChange={handleChange} /></label>
+              
+              <div className="modal-buttons">
+                <button onClick={handleSave}>Save</button>
+                <button onClick={handleClose}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
   );
 };
 

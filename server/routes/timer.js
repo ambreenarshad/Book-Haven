@@ -5,21 +5,25 @@ const router = express.Router();
 router.post("/log", async (req, res) => {
     console.log("Received Timer Data:", req.body);  // Log incoming data
 
-    const { bookId, duration, real_time, pages_read } = req.body;
+    const { reader_id, bookId, duration, real_time, pages_read } = req.body;
 
-    if (!bookId || !duration || !real_time || !pages_read) {
+    // Check for missing required fields
+    if (!reader_id || !bookId || !duration || !real_time || !pages_read) {
         return res.status(400).json({ message: "Missing required fields." });
     }
 
     try {
+        // Create a new Timer session object
         const newSession = new Timer({
-            bookId,
+            reader_id: reader_id, // Use reader_id passed in the body
+            bookId: bookId,
             duration: Number(duration),
             real_time: Number(real_time),
             pages_read: Number(pages_read),
-            date: new Date()  // Optionally override if needed
+            date: new Date(), // Optionally override if needed
         });
 
+        // Save the session to the database
         await newSession.save();
         res.status(201).json({ message: "Timer session logged successfully!", session: newSession });
     } catch (err) {
@@ -27,5 +31,6 @@ router.post("/log", async (req, res) => {
         res.status(500).json({ message: "Failed to save timer session.", error: err.message });
     }
 });
+
 
 module.exports = router;

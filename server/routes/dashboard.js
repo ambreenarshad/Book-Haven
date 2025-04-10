@@ -1,5 +1,6 @@
 const express = require("express");
 const Book = require("../models/Book");
+const Timer = require("../models/Timer")
 const router = express.Router();
 
 // GET /dashboard/summary/:readerid
@@ -17,43 +18,55 @@ router.get("/summary/:readerid", async (req, res) => {
       res.status(500).json({ error: "Server error while fetching summary" });
     }
   });
-// // GET /dashboard/weekly-stats
-// router.get("/weekly-stats", async (req, res) => {
-//     const today = new Date();
-//     const weekAgo = new Date(today);
-//     weekAgo.setDate(today.getDate() - 6);
+  router.get("/timer/:readerid", async (req, res) => {
+    try {
+        const readerId = Number(req.params.readerid);
 
-//     const weeklyStats = await Timer.aggregate([
-//         {
-//             $match: {
-//                 date: { $gte: weekAgo }
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-//                 totalPages: { $sum: "$pages_read" },
-//                 totalTime: { $sum: "$real_time" }
-//             }
-//         },
-//         {
-//             $sort: { _id: 1 }
-//         }
-//     ]);
+        // Calculate 7 days ago from now (including today)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6); // include today + past 6 days
 
-//     res.json(weeklyStats);
-// });
-// // GET /currently-reading
-// router.get("/currently-reading", async (req, res) => {
-//     const books = await Book.find({ reading_status: "Reading" }, {
-//         book_name: 1,
-//         total_pages: 1,
-//         currently_read: 1,
-//         cover_image: 1
-//     });
+        const summary = await Timer.aggregate([
+            {
+                $addFields: {
+                    date: { $toDate: "$date" } // ensure date is a Date type before match
+                }
+            },
+            {
+                $match: {
+                    reader_id: readerId,
+                    date: { $gte: sevenDaysAgo }
+                }
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+                    totalPages: { $sum: "$pages_read" },
+                    totalRealTimeSeconds: { $sum: "$real_time" }
+                }
+            },
+            {
+                $project: {
+                    date: "$_id",
+                    totalPages: 1,
+                    totalMinutes: { $divide: ["$totalRealTimeSeconds", 60] },
+                    _id: 0
+                }
+            },
+            { $sort: { date: 1 } }
+        ]);
 
-//     res.json(books);
-// });
+        console.log("Aggregated Summary:", summary);
 
+        if (summary.length === 0) {
+            return res.status(404).json({ message: "No reading data found for this reader." });
+        }
+
+        res.json(summary);
+    } catch (err) {
+        console.error("Error in /timer/:readerid:", err);
+        res.status(500).json({ error: "Server error while fetching timer data" });
+    }
+});
 
 module.exports = router;

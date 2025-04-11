@@ -1,3 +1,4 @@
+import React from "react";
 import "../side.css"; 
 import { Link } from "react-router-dom";
 // Import icons from react-icons
@@ -12,8 +13,9 @@ import {
   MdDownload, 
   MdCategory
 } from "react-icons/md";
+import SidebarUserProfile from "./SidebarUserProfile";
 
-const Sidebar = () => {
+const Sidebar = ({ userData, onLogout }) => {
   const categories = [
     { name: "Dashboard", path: "/", icon: <MdDashboard /> },
     { name: "All Books", path: "/all-books", icon: <MdMenuBook /> },
@@ -40,6 +42,11 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
+      
+      {/* User profile at bottom of sidebar */}
+      <div className="sidebar-footer">
+        <SidebarUserProfile userData={userData} onLogout={onLogout} />
+      </div>
     </div>
   );
 };

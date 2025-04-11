@@ -12,30 +12,63 @@ import BookDetails from "./components/BookDetails";
 import Dashboard from "./components/DashBoard";
 import Genre from "./components/Genre";
 import Trash from "./components/Trash";
-import Favorites from "./components/Favorites"
+import Favorites from "./components/Favorites";
+
 const App = () => {
   const [theme, setTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReaderId, setCurrentReaderId] = useState(null);
+  const [userData, setUserData] = useState(null);
+
   const handleLogin = (readerId) => {
     console.log("Logging in with Reader ID:", readerId); // Debugging
     setIsAuthenticated(true);
     setCurrentReaderId(readerId);
-    sessionStorage.setItem("reader_id", readerId); // Store in localStorage
+    sessionStorage.setItem("reader_id", readerId); // Store in sessionStorage
+    fetchUserData(readerId);
+  };
+  
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentReaderId(null);
+    setUserData(null);
+    sessionStorage.removeItem("reader_id");
+  };
+
+  const fetchUserData = async (readerId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+      } else {
+        console.error("Failed to fetch user data");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
   
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") || "light";
     setTheme(storedTheme);
     document.documentElement.classList.toggle("dark", storedTheme === "dark");
+    
     const storedReaderId = sessionStorage.getItem("reader_id");
-    console.log("Retrieved Reader ID from localStorage:", storedReaderId); // Debugging
+    console.log("Retrieved Reader ID from sessionStorage:", storedReaderId); // Debugging
     if (storedReaderId) {
       setIsAuthenticated(true);
       setCurrentReaderId(storedReaderId);
+      fetchUserData(storedReaderId);
     }
   }, []);
+
+  
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -71,24 +104,30 @@ const App = () => {
           </div>
         ) : (
           <div className="app-container flex">
-            <Sidebar />
+            <Sidebar userData={userData} onLogout={handleLogout} />
             <div className="content flex-grow">
-              <Header toggleTheme={toggleTheme} theme={theme} openModal={openModal} />
-              <AddBookModal isOpen={isModalOpen} closeModal={closeModal}  readerId={currentReaderId} />
+              <Header 
+                toggleTheme={toggleTheme} 
+                theme={theme} 
+                openModal={openModal} 
+                userData={userData}
+                onLogout={handleLogout}
+              />
+              <AddBookModal isOpen={isModalOpen} closeModal={closeModal} readerId={currentReaderId} />
 
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/all-books" element={<AllBooks />} /> {/* ✅ AllBooks should be here */}
+                <Route path="/all-books" element={<AllBooks />} />
                 <Route path="/book/:id" element={<BookDetails />} />
                 <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
                 <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
                 <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
                 <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
-                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
                 <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
-                <Route path="/genre" element={<Genre />} /> {/* Add the new Genre route */}
+                <Route path="/genre" element={<Genre />} />
                 <Route path="/trash" element={<Trash />} />
+                <Route path="/favorites" element={<Favorites />} />
               </Routes>
             </div>
           </div>

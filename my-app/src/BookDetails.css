@@ -413,7 +413,35 @@
     color: #cc0000;
   }
 
- 
+ /* Cover with edit button */
+.cover-with-edit {
+  position: relative;
+  display: inline-block;
+}
+
+.edit-cover-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  color: black;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-cover-button:hover {
+  transform: scale(1.1);
+}
+
+.edit-icon {
+  font-size: 16px;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

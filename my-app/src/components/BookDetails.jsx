@@ -7,8 +7,8 @@ import {
 } from "./Tabs";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { MdCloudUpload, MdTimer} from "react-icons/md";
 import { IoArrowRedoCircleSharp } from "react-icons/io5";
+import { MdEdit } from "react-icons/md";
 import "../BookDetails.css";
 import ReadingTimerDialog from "./ReadingTimerDialog";
 import BookQuotes from "./BookQuotes"; // Import the BookQuotes component
@@ -134,6 +134,7 @@ const BookDetails = () => {
         <h1 className="BookDetails-h1">{book.book_name}</h1>
         <div className="book-container">        
             <div className="book-image-container">
+            <div className="cover-with-edit">
                 <img
                     src={book.cover_image || "https://via.placeholder.com/150"}
                     alt={book.book_name}
@@ -143,6 +144,10 @@ const BookDetails = () => {
                         e.target.src = "/empty.jpeg";
                     }}
                 />
+                <label htmlFor="cover-upload" className="edit-cover-button">
+                <MdEdit className="edit-icon" />
+                </label>
+            </div>
                 {/* Log Reading Session Button */}
                 <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
                 <MdTimer style={{marginBottom: '-2px'  }} /> Log Reading Session
@@ -159,9 +164,9 @@ const BookDetails = () => {
                             style={{ display: "none" }}
                             onChange={handleCoverUpload}
                         />
-                        <label htmlFor="cover-upload" className="upload-cover-button">
+                        {/* <label htmlFor="cover-upload" className="upload-cover-button">
                             <MdCloudUpload style={{marginBottom: '-2px'  }} /> Upload Cover Image
-                        </label>
+                        </label> */}
                 {/* Timer Dialog */}
                 {isTimerOpen && (
                     <ReadingTimerDialog 

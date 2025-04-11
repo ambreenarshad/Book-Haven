@@ -12,6 +12,7 @@ import BookDetails from "./components/BookDetails";
 import Dashboard from "./components/DashBoard";
 import Genre from "./components/Genre";
 import Trash from "./components/Trash";
+import Favorites from "./components/Favorites"
 const App = () => {
   const [theme, setTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -83,6 +84,7 @@ const App = () => {
                 <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
                 <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
                 <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
+                <Route path="/favorites" element={<Favorites />} />
                 <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
                 <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
                 <Route path="/genre" element={<Genre />} /> {/* Add the new Genre route */}

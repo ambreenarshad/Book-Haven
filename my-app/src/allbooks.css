@@ -194,7 +194,17 @@
 .trash-icon:hover {
     color: rgb(115, 112, 112);
 }
-
+.favorite-icon {
+    color: rgb(118, 28, 28);
+    position: absolute;
+    top: 45px; 
+    right: 15px;
+    z-index: 100;
+    cursor: pointer;
+}
+.favorite-icon:hover {
+    color: rgb(143, 81, 81);
+}
 /* Different status colors */
 .status-badge.Reading { background-color: rgb(245, 238, 238); }
 .status-badge.Completed { background-color: rgb(245, 238, 238); }

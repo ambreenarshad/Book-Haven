@@ -1,7 +1,7 @@
 import "../side.css"; 
 import { Link } from "react-router-dom";
 // Import icons from react-icons
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaHeart } from "react-icons/fa";
 import { 
   MdDashboard, 
   MdMenuBook, 
@@ -20,11 +20,11 @@ const Sidebar = () => {
     { name: "Currently Reading", path: "/currently-reading", icon: <MdAutoStories /> },
     { name: "Completed", path: "/completed", icon: <MdCheckCircle /> },
     { name: "Wishlist", path: "/wishlist", icon: <MdBookmark /> },
+    { name: "Favorites", path: "/favorites", icon: <FaHeart /> },
     { name: "Lent Out", path: "/lent-out", icon: <MdShare /> },
     { name: "Borrowed", path: "/borrowed", icon: <MdDownload /> },
     { name: "Genre", path: "/genre", icon: <MdCategory /> },
     { name: "Trash", path: "/trash", icon: <FaTrash /> },
-
   ];
 
   return (

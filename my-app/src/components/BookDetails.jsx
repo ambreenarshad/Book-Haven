@@ -18,6 +18,8 @@ const BookDetails = () => {
     const [isUpdating, setIsUpdating] = useState(false);
     const [isTimerOpen, setIsTimerOpen] = useState(false); // Modal state
     const [tags, setTags] = useState([]);
+    const [summary, setSummary] = useState("");
+    const [loadingSummary, setLoadingSummary] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +33,28 @@ const BookDetails = () => {
             })
             .catch((error) => console.error("Error fetching book details:", error));
     }, [id]);
+
+    const handleGenerateSummary = async () => {
+        setLoadingSummary(true);
+        try {
+          const response = await fetch("http://localhost:8000/api/summary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              bookName: book.book_name,
+              authorName: book.author_name
+            }),
+          });
+      
+          const data = await response.json();
+          setSummary(data.summary);
+        } catch (err) {
+          console.error("Failed to generate summary", err);
+          setSummary("Failed to generate summary. Please try again.");
+        } finally {
+          setLoadingSummary(false);
+        }
+      };
 
     const updateReview = async () => {
         setIsUpdating(true);
@@ -150,6 +174,24 @@ const BookDetails = () => {
                             </div>
                         )}
                     </div>
+                </TabsContent>
+                <TabsContent value="ai" className="space-y-4">
+                <div>
+                    <button
+                    onClick={handleGenerateSummary}
+                    className="generate-summary-button"
+                    disabled={loadingSummary}
+                    >
+                    {loadingSummary ? "Generating..." : "Generate Summary"}
+                    </button>
+
+                    {summary && (
+                    <div className="summary-output">
+                        <h3>AI Summary:</h3>
+                        <p>{summary}</p>
+                    </div>
+                    )}
+                </div>
                 </TabsContent>
             </Tabs>
         </div>            

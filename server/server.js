@@ -8,6 +8,7 @@ const readingGoalsRoutes = require("./routes/readingGoals");
 const timerRoutes = require("./routes/timer");
 const dashboardRoutes = require("./routes/dashboard")
 const deleteOldTrash = require("./deleteOldTrash");
+const summaryRoute = require("./routes/summary");
 require("dotenv").config();
 
 const app = express();
@@ -23,7 +24,7 @@ app.use("/reader", readersRoutes);
 app.use("/reading-goals", readingGoalsRoutes); 
 app.use("/timer", timerRoutes);
 app.use("/dashboard", dashboardRoutes);
-
+app.use("/api/summary", summaryRoute);
 // Run every day at 1 AM
 cron.schedule("0 1 * * *", () => {
     console.log("Running daily trash cleanup...");

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa";
+import { FaStar, FaRegStar, FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../allbooks.css"
+
+import "../allbooks.css";
 
 const StarRating = ({ rating }) => {
     return (
@@ -25,7 +25,7 @@ const AllBooks = ({ statusFilter }) => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const readerId = sessionStorage.getItem("reader_id"); // Get reader_id from localStorage
+                const readerId = sessionStorage.getItem("reader_id");
     
                 if (!readerId) {
                     console.error("No reader ID found.");
@@ -35,6 +35,17 @@ const AllBooks = ({ statusFilter }) => {
                 const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`);
                 let fetchedBooks = response.data.books.filter(book => book.reading_status !== "Trash");
     
+                // Fetch favorite status for all books
+                const favoritesResponse = await axios.get(`http://localhost:8000/book/favorites?readerid=${readerId}`);
+                const favoriteBooks = favoritesResponse.data;
+                const favoriteBookIds = favoriteBooks.map(book => book.bookid);
+                
+                // Add isFavorite flag to each book
+                fetchedBooks = fetchedBooks.map(book => ({
+                    ...book,
+                    isFavorite: favoriteBookIds.includes(book.bookid)
+                }));
+                
                 if (statusFilter) {
                     fetchedBooks = fetchedBooks.filter(book => book.reading_status === statusFilter);
                 }
@@ -51,7 +62,6 @@ const AllBooks = ({ statusFilter }) => {
         fetchBooks();
     }, [statusFilter]);
     
-
     useEffect(() => {
         if (searchQuery.trim() === "") {
             setFilteredBooks(books);
@@ -64,6 +74,37 @@ const AllBooks = ({ statusFilter }) => {
             );
         }
     }, [searchQuery, books]);
+
+    const handleFavoriteToggle = async (e, book) => {
+        e.stopPropagation(); // prevent navigation
+        
+        try {
+            const readerId = sessionStorage.getItem("reader_id");
+            const response = await axios.post("http://localhost:8000/book/favorite", {
+                bookId: book.bookid,
+                readerId: readerId
+            });
+            
+            // Update book in state with new favorite status
+            const updatedBooks = books.map(b => 
+                b.bookid === book.bookid 
+                    ? { ...b, isFavorite: response.data.isFavorite } 
+                    : b
+            );
+            
+            setBooks(updatedBooks);
+            setFilteredBooks(
+                updatedBooks.filter(book => 
+                    searchQuery.trim() === "" || 
+                    book.book_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    book.author_name.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            );
+            
+        } catch (err) {
+            console.error("Error updating favorite status:", err);
+        }
+    };
 
     const renderBookList = () => {
         if (loading) {
@@ -91,6 +132,21 @@ const AllBooks = ({ statusFilter }) => {
                             onClick={() => navigate(`/book/${book.bookid || book._id}`)}
                             style={{ cursor: "pointer" }}
                         >
+                            {book.isFavorite ? (
+                                <FaHeart
+                                    className="favorite-icon"
+                                    color="red"
+                                    onClick={(e) => handleFavoriteToggle(e, book)}
+                                    title="Remove from Favorites"
+                                />
+                            ) : (
+                                <FaRegHeart
+                                    className="favorite-icon"
+                                    onClick={(e) => handleFavoriteToggle(e, book)}
+                                    title="Add to Favorites"
+                                />
+                            )}
+
                             <FaTrash
                                 className="trash-icon"
                                 onClick={(e) => {
@@ -115,7 +171,7 @@ const AllBooks = ({ statusFilter }) => {
                                 className="book-cover"
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = "/empty.jpeg";
+                                    e.target.src = "/empty.png";
                                 }}
                             />
                             <div className="book-info">
@@ -133,7 +189,6 @@ const AllBooks = ({ statusFilter }) => {
                         </div>
                     );
                 })}
-
             </div>
         );
     };

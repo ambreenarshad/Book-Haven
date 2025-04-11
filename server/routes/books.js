@@ -52,7 +52,68 @@ router.get("/:id/quotes", async (req, res) => {
       res.status(500).json({ message: "Error fetching quotes", error });
     }
   });
-  
+  // Add a tag to a book
+router.post('/:bookid/tags', async (req, res) => {
+    try {
+        const { bookid } = req.params;
+        const { tag } = req.body;
+
+        // Check if book exists
+        const book = await Book.findOne({ bookid: parseInt(bookid) });
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+
+        // Create new tag
+        const newTag = new Tags({
+            bookid: parseInt(bookid),
+            tag: tag.trim()
+        });
+
+        await newTag.save();
+
+        res.status(201).json(newTag);
+    } catch (error) {
+        console.error('Error adding tag:', error);
+        res.status(500).json({ error: 'Failed to add tag' });
+    }
+});
+
+// Remove a tag from a book
+router.delete('/:bookid/tags', async (req, res) => {
+    try {
+        const { bookid } = req.params;
+        const { tag } = req.body;
+
+        // Check if tag exists for this book
+        const existingTag = await Tags.findOneAndDelete({ 
+            bookid: parseInt(bookid), 
+            tag: tag 
+        });
+
+        if (!existingTag) {
+            return res.status(404).json({ error: 'Tag not found for this book' });
+        }
+
+        res.status(200).json({ message: 'Tag deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting tag:', error);
+        res.status(500).json({ error: 'Failed to delete tag' });
+    }
+});
+
+// Get all tags for a book
+router.get('/:bookid/tags', async (req, res) => {
+    try {
+        const { bookid } = req.params;
+        const tags = await Tags.find({ bookid: parseInt(bookid) });
+        res.status(200).json(tags);
+    } catch (error) {
+        console.error('Error fetching tags:', error);
+        res.status(500).json({ error: 'Failed to fetch tags' });
+    }
+});
+
   // Add a new quote
   router.post("/:id/quotes", async (req, res) => {
     try {

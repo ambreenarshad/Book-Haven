@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import "../global.css";
+
+import React, { useState } from "react";
 
 const Auth = ({ setIsAuthenticated, onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
@@ -35,11 +36,11 @@ const Auth = ({ setIsAuthenticated, onLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
         if (activeTab === "login") {
           sessionStorage.setItem("reader_id", data.reader_id); // Store reader_id
-          setIsAuthenticated(true);
-          if (onLogin) onLogin(data.reader_id); // Call onLogin function
+          if (onLogin) onLogin(data.reader_id); // Call onLogin function which will trigger animation
+        } else {
+          alert(data.message); // Show message for registration
         }
       } else {
         alert(data.message);

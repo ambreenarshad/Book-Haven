@@ -118,6 +118,22 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       alert("Error: Reader ID is missing. Please log in again.");
       return;
     }
+    /*Check for duplicate book*/
+    try {
+      // First check for existing books
+      const checkResponse = await axios.get(`http://localhost:8000/book/check`, {
+        params: {
+          readerId,
+          title: title.trim().toLowerCase(),
+          author: author.trim().toLowerCase()
+        }
+      });
+  
+      if (checkResponse.data.exists) {
+        alert("You already have a book with this title and author in your collection.");
+        return;
+      }
+    /**************************************/
     const formData = new FormData();
     formData.append("book_name", title);
     formData.append("author_name", author);
@@ -141,7 +157,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       formData.append("readerid", readerId);
     }
   
-    try {
+    
       const response = await axios.post("http://localhost:8000/book/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

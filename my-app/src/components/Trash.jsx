@@ -31,7 +31,24 @@ const Trash = () => {
     };
     fetchTrash();
   }, []);
-  
+
+  const checkDuplicate = async (bookName, authorName) => {
+    try {
+      const readerId = sessionStorage.getItem("reader_id");
+      const response = await axios.get(`http://localhost:8000/book/check`, {
+        params: {
+          readerId,
+          title: bookName,
+          author: authorName
+        }
+      });
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking for duplicate:", error);
+      return false;
+    }
+  };
+
   const handleBulkRestore = async () => {
     if (selectedBooks.length === 0) {
       alert("Please select books to restore.");
@@ -40,7 +57,30 @@ const Trash = () => {
   
     const confirmRestore = window.confirm("Are you sure you want to restore the selected books?");
     if (!confirmRestore) return;
-  
+    // Get the selected books data
+  const booksToRestore = trashedBooks.filter(book => 
+    selectedBooks.includes(book.bookId)
+  );
+
+  // Check 1: Verify we're not restoring multiple books with same title/author
+  const titleAuthorMap = {};
+  for (const book of booksToRestore) {
+    const key = `${book.book_name.toLowerCase()}|${book.author_name.toLowerCase()}`;
+    if (titleAuthorMap[key]) {
+      alert(`Cannot restore multiple books with the same title and author. You're trying to restore more than one copy of "${book.book_name}" by ${book.author_name}. Please restore any of the one.`);
+      return;
+    }
+    titleAuthorMap[key] = true;
+  }
+
+  // Check 2: Verify no duplicates exist in the library
+  for (const book of booksToRestore) {
+    const isDuplicate = await checkDuplicate(book.book_name, book.author_name);
+    if (isDuplicate) {
+      alert(`Cannot restore "${book.book_name}" by ${book.author_name} because you already have this book in your library. Please delete that book first if you want to restore this one.`);
+      return;
+    }
+  }
     try {
       await axios.post("http://localhost:8000/book/trash/restore", { bookIds: selectedBooks });
       setTrashedBooks((prev) => prev.filter((book) => !selectedBooks.includes(book.bookId)));

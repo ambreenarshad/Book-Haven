@@ -146,7 +146,26 @@ router.post("/favorite", async (req, res) => {
         res.status(500).json({ error: "Server error while updating favorite status" });
     }
 });
-
+// In your backend routes
+/*For duplicate books check*/
+router.get('/check', async (req, res) => {
+    try {
+      const { readerId, title, author } = req.query;
+      
+      const existingBook = await Book.findOne({
+        readerid: readerId,
+        book_name: { $regex: new RegExp(`^${title}$`, 'i') },
+        author_name: { $regex: new RegExp(`^${author}$`, 'i') },
+        reading_status: { $ne: "Trash" } // Exclude books with status "Trash"
+      });
+  
+      res.json({ exists: !!existingBook });
+    } catch (error) {
+      console.error('Error checking for duplicate book:', error);
+      res.status(500).json({ error: 'Error checking for duplicate book' });
+    }
+  });
+ /***************************/ 
 // Get favorites for a reader
 router.get("/favorites", async (req, res) => {
     const { readerid } = req.query;

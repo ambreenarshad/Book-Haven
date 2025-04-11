@@ -201,13 +201,18 @@
     font-weight: bold;
 }
 /* Tab Navigation */
+/* Tab Navigation */
 .pretty-tabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    background-color: #e5e5e5;
+    background-color: #ffffff;
     padding: 10px;
     gap: 6px;
-    margin-bottom: 16px; /* ⬅️ Gap below the tab bar */
+    margin-bottom: 16px; /* ⬅ Gap below the tab bar */
+  }
+
+  .dark .pretty-tabs {
+    background-color: #1e1d1d; /* Dark mode override */
   }
   
   .pretty-tab {
@@ -267,7 +272,127 @@
 .upload-cover-button:hover {
     background: var(--button-hover-bg);
 }
-
+/* Quotes Container */
+.quotes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  /* Quote Form */
+  .quote-form {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .quote-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .quote-input-group {
+    flex: 1;
+  }
+  
+  .quote-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+  }
+  
+  .quote-form-bottom {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .add-quote-button {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .add-quote-button:hover {
+    background: var(--button-hover-bg);
+  }
+  
+  .add-quote-button:disabled {
+    background-color: #b3c4e6;
+    cursor: not-allowed;
+  }
+  
+  /* Quotes List */
+  .quotes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .quote-item {
+    position: relative;
+    background-color: white;
+    border-left: 4px solid #4a7bec;
+    border-radius: 4px;
+    padding: 15px 40px 15px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .quote-text {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  
+  .quote-date {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .delete-quote-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #cc0000;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  
+  .delete-quote-button:hover {
+    opacity: 1;
+  }
+  
+  .no-quotes {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .quote-loading, .quotes-error {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+  
+  .quotes-error {
+    color: #cc0000;
+  }
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

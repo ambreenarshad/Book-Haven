@@ -4,13 +4,13 @@ import {
     TabsList,
     TabsTrigger,
     TabsContent,
-  } from "./Tabs";
+} from "./Tabs";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { MdCloudUpload } from "react-icons/md";
-
 import "../BookDetails.css";
-import ReadingTimerDialog from "./ReadingTimerDialog"; // Import the modal
+import ReadingTimerDialog from "./ReadingTimerDialog";
+import BookQuotes from "./BookQuotes"; // Import the BookQuotes component
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -18,10 +18,8 @@ const BookDetails = () => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
-    const [isTimerOpen, setIsTimerOpen] = useState(false); // Modal state
+    const [isTimerOpen, setIsTimerOpen] = useState(false);
     const [tags, setTags] = useState([]);
-    const [summary, setSummary] = useState("");
-    const [loadingSummary, setLoadingSummary] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,34 +56,12 @@ const BookDetails = () => {
             console.error("Upload error:", err);
             alert("Failed to upload cover image.");
         }
-    };    
-
-    const handleGenerateSummary = async () => {
-        setLoadingSummary(true);
-        try {
-          const response = await fetch("http://localhost:8000/api/summary", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              bookName: book.book_name,
-              authorName: book.author_name
-            }),
-          });
-      
-          const data = await response.json();
-          setSummary(data.summary);
-        } catch (err) {
-          console.error("Failed to generate summary", err);
-          setSummary("Failed to generate summary. Please try again.");
-        } finally {
-          setLoadingSummary(false);
-        }
-      };
+    };
 
     const updateReview = async () => {
         setIsUpdating(true);
         try {
-            const response = await fetch(`http://localhost:8000/book/${id}`, {
+            const response = await fetch(`http://localhost:8000/book/${id}`,{
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ book_rating: rating, book_review: review }),
@@ -124,9 +100,9 @@ const BookDetails = () => {
                 />
                 {/* Log Reading Session Button */}
                 <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
-                            ⏱ Log Reading Session
-                        </button>
-                        <input
+                    ⏱ Log Reading Session
+                </button>
+                <input
                             type="file"
                             accept="image/*"
                             id="cover-upload"
@@ -137,26 +113,20 @@ const BookDetails = () => {
                             <MdCloudUpload style={{ marginRight: "6px" }} />
                             Upload Cover Image
                         </label>
-
-
-
-                        {/* Timer Dialog */}
-                        {isTimerOpen && (
-                            <ReadingTimerDialog 
-                            onClose={() => setIsTimerOpen(false)} 
-                            bookId={book.bookid}  // ✅ Ensure `book.bookid` is passed correctly
-                            
-                        />
-                        
-                        )}
-
+                {/* Timer Dialog */}
+                {isTimerOpen && (
+                    <ReadingTimerDialog 
+                        onClose={() => setIsTimerOpen(false)} 
+                        bookId={book.bookid}
+                    />
+                )}
             </div>
             <div className="Book-Segment">
                 <Tabs defaultValue="details">
                     <TabsList className="pretty-tabs">
                         <TabsTrigger value="details" className="pretty-tab">Details</TabsTrigger>
-                        <TabsTrigger value="reread" className="pretty-tab">Reread History</TabsTrigger>
                         <TabsTrigger value="quotes" className="pretty-tab">Quotes</TabsTrigger>
+                        <TabsTrigger value="reread" className="pretty-tab">Reread History</TabsTrigger>
                         <TabsTrigger value="ai" className="pretty-tab">AI Summary</TabsTrigger>
                     </TabsList>
                     
@@ -201,7 +171,7 @@ const BookDetails = () => {
                             {isUpdating ? "Saving..." : "Save"}
                         </button>
                         <p><strong>Started:</strong> {book.start_date}</p>
-                        <p><strong>Completed:</strong> {book.end_date }</p>
+                        <p><strong>Completed:</strong> {book.end_date}</p>
                         <p><strong>Added on:</strong> {book.add_date}</p>
                         {/* Render Tags */}
                         {tags.length > 0 && (
@@ -213,30 +183,26 @@ const BookDetails = () => {
                                 ))}
                             </div>
                         )}
-                    </div>
-                </TabsContent>
-                <TabsContent value="ai" className="space-y-4">
-                <div>
-                    <button
-                    onClick={handleGenerateSummary}
-                    className="generate-summary-button"
-                    disabled={loadingSummary}
-                    >
-                    {loadingSummary ? "Generating..." : "Generate Summary"}
-                    </button>
+                        </div>
+                    </TabsContent>
 
-                    {summary && (
-                    <div className="summary-output">
-                        <h3>AI Summary:</h3>
-                        <p>{summary}</p>
-                    </div>
-                    )}
-                </div>
-                </TabsContent>
-            </Tabs>
-        </div>            
-    </div>
-    </div>
+                    {/* Quotes Tab Content */}
+                    <TabsContent value="quotes" className="space-y-4">
+                        <BookQuotes bookId={book.bookid} />
+                    </TabsContent>
+                    
+                    {/* Other tabs content remains unchanged */}
+                    <TabsContent value="reread" className="space-y-4">
+                        <p>Reread history will be displayed here.</p>
+                    </TabsContent>
+                    
+                    <TabsContent value="ai" className="space-y-4">
+                        <p>AI Summary will be displayed here.</p>
+                    </TabsContent>
+                </Tabs>
+            </div>            
+        </div>
+        </div>
     );
 };
 

@@ -6,6 +6,7 @@ const Book = require("../models/Book");
 const Trash = require("../models/Trash"); // Add this line at the top
 const Tags = require("../models/Tag");
 const Favorite = require("../models/Favorite");
+const Quote = require("../models/Quote");
 
 const router = express.Router();
 
@@ -36,6 +37,73 @@ router.get("/", async (req, res) => {
         res.status(500).json({ message: "Error fetching books", error });
     }
 });
+
+
+router.get("/:id/quotes", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const Quote = require("../models/Quote"); // Import Quote model
+      
+      const quotes = await Quote.find({ bookId: Number(id) }).sort({ createdAt: -1 });
+      res.status(200).json(quotes);
+    } catch (error) {
+      console.error("Error fetching quotes:", error);
+      res.status(500).json({ message: "Error fetching quotes", error });
+    }
+  });
+  
+  // Add a new quote
+  router.post("/:id/quotes", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { quote } = req.body;
+      const Quote = require("../models/Quote"); // Import Quote model
+      
+      // Validate required fields
+      if (!quote) {
+        return res.status(400).json({ message: "Quote text is required" });
+      }
+  
+      // Create new quote
+      const newQuote = new Quote({
+        bookId: Number(id),
+        quote
+      });
+  
+      const savedQuote = await newQuote.save();
+      res.status(201).json(savedQuote);
+    } catch (error) {
+      console.error("Error adding quote:", error);
+      res.status(500).json({ message: "Error adding quote", error });
+    }
+  });
+  
+  // Delete a quote
+  router.delete("/quotes/:quoteId", async (req, res) => {
+    try {
+      const { quoteId } = req.params;
+      console.log("Delete request received for quote ID:", quoteId); // Add this log
+      
+      const Quote = require("../models/Quote");
+      
+      // Make sure we're looking for a Number, not a String
+      const result = await Quote.findOneAndDelete({ quoteId: Number(quoteId) });
+      
+      console.log("Delete result:", result); // Add this log
+      
+      if (!result) {
+        return res.status(404).json({ message: "Quote not found" });
+      }
+      
+      res.status(200).json({ message: "Quote deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting quote:", error);
+      res.status(500).json({ message: "Error deleting quote", error });
+    }
+  });
+
+
+
 
 // Add these routes to your books.js router file
 
@@ -338,7 +406,6 @@ router.post("/:id/upload-cover", upload.single("cover"), async (req, res) => {
         res.status(500).json({ message: "Cover upload failed" });
     }
 });
-
 router.put("/:id/update-pages", async (req, res) => {
     try {
         console.log("Received request to update pages for book:", req.params.id);

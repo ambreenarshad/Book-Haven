@@ -1,11 +1,11 @@
 import "../global.css";
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const Auth = ({ setIsAuthenticated, onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -39,6 +39,7 @@ const Auth = ({ setIsAuthenticated, onLogin }) => {
         if (activeTab === "login") {
           sessionStorage.setItem("reader_id", data.reader_id); // Store reader_id
           if (onLogin) onLogin(data.reader_id); // Call onLogin function which will trigger animation
+          navigate("/");
         } else {
           alert(data.message); // Show message for registration
         }

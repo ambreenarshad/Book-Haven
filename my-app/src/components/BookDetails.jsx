@@ -7,6 +7,8 @@ import {
   } from "./Tabs";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { MdCloudUpload } from "react-icons/md";
+
 import "../BookDetails.css";
 import ReadingTimerDialog from "./ReadingTimerDialog"; // Import the modal
 
@@ -33,6 +35,30 @@ const BookDetails = () => {
             })
             .catch((error) => console.error("Error fetching book details:", error));
     }, [id]);
+
+    const handleCoverUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+    
+        const formData = new FormData();
+        formData.append("cover", file);
+    
+        try {
+            const res = await fetch(`http://localhost:8000/book/${book.bookid}/upload-cover`, {
+                method: "POST",
+                body: formData,
+            });
+    
+            if (!res.ok) throw new Error("Upload failed");
+            const data = await res.json();
+    
+            setBook((prev) => ({ ...prev, cover_image: data.cover_image }));
+            alert("Cover uploaded successfully!");
+        } catch (err) {
+            console.error("Upload error:", err);
+            alert("Failed to upload cover image.");
+        }
+    };    
 
     const handleGenerateSummary = async () => {
         setLoadingSummary(true);
@@ -100,6 +126,20 @@ const BookDetails = () => {
                 <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
                             ⏱ Log Reading Session
                         </button>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="cover-upload"
+                            style={{ display: "none" }}
+                            onChange={handleCoverUpload}
+                        />
+                        <label htmlFor="cover-upload" className="upload-cover-button">
+                            <MdCloudUpload style={{ marginRight: "6px" }} />
+                            Upload Cover Image
+                        </label>
+
+
+
                         {/* Timer Dialog */}
                         {isTimerOpen && (
                             <ReadingTimerDialog 

@@ -320,6 +320,24 @@ router.put("/:id", async (req, res) => {
         res.status(500).json({ message: "Error updating book details", error });
     }
 });
+router.post("/:id/upload-cover", upload.single("cover"), async (req, res) => {
+    try {
+        const bookId = req.params.id;
+        const coverUrl = req.file.path;
+
+        // Assuming you're using Mongoose:
+        const updated = await Book.findOneAndUpdate(
+            { bookid: bookId },
+            { cover_image: coverUrl },
+            { new: true }
+        );
+
+        res.json({ message: "Cover uploaded successfully", cover_image: updated.cover_image });
+    } catch (err) {
+        console.error("Upload error:", err);
+        res.status(500).json({ message: "Cover upload failed" });
+    }
+});
 
 router.put("/:id/update-pages", async (req, res) => {
     try {

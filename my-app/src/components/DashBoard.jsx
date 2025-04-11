@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import "../DashBoard.css";
-import { 
-  MdDashboard, 
+import {  
   MdMenuBook, 
   MdAutoStories, 
   MdCheckCircle,
-  MdFlag,
-  MdTimeline
+  MdFlag 
 } from "react-icons/md";
 import { LuLibrary,LuNotebookText } from "react-icons/lu";
 import { AiOutlinePieChart } from "react-icons/ai";
@@ -26,8 +24,8 @@ const Dashboard = () => {
   const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
   const [genreData, setGenreData] = useState([]);
   const readerId = sessionStorage.getItem("reader_id");
-  const currentTheme = sessionStorage.getItem('theme') || 'light'; // Default to 'light' if not set
-  const darkMode = currentTheme === 'dark'; // Boolean value indicating dark mode
+  
+  
   useEffect(() => {
     if (!readerId) {
       console.error("Reader ID is missing from sessionStorage.");

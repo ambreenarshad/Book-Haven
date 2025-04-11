@@ -77,6 +77,11 @@
     display: flex;
     gap: 20px;
     padding: 20px;
+    width: 100%;
+}
+.Book-Segment{
+    width: 100%;
+    
 }
 
 .book-cover-large {
@@ -109,8 +114,8 @@
 }
 
 .save-review-button {
-    margin-left: 10px;
-    padding: 5px 10px;
+    width: 15%;
+    padding: 8px 20px;
     background-color: var(--button-bg);
     color: var(--button-text);
     border: none;
@@ -123,7 +128,7 @@
 }
 
 .review-textarea {
-    width: 100%;
+    width: 70%;
     min-height: 50px;
     max-height: 150px;
     padding: 8px;
@@ -195,7 +200,37 @@
     white-space: nowrap;
     font-weight: bold;
 }
-
+/* Tab Navigation */
+.pretty-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: #e5e5e5;
+    padding: 10px;
+    gap: 6px;
+    margin-bottom: 16px; /* ⬅️ Gap below the tab bar */
+  }
+  
+  .pretty-tab {
+    background-color: transparent;
+    color: #444;
+    font-weight: 500;
+    padding: auto; /* ⬅️ More padding = taller tabs */
+    border-radius: 6px;
+    text-align: center;
+    transition: all 0.2s ease;
+    font-size: 32px;
+  }
+  
+  .pretty-tab:hover {
+    background-color: #dcdcdc;
+  }
+  
+  .pretty-tab[aria-selected="true"] {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

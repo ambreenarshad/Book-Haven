@@ -57,6 +57,7 @@ const Dashboard = () => {
         setCurrentlyReadingBooks(data);
       })
       .catch(err => console.error("Error fetching currently reading books:", err));
+      
     fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`)
     .then((res) => res.json())
     .then((data) => {

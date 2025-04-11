@@ -8,7 +8,10 @@ router.get("/summary/:readerid", async (req, res) => {
     try {
       const readerId = Number(req.params.readerid); // ensure it's a number
   
-      const totalBooks = await Book.countDocuments({ readerid: readerId });
+      const totalBooks = await Book.countDocuments({
+        readerid: readerId,
+        reading_status: { $ne: "Trash" }
+      });
       const completedBooks = await Book.countDocuments({ readerid: readerId, reading_status: "Completed" });
       const currentlyReading = await Book.countDocuments({ readerid: readerId, reading_status: "Reading" });
   
@@ -83,7 +86,7 @@ router.get("/currently-reading/:readerid", async (req, res) => {
   
     try {
       const genres = await Book.aggregate([
-        { $match: { readerid: readerid } },  // Match by readerid
+        { $match: { readerid: readerid , reading_status: { $ne: "Trash" } } },  // Match by readerid
         { $group: { _id: "$genre", count: { $sum: 1 } } }  // Group by genre
       ]);
   

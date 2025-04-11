@@ -8,11 +8,11 @@ import {
   MdFlag,
   MdTimeline
 } from "react-icons/md";
-import { LuLibrary } from "react-icons/lu";
-
+import { LuLibrary,LuNotebookText } from "react-icons/lu";
+import { AiOutlinePieChart } from "react-icons/ai";
 import { Line } from "react-chartjs-2"; // Importing the Line chart from react-chartjs-2
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 // Register the components with Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -23,10 +23,11 @@ const Dashboard = () => {
   const [summary, setSummary] = useState(null);
   const [pagesChartData, setPagesChartData] = useState(null);
   const [minutesChartData, setMinutesChartData] = useState(null);
-
-
+  const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
+  const [genreData, setGenreData] = useState([]);
   const readerId = sessionStorage.getItem("reader_id");
-
+  const currentTheme = sessionStorage.getItem('theme') || 'light'; // Default to 'light' if not set
+  const darkMode = currentTheme === 'dark'; // Boolean value indicating dark mode
   useEffect(() => {
     if (!readerId) {
       console.error("Reader ID is missing from sessionStorage.");
@@ -50,6 +51,22 @@ const Dashboard = () => {
       })
       .catch((err) => console.error("Error fetching summary:", err));
 
+    fetch(`http://localhost:8000/dashboard/currently-reading/${readerId}`)
+      .then(res => res.json())
+      .then(data => {
+        setCurrentlyReadingBooks(data);
+      })
+      .catch(err => console.error("Error fetching currently reading books:", err));
+    fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const formattedData = data.map((item) => ({
+        name: item._id || "Unknown",
+        value: item.count,
+      }));
+      setGenreData(formattedData);
+    })
+    .catch((err) => console.error("Error fetching genre data:", err));
       const fetchData = async () => {
         try {
           const response = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`);
@@ -66,7 +83,7 @@ const Dashboard = () => {
                 {
                   label: 'Total Pages Read',
                   data: totalPages,
-                  borderColor: 'rgb(4, 3, 6)',
+                  borderColor:'rgb(81, 78, 87)',
                   fill: false,
                   tension: 0.1,
                 },
@@ -79,7 +96,9 @@ const Dashboard = () => {
                 {
                   label: 'Total Minutes Read',
                   data: totalMinutes,
-                  borderColor: 'rgb(4, 3, 6)',
+                  // borderColor: 'rgba(153, 102, 255, 1)',
+                  borderColor:'rgb(81, 78, 87)',
+                  // borderColor: 'rgb(75, 73, 79)',
                   fill: false,
                   tension: 0.1,
                 },
@@ -93,6 +112,7 @@ const Dashboard = () => {
         }
       };
       fetchData()
+ 
   }, [readerId]); // Runs when readerId changes
 
   const handleEditClick = () => {
@@ -167,7 +187,7 @@ const Dashboard = () => {
     
       <div className="book-summary">
         <h2 className="summary-heading">
-          <LuLibrary style={{ fontSize: '1.6rem', color: 'black', marginBottom: '-2px' }}/> Reading Statistics </h2>
+          <LuLibrary style={{ fontSize: '1.6rem', marginBottom: '-2px' }}/> Reading Statistics </h2>
         <div className="summary-cards">
           <div className="summary-card">
             <p className="summary-title">
@@ -196,11 +216,60 @@ const Dashboard = () => {
             <Line data={minutesChartData} options={{ responsive: true, plugins: { title: { display: true, text: 'Minutes of Reading per Day' } } }} />
           </div>
         </div>
+        <div className="dashboard-row">
+  {/* Genre Pie Chart */}
+  <div className="genre-chart-container">
+  <h2 className="chart-heading"><AiOutlinePieChart style={{ marginBottom: '-2px' }}/> Genre Distribution</h2>
+  {genreData.length === 0 ? (
+    <p>Loading genre data...</p>
+  ) : (
+    <ResponsiveContainer width="100%" height={270}>
+    <PieChart>
+      <Pie
+        data={genreData}
+        dataKey="value"
+        nameKey="name"
+        outerRadius={90}
+        className="genre-pie-chart"
+        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`} // Display genre name and percentage
+      >
+        {genreData.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            className="genre-pie-chart-cell"
+          />
+        ))}
+      </Pie>
+      <Tooltip />
+    </PieChart>
+  </ResponsiveContainer>
+  )}
+</div>
+
+  {/* Currently Reading Container */}
+  <div className="currently-reading-container">
+    <h2 className="currently-reading-heading"><LuNotebookText style={{ marginBottom: '-2px' }} /> Currently Reading</h2>
+    {currentlyReadingBooks.map((book) => {
+      const progress = Math.min(Math.round((book.currently_read / book.total_pages) * 100), 100);
+      return (
+        <div key={book.bookid} className="currently-reading-item">
+          <p className="book-title">{book.book_name} by {book.author_name}</p>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+          </div>
+          <span>{progress}%</span>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+
       </div> 
 
       <div className="ReadingGoals">
         <h2 className="ReadingGoals-h2">
-          <MdFlag style={{ fontSize: '1.6rem', color: 'black', marginBottom: '-2px' }}/>Reading Goals</h2>
+          <MdFlag style={{ fontSize: '1.6rem', marginBottom: '-2px' }}/>Reading Goals</h2>
         <p className="ReadingGoals-p">Track your reading progress based on completed books</p>
 
         <GoalProgress title="Yearly Goal" current={goals.yearly_progress} total={goals.yearly_goal} />

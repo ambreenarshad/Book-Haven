@@ -68,5 +68,36 @@ router.get("/summary/:readerid", async (req, res) => {
         res.status(500).json({ error: "Server error while fetching timer data" });
     }
 });
-
+router.get("/currently-reading/:readerid", async (req, res) => {
+    const { readerid } = req.params;
+    try {
+      const books = await Book.find({ readerid, reading_status: "Reading" });
+      res.json(books);
+    } catch (err) {
+      res.status(500).json({ message: "Error fetching currently reading books" });
+    }
+  });
+  router.get("/genre-counts/:readerid", async (req, res) => {
+    // Convert readerid to a Number
+    const readerid = Number(req.params.readerid);  // Ensure readerid is a Number
+  
+    try {
+      const genres = await Book.aggregate([
+        { $match: { readerid: readerid } },  // Match by readerid
+        { $group: { _id: "$genre", count: { $sum: 1 } } }  // Group by genre
+      ]);
+  
+      // Check if genres were returned
+      console.log("Aggregated genres:", genres);
+  
+      if (genres.length === 0) {
+        return res.status(404).json({ message: "No genres found for this reader." });
+      }
+  
+      res.json(genres);  // Return the aggregated genres
+    } catch (err) {
+      console.error("Error fetching genre counts:", err);
+      res.status(500).json({ message: "Error fetching genre counts" });
+    }
+  });
 module.exports = router;

@@ -1,4 +1,5 @@
 const express = require("express");
+
 const Reader = require("../models/Reader");
 
 const router = express.Router();
@@ -11,6 +12,19 @@ router.get("/", async (req, res) => {
         console.error("Error fetching readers:", error);
         res.status(500).json({ message: "Error fetching readers", error });
     }
+});
+router.get("/:id", async (req, res) => {
+    try {
+            const reader = await Reader.findOne({ reader_id: req.params.id }) || await Reader.findById(req.params.id);
+            if (!reader) {
+                return res.status(404).json({ message: "Reader not found" });
+            }
+    
+            res.json({ reader });
+        } catch (error) {
+            console.error("Error fetching reader:", error);
+            res.status(500).json({ message: "Error fetching reader details", error });
+        }
 });
 
 // **Login Route**

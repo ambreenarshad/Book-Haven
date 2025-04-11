@@ -46,6 +46,8 @@ const App = () => {
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
+        console.log("User data:", data);
+
       } else {
         console.error("Failed to fetch user data");
       }

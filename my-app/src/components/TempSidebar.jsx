@@ -16,6 +16,7 @@ import {
 import SidebarUserProfile from "./SidebarUserProfile";
 
 const Sidebar = ({ userData, onLogout }) => {
+  console.log("user data in tempsidebar: ", userData);
   const categories = [
     { name: "Dashboard", path: "/", icon: <MdDashboard /> },
     { name: "All Books", path: "/all-books", icon: <MdMenuBook /> },

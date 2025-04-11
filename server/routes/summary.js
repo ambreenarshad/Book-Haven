@@ -13,28 +13,23 @@ router.post("/", async (req, res) => {
   const prompt = `Summarize the book titled "${bookName}" by ${authorName}. Focus on the plot, main characters, and themes.`;
 
   try {
-    const response = await fetch("https://api.openai.com/v1/completions", {
+    const response = await fetch("https://api-inference.huggingface.co/models/google/pegasus-cnn_dailymail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`, // Use your OpenAI API Key
+        "Authorization": `Bearer ${process.env.HUGGINGFACE_API_TOKEN}`, // Add your Hugging Face token
       },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",  // Updated model to use
-        prompt: prompt,
-        max_tokens: 500, // Adjust tokens to fit your summary length
-        temperature: 0.7,
-      }),
+      body: JSON.stringify({ inputs: prompt }),
     });
 
     const data = await response.json();
 
     if (data.error) {
-      console.error("OpenAI API error:", data.error);
+      console.error("Hugging Face API error:", data.error);
       return res.status(500).json({ error: "Failed to generate summary" });
     }
 
-    res.json({ summary: data.choices[0].text.trim() });
+    res.json({ summary: data[0]?.summary_text || "No summary available." });
   } catch (err) {
     console.error("API error:", err.message);
     res.status(500).json({ error: "Something went wrong" });

@@ -5,7 +5,15 @@ import { IoLogOutOutline } from "react-icons/io5";
 const SidebarUserProfile = ({ userData, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  
+
+  // Log the structure of userData to verify it's available
+  console.log("user data in sidebar: ", userData);
+
+  // Check the properties of userData for debugging
+  console.log("user first name: ", userData?.reader?.first_name); // Access first_name under 'reader'
+  console.log("user last name: ", userData?.reader?.last_name); // Access last_name under 'reader'
+  console.log("user email: ", userData?.reader?.email); // Access email under 'reader'
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,9 +37,11 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
     onLogout();
   };
 
-  // Use reader ID from session storage as fallback if userData isn't available
-  const readerId = sessionStorage.getItem("reader_id") || "Unknown";
-  
+  // Render a fallback UI if userData is not available yet
+  if (!userData?.reader) {
+    return <div>Loading...</div>;  // You can show a loading spinner or any other fallback
+  }
+
   return (
     <div className="sidebar-user-profile" ref={dropdownRef}>
       <div 
@@ -41,10 +51,12 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
         <FaUserCircle className="user-icon" />
         <div className="user-info">
           <span className="user-name">
-            {userData ? `${userData.first_name} ${userData.last_name}` : "User"}
+            {/* Using optional chaining to safely access first_name and last_name under 'reader' */}
+            {userData?.reader?.first_name ? `${userData.reader.first_name} ${userData.reader.last_name}` : "User"}
           </span>
           <span className="user-email">
-            {/* {userData ? userData.email : `ID: ${readerId}`} */}
+            {/* Optional chaining for email */}
+            {userData?.reader?.email || "No email available"}
           </span>
         </div>
       </div>
@@ -53,26 +65,6 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
         <div className="user-dropdown">
           <div className="user-dropdown-info">
             <h3>Account</h3>
-            {/* {userData ? (
-              <>
-                <p className="full-name">{userData.first_name} {userData.last_name}</p>
-                <p className="email">{userData.email}</p>
-              </>
-            ) : (
-              <p className="reader-id">Reader ID: {readerId}</p>
-            )} */}
-{userData ? (
-  <>
-    <p className="full-name">{userData.first_name} {userData.last_name}</p>
-    <p className="email">{userData.email}</p>
-    <p className="reader-id">Reader ID: {userData.reader_id || readerId}</p>
-  </>
-) : (
-  <>
-
-    <p className="reader-id">Reader ID: {readerId}</p>
-  </>
-)}
           </div>
           <button className="logout-button" onClick={handleLogout}>
             <IoLogOutOutline />

@@ -7,6 +7,7 @@ const Trash = require("../models/Trash"); // Add this line at the top
 const Tags = require("../models/Tag");
 const Favorite = require("../models/Favorite");
 const Quote = require("../models/Quote");
+const Rereader = require("../models/Rereader")
 
 const router = express.Router();
 
@@ -367,7 +368,6 @@ router.get("/:id", async (req, res) => {
 // Get Single Book by ID + Tags
 
 
-
 // Update Book Rating & Review
 router.put("/:id", async (req, res) => {
     try {
@@ -453,8 +453,54 @@ router.put("/:id/update-pages", async (req, res) => {
         res.status(500).json({ message: "Error updating reading progress", error });
     }
 });
+//Rereading routes:
+router.post('/:id/reread', async (req, res) => {
+    try {
+        const book = await Book.findOne({ bookid: Number(req.params.id) });
+        if (!book || book.reading_status !== 'Completed') {
+            return res.status(400).json({ error: 'Book not found or not completed.' });
+        }
+        console.log("the book to reread is",book)
+        const rereadEntry = new Rereader({
+            bookid: book.bookid,
+            startDate: book.start_date,
+            endDate: book.end_date
+        });
 
+        await rereadEntry.save();
 
-  
+        // Reset book fields
+        book.start_date = null;
+        book.end_date = null;
+        book.reading_status = 'To Read';
+        book.currently_read = 0;
+
+        await book.save();
+
+        res.status(200).json({ message: 'Reread recorded successfully.' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+router.get('/:id/rereads', async (req, res) => {
+    try {
+        const bookid = Number(req.params.id);  // Get bookid from the URL params
+        console.log("Fetching reread history for bookid:", bookid);
+
+        // Fetch rereading history by matching bookid in Rereader
+        const history = await Rereader.find({ bookid }).sort({ reread_id: 1 }); // Optional sorting by reread_id
+        
+        if (history.length === 0) {
+            return res.status(404).json({ error: 'No reread history found for this book.' });
+        }
+
+        res.status(200).json(history);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch reread history' });
+    }
+});  
 
 module.exports = router;

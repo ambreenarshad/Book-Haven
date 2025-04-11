@@ -252,7 +252,26 @@
     padding: 1rem;
     border-radius: 8px;
     line-height: 1.5;
-  }  
+  } 
+
+   .re-read-button {
+    background: var(--button-bg);
+    color: var(--button-text);
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 210px;
+    margin: 1px 1px;
+    display: block;
+    text-align: center;
+    z-index: 1;
+}
+
+  .re-read-button:hover {
+      background: var(--button-hover-bg);
+  } 
   .upload-cover-button {
     background: var(--button-bg);
     color: var(--button-text);
@@ -393,6 +412,8 @@
   .quotes-error {
     color: #cc0000;
   }
+
+ 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

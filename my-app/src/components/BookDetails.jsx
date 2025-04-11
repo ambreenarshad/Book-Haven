@@ -7,10 +7,12 @@ import {
 } from "./Tabs";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { MdCloudUpload } from "react-icons/md";
+import { MdCloudUpload, MdTimer} from "react-icons/md";
+import { IoArrowRedoCircleSharp } from "react-icons/io5";
 import "../BookDetails.css";
 import ReadingTimerDialog from "./ReadingTimerDialog";
 import BookQuotes from "./BookQuotes"; // Import the BookQuotes component
+import Reread from './Reread';
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -78,6 +80,25 @@ const BookDetails = () => {
         }
         setIsUpdating(false);
     };
+    const handleReread = async () => {
+        try {
+            
+          const res = await fetch(`http://localhost:8000/book/${book.bookid}/reread`, {
+            method: 'POST',
+          });
+      
+          const data = await res.json();
+          if (res.ok) {
+            alert('Reread started successfully!');
+            // Optionally: trigger a refresh or state update here
+          } else {
+            alert(data.error);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Something went wrong');
+        }
+      };
 
     if (!book) {
         return <p>Loading book details...</p>;
@@ -100,8 +121,13 @@ const BookDetails = () => {
                 />
                 {/* Log Reading Session Button */}
                 <button onClick={() => setIsTimerOpen(true)} className="log-reading-button">
-                    ⏱ Log Reading Session
+                <MdTimer style={{marginBottom: '-2px'  }} /> Log Reading Session
                 </button>
+                {book.reading_status === 'Completed' && (
+                <button onClick={() => handleReread()} className="re-read-button">
+                     <IoArrowRedoCircleSharp style={{marginBottom: '-2px'  }}/> Re-Read
+                </button>
+                )}
                 <input
                             type="file"
                             accept="image/*"
@@ -110,8 +136,7 @@ const BookDetails = () => {
                             onChange={handleCoverUpload}
                         />
                         <label htmlFor="cover-upload" className="upload-cover-button">
-                            <MdCloudUpload style={{ marginRight: "6px" }} />
-                            Upload Cover Image
+                            <MdCloudUpload style={{marginBottom: '-2px'  }} /> Upload Cover Image
                         </label>
                 {/* Timer Dialog */}
                 {isTimerOpen && (
@@ -193,7 +218,7 @@ const BookDetails = () => {
                     
                     {/* Other tabs content remains unchanged */}
                     <TabsContent value="reread" className="space-y-4">
-                        <p>Reread history will be displayed here.</p>
+                    <Reread bookid={book.bookid} />
                     </TabsContent>
                     
                     <TabsContent value="ai" className="space-y-4">

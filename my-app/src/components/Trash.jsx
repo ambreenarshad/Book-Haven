@@ -174,7 +174,7 @@ const Trash = () => {
                   onChange={() => handleSelectBook(book.bookId)}
                 />
                 <img
-                  src={book.cover_image || "https://via.placeholder.com/150"}
+                  src={book.cover_image || "/empty.jpeg"}
                   alt={book.book_name}
                   className="book-cover"
                   onError={(e) => {

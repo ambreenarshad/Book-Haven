@@ -25,11 +25,10 @@ app.use("/reading-goals", readingGoalsRoutes);
 app.use("/timer", timerRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/api/summary", summaryRoute);
-// Run every day at 1 AM
-cron.schedule("0 1 * * *", () => {
-    console.log("Running daily trash cleanup...");
-    deleteOldTrash();
-  });
+
+console.log("Running startup trash cleanup...");
+deleteOldTrash();
+
   
 app.listen(8000, () => {
     console.log("Server started on port 8000");

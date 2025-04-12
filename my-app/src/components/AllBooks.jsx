@@ -166,13 +166,13 @@ const AllBooks = ({ statusFilter }) => {
                                 title="Move to Trash"
                             />
                             <img
-                                src={book.cover_image || "https://via.placeholder.com/150"}
-                                alt={book.book_name}
-                                className="book-cover"
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = "/empty.png";
-                                }}
+                            src={book.cover_image || "/empty.jpeg"}
+                            alt={book.book_name}
+                            className="book-cover"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "/empty.jpeg";
+                            }}
                             />
                             <div className="book-info">
                                 <h3>{book.book_name}</h3>

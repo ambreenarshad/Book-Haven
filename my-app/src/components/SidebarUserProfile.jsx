@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-
+import { FiSettings } from "react-icons/fi"; // 👈 Settings icon
+import { useNavigate } from "react-router-dom";
+import "../side.css"
 const SidebarUserProfile = ({ userData, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const navigate = useNavigate();
   // Log the structure of userData to verify it's available
   console.log("user data in sidebar: ", userData);
 
@@ -36,7 +38,10 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
     setIsOpen(false);
     onLogout();
   };
-
+  const goToAccount = () => {
+    setIsOpen(false);
+    navigate("/account"); // 👈 Change this path to your actual account route
+  };
   // Render a fallback UI if userData is not available yet
   if (!userData?.reader) {
     return <div>Loading...</div>;  // You can show a loading spinner or any other fallback
@@ -63,9 +68,11 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
       
       {isOpen && (
         <div className="user-dropdown">
-          <div className="user-dropdown-info">
-            <h3>Account</h3>
+          <div className="user-dropdown-info account-item" onClick={goToAccount}>
+            <span className="account-text">Account</span>
+            <FiSettings className="settings-icon" />
           </div>
+
           <button className="logout-button" onClick={handleLogout}>
             <IoLogOutOutline />
             <span>Logout</span>

@@ -82,7 +82,7 @@ const Dashboard = () => {
                 {
                   label: 'Total Pages Read',
                   data: totalPages,
-                  borderColor:'rgb(81, 78, 87)',
+                  borderColor:'rgb(46, 153, 151)',
                   fill: false,
                   tension: 0.1,
                 },
@@ -95,8 +95,8 @@ const Dashboard = () => {
                 {
                   label: 'Total Minutes Read',
                   data: totalMinutes,
-                  // borderColor: 'rgba(153, 102, 255, 1)',
-                  borderColor:'rgb(81, 78, 87)',
+                   borderColor: 'rgba(153, 102, 255, 1)',
+                  //borderColor:'rgb(81, 78, 87)',
                   // borderColor: 'rgb(75, 73, 79)',
                   fill: false,
                   tension: 0.1,

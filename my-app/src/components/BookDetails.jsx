@@ -9,7 +9,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaTags, FaStar, FaRegStar } from "react-icons/fa";
 import { MdTimer} from "react-icons/md";
 import { IoArrowRedoCircleSharp } from "react-icons/io5";
-import { MdEdit,MdTimer } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import "../BookDetails.css";
 import ReadingTimerDialog from "./ReadingTimerDialog";
 import BookQuotes from "./BookQuotes"; // Import the BookQuotes component

@@ -6,7 +6,8 @@ import {
     TabsContent,
 } from "./Tabs";
 import { useParams, useNavigate } from "react-router-dom";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaTags, FaStar, FaRegStar } from "react-icons/fa";
+import { MdTimer} from "react-icons/md";
 import { IoArrowRedoCircleSharp } from "react-icons/io5";
 import { MdEdit,MdTimer } from "react-icons/md";
 import "../BookDetails.css";
@@ -24,6 +25,8 @@ const BookDetails = () => {
     const [tags, setTags] = useState([]);
     const [summary, setSummary] = useState("");
     const [loadingSummary, setLoadingSummary] = useState(false);
+    const [newTag, setNewTag] = useState("");
+    const [isAddingTag, setIsAddingTag] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,6 +40,49 @@ const BookDetails = () => {
             })
             .catch((error) => console.error("Error fetching book details:", error));
     }, [id]);
+
+    const handleAddTag = async () => {
+        if (!newTag.trim()) return;
+        
+        try {
+            // setIsAddingTag(true);
+            const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tag: newTag.trim() }),
+            });
+
+            if (response.ok) {
+                setTags([...tags, { tag: newTag.trim() }]);
+                setNewTag("");
+            } else {
+                console.error("Failed to add tag");
+            }
+        } catch (error) {
+            console.error("Error adding tag:", error);
+         } //finally {
+        //     setIsAddingTag(false);
+        // }
+    };
+
+    // Add this function to handle tag deletion
+    const handleDeleteTag = async (tagToDelete) => {
+        try {
+            const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tag: tagToDelete }),
+            });
+
+            if (response.ok) {
+                setTags(tags.filter(tagObj => tagObj.tag !== tagToDelete));
+            } else {
+                console.error("Failed to delete tag");
+            }
+        } catch (error) {
+            console.error("Error deleting tag:", error);
+        }
+    };
 
     const handleCoverUpload = async (e) => {
         const file = e.target.files[0];
@@ -164,9 +210,43 @@ const BookDetails = () => {
                             style={{ display: "none" }}
                             onChange={handleCoverUpload}
                         />
-                        {/* <label htmlFor="cover-upload" className="upload-cover-button">
-                            <MdCloudUpload style={{marginBottom: '-2px'  }} /> Upload Cover Image
-                        </label> */}
+                {/* Add Tags Button and Input */}
+            <div className="tags-section">
+                <button 
+                    onClick={() => setIsAddingTag(!isAddingTag)} 
+                    className="add-tags-button"
+                >
+                    
+                    <>
+                        <FaTags className="icon-spacing" /> Add Tags
+                    </>
+                    
+                </button>
+                
+                {isAddingTag && (
+                    <div className="tag-input-container">
+                        <input
+                            type="text"
+                            value={newTag}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            placeholder="Enter a tag"
+                            className="tag-input"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && newTag.trim()) {
+                                  handleAddTag();
+                                }
+                              }}
+                        />
+                        <button 
+                            onClick={handleAddTag}
+                            disabled={!newTag.trim()}
+                            className="save-tag-button"
+                        >
+                            Add
+                        </button>
+                    </div>
+                )}
+            </div>
                 {/* Timer Dialog */}
                 {isTimerOpen && (
                     <ReadingTimerDialog 
@@ -233,6 +313,12 @@ const BookDetails = () => {
                                 {tags.map((tagObj, index) => (
                                     <span key={index} className="tag-pill">
                                         {tagObj.tag}
+                                    <button 
+                                    onClick={() => handleDeleteTag(tagObj.tag)} 
+                                    className="delete-tag-button"
+                                    >
+                                        ×
+                                    </button>
                                     </span>
                                 ))}
                             </div>

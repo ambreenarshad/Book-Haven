@@ -442,6 +442,89 @@
 .edit-icon {
   font-size: 16px;
 }
+/* Tags Section */
+.tags-section {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-tags-button {
+  background: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 210px; /* Fixed width instead of max-width */
+  margin: 1px 1px;
+  display: block;
+  text-align: center;
+  transition: all 0.2s ease; /* Smooth transition for hover effects */
+}
+
+.add-tags-button:hover {
+  background: var(--button-hover-bg);
+}
+
+.tag-input-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  width: 210px; /* Match the button width */
+}
+
+.tag-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+  min-width: 0; /* Prevents input from overflowing */
+}
+
+.save-tag-button {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevents button from shrinking */
+}
+
+.save-tag-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.save-tag-button:hover:not(:disabled) {
+  background: var(--button-hover-bg);
+}
+
+.tag-pill {
+  background-color: #e0e0e0;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.delete-tag-button {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+}
+
+.delete-tag-button:hover {
+  color: #040404;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

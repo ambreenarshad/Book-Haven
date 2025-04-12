@@ -16,7 +16,7 @@ import Genre from "./components/Genre"
 import Trash from "./components/Trash"
 import Favorites from "./components/Favorites"
 import BookAnimation from "./components/BookAnimation"
-
+import Recommendations from "./components/Recommendations"
 const App = () => {
   const [theme, setTheme] = useState("light")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -139,6 +139,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/all-books" element={<AllBooks />} />
+                  <Route path="/recommendations" element={<Recommendations />} />
                   <Route path="/book/:id" element={<BookDetails />} />
                   <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
                   <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />

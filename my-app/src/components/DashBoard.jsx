@@ -10,7 +10,12 @@ import { LuLibrary,LuNotebookText } from "react-icons/lu";
 import { AiOutlinePieChart } from "react-icons/ai";
 import { Line } from "react-chartjs-2"; // Importing the Line chart from react-chartjs-2
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer
+} from "recharts";
 // Register the components with Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -82,6 +87,7 @@ const Dashboard = () => {
                 {
                   label: 'Total Pages Read',
                   data: totalPages,
+                  borderColor:'rgb(46, 153, 151)',
                   borderColor:'rgb(46, 153, 151)',
                   fill: false,
                   tension: 0.1,

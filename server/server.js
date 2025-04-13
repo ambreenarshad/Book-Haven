@@ -10,6 +10,7 @@ const dashboardRoutes = require("./routes/dashboard")
 const deleteOldTrash = require("./deleteOldTrash");
 const summaryRoute = require("./routes/summary");
 const lendingRoutes = require('./routes/lending');
+const uploadProfileRoute = require("./routes/uploadProfile");
 require("dotenv").config();
 
 const app = express();
@@ -27,7 +28,7 @@ app.use("/timer", timerRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/api/summary", summaryRoute);
 app.use('/lending', lendingRoutes);
-
+app.use("/profile-pic", uploadProfileRoute);
 console.log("Running startup trash cleanup...");
 deleteOldTrash();
 

@@ -19,6 +19,7 @@ import BookAnimation from "./components/BookAnimation"
 import Recommendations from "./components/Recommendations"
 import LentOut from "./components/LentOut"
 import Borrowed from "./components/Borrowed"
+import AccountPage from "./components/AccountPage";
 const App = () => {
   const [theme, setTheme] = useState("light")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -152,6 +153,7 @@ const App = () => {
                   <Route path="/genre" element={<Genre />} />
                   <Route path="/trash" element={<Trash />} />
                   <Route path="/favorites" element={<Favorites />} />
+                  <Route path="/account" element={<AccountPage userData={userData} />} />
                 </Routes>
               </div>
             </div>

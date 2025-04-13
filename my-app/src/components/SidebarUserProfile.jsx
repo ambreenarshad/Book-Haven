@@ -15,6 +15,7 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
   console.log("user first name: ", userData?.reader?.first_name); // Access first_name under 'reader'
   console.log("user last name: ", userData?.reader?.last_name); // Access last_name under 'reader'
   console.log("user email: ", userData?.reader?.email); // Access email under 'reader'
+  console.log("userimage:", userData?.reader?.profilePicUrl);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -53,7 +54,15 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
         className="user-profile-button" 
         onClick={toggleDropdown}
       >
-        <FaUserCircle className="user-icon" />
+        {userData?.reader?.profilePicUrl ? (
+          <img 
+            src={userData.reader.profilePicUrl} 
+            alt="Profile" 
+            className="user-icon profile-pic"
+          />
+        ) : (
+          <FaUserCircle className="user-icon" />
+        )}
         <div className="user-info">
           <span className="user-name">
             {/* Using optional chaining to safely access first_name and last_name under 'reader' */}

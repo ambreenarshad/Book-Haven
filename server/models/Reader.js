@@ -7,7 +7,8 @@ const readerSchema = new mongoose.Schema({
     last_name: String,
     email: { type: String, unique: true },
     password: String, 
-    date_of_birth: Date
+    date_of_birth: Date,
+    profilePicUrl: { type: String, default: "" } 
 }, { collection: "Reader" });
 
 // Apply auto-increment plugin

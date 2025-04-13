@@ -525,6 +525,287 @@
 .delete-tag-button:hover {
   color: #040404;
 }
+.lending-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #01050b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.lending-button:hover {
+  background-color: #31363c;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(6px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-container {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.lending-dialog {
+  max-width: 400px;
+  width: 100%;
+  margin-left: 200px; 
+  margin-top: 50px;
+}
+
+.lending-dialog h2 {
+  margin-top: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.lend-button {
+  background-color: #4a6fa5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.lend-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.lending-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+}
+
+.lending-info h3 {
+  margin-top: 0;
+  color: #201f1f;
+  font-size: 1.2rem;
+}
+
+.clear-lending-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.clear-lending-button:hover {
+  background-color: #c82333;
+}
+
+.clear-lending-button:disabled {
+  background-color: #e9a8ad;
+  cursor: not-allowed;
+}
+
+.lent-badge {
+  display: inline-block;
+  background-color: #dc3545;
+  color: white;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+ 
+/* Add these styles to your existing BookDetails.css file */
+
+.lending-borrowing-section {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.lending-borrowing-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.lend-button,
+.borrow-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.lend-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.lend-button:hover {
+  background-color: #3d8b40;
+}
+
+.borrow-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.borrow-button:hover {
+  background-color: #0b7dda;
+}
+
+.lending-info,
+.borrowing-info {
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.lending-info {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.borrowing-info {
+  background-color: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.clear-lending-button,
+.clear-borrowing-button {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.clear-lending-button {
+  background-color: #ff9800;
+  color: white;
+}
+
+.clear-borrowing-button {
+  background-color: #ff5722;
+  color: white;
+}
+
+.lending-dialog,
+.borrowing-dialog {
+  max-width: 400px;
+}
+
+/* Add to allbooks.css for the badges */
+.lent-badge,
+.borrowed-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.lent-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+.borrowed-badge {
+  background-color: #f44336;
+  color: white;
+}
+
+.lending-badge,
+.borrowing-badge {
+  display: block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.lending-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+.borrowing-badge {
+  background-color: #f44336;
+  color: white;
+}
+
+.lending-date,
+.borrowing-date {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 4px;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .book-container {

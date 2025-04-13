@@ -17,6 +17,8 @@ import Trash from "./components/Trash"
 import Favorites from "./components/Favorites"
 import BookAnimation from "./components/BookAnimation"
 import Recommendations from "./components/Recommendations"
+import LentOut from "./components/LentOut"
+import Borrowed from "./components/Borrowed"
 const App = () => {
   const [theme, setTheme] = useState("light")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -145,8 +147,8 @@ const App = () => {
                   <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
                   <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
                   <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
-                  <Route path="/lent-out" element={<PlaceholderPage title="Lent Out" />} />
-                  <Route path="/borrowed" element={<PlaceholderPage title="Borrowed" />} />
+                  <Route path="/lent-out" element={<LentOut />} />
+                  <Route path="/borrowed" element={<Borrowed />} />
                   <Route path="/genre" element={<Genre />} />
                   <Route path="/trash" element={<Trash />} />
                   <Route path="/favorites" element={<Favorites />} />

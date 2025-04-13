@@ -227,7 +227,6 @@ router.get('/check', async (req, res) => {
       res.status(500).json({ error: 'Error checking for duplicate book' });
     }
   });
- /***************************/ 
 // Get favorites for a reader
 router.get("/favorites", async (req, res) => {
     const { readerid } = req.query;

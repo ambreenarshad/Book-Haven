@@ -30,7 +30,6 @@ const Dashboard = () => {
   const [genreData, setGenreData] = useState([]);
   const readerId = sessionStorage.getItem("reader_id");
   
-  
   useEffect(() => {
     if (!readerId) {
       console.error("Reader ID is missing from sessionStorage.");
@@ -88,7 +87,6 @@ const Dashboard = () => {
                   label: 'Total Pages Read',
                   data: totalPages,
                   borderColor:'rgb(46, 153, 151)',
-                  borderColor:'rgb(46, 153, 151)',
                   fill: false,
                   tension: 0.1,
                 },
@@ -102,8 +100,6 @@ const Dashboard = () => {
                   label: 'Total Minutes Read',
                   data: totalMinutes,
                    borderColor: 'rgba(153, 102, 255, 1)',
-                  //borderColor:'rgb(81, 78, 87)',
-                  // borderColor: 'rgb(75, 73, 79)',
                   fill: false,
                   tension: 0.1,
                 },

@@ -1,8 +1,7 @@
 import "../global.css";
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Auth = ({ setIsAuthenticated, onLogin }) => {
+const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();

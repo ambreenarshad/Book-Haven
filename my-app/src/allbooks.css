@@ -205,6 +205,43 @@
 .favorite-icon:hover {
     color: rgb(143, 81, 81);
 }
+.lent-to-info,
+.lent-date-info {
+  font-size: 0.85rem;
+  margin: 2px 0;
+}
+
+.lent-badge {
+  display: inline-block;
+  background-color: #dc3545;
+  color: white;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+/* Add a special style for the lent out books in the book list */
+.book-card.lent-out {
+  border-left: 3px solid #dc3545;
+}
+
+/* Style for the search bar in lent out books */
+.all-books .search-bar {
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.all-books .search-bar:focus {
+  outline: none;
+  border-color: #4a6fa5;
+  box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+}
 /* Different status colors */
 .status-badge.Reading { background-color: rgb(245, 238, 238); }
 .status-badge.Completed { background-color: rgb(245, 238, 238); }

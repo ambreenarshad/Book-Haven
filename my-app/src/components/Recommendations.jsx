@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 // import "./Recommendations.css"; // Optional for styling
 
 const genres = ["Fantasy", "Science", "Romance", "History", "Horror"];

@@ -118,7 +118,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       alert("Error: Reader ID is missing. Please log in again.");
       return;
     }
-    /*Check for duplicate book*/
+    //Check for duplicate book
     try {
       // First check for existing books
       const checkResponse = await axios.get(`http://localhost:8000/book/check`, {
@@ -133,7 +133,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
         alert("You already have a book with this title and author in your collection.");
         return;
       }
-    /**************************************/
     const formData = new FormData();
     formData.append("book_name", title);
     formData.append("author_name", author);
@@ -155,9 +154,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     // Add readerId to associate the book with a specific reader
     if (readerId) {
       formData.append("readerid", readerId);
-    }
-  
-    
+    } 
       const response = await axios.post("http://localhost:8000/book/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -317,7 +314,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       value={endDate}
       onChange={(e) => {
         setEndDate(e.target.value);
-        setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
+        setCurrentlyRead(totalPages); // Automatically set currentlyRead when End Date is selected
       }}
     />
 

@@ -84,7 +84,7 @@ const Trash = () => {
     try {
       await axios.post("http://localhost:8000/book/trash/restore", { bookIds: selectedBooks });
       setTrashedBooks((prev) => prev.filter((book) => !selectedBooks.includes(book.bookId)));
-      setSelectedBooks([]); // ✅ clear selection
+      setSelectedBooks([]); // clear selection
     } catch (err) {
       console.error("Bulk restore failed:", err);
       alert("Restore failed. Check the console.");
@@ -196,12 +196,6 @@ const Trash = () => {
                   </div>
                   <p className="trashed-duration">{getDaysInTrash(book.deletedAt)}</p>
                 </div>
-                {/* <button
-                  onClick={() => handleRestore(book.bookId)}
-                  className="restore-btn"
-                >
-                  ♻️ Restore
-                </button> */}
               </div>
             );
           })

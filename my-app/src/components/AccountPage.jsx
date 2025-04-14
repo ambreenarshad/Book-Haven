@@ -19,11 +19,15 @@ const AccountPage = ({ userData }) => {
   const [email, setEmail] = useState(reader?.email || "");
   const [password, setPassword] = useState(""); // New password field
   const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
+  const [changePasswordMode, setChangePasswordMode] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+
   const [errors, setErrors] = useState({});
   
-  const [passwordVisible, setPasswordVisible] = useState(false); // Password visibility state
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // Confirm password visibility state
-  
+  const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
+  const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    
   useEffect(() => {
     if (reader?.profilePicUrl) setPreviewUrl(reader.profilePicUrl);
     setFirstName(reader?.first_name || "");
@@ -47,12 +51,18 @@ const AccountPage = ({ userData }) => {
     if (!email.trim()) newErrors.email = "Email is required.";
   
     // Password validation
-    if (password && password !== confirmPassword) {
-      newErrors.password = "Passwords do not match.";
-    }
-    if (password && password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long.";
-    }
+    if (changePasswordMode) {
+      if (!currentPassword && (password && confirmPassword)) {
+        newErrors.currentPassword = "Current password is required.";
+      }
+      if (currentPassword && (!password || !confirmPassword)) {
+        newErrors.password = "New password and confirmation are required.";
+      } else if (password !== confirmPassword) {
+        newErrors.password = "Passwords do not match.";
+      } else if (password && password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters long.";
+      }
+    }    
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -64,6 +74,8 @@ const AccountPage = ({ userData }) => {
   
     try {
       setUploading(true);
+      let updateSuccessful = true;
+      let passwordUpdateSuccessful = true;
   
       // Upload new profile image if available
       if (image) {
@@ -75,7 +87,6 @@ const AccountPage = ({ userData }) => {
           "http://localhost:8000/profile-pic/upload-profile",
           formData
         );
-  
         setPreviewUrl(imgRes.data.profilePicUrl);
       }
   
@@ -88,27 +99,41 @@ const AccountPage = ({ userData }) => {
       });
   
       // If password is set, send update request for password
-      if (password) {
-        await axios.post("http://localhost:8000/profile-pic/update-password", {
-          readerId: reader.reader_id,
-          password,
-        });
+      if (changePasswordMode && password) {
+        try {
+          const passwordResponse = await axios.post("http://localhost:8000/profile-pic/update-password", {
+            readerId: reader.reader_id,
+            currentPassword,
+            newPassword: password,
+          });
+          
+          if (passwordResponse.data.error) {
+            setErrors(prev => ({ ...prev, currentPassword: passwordResponse.data.error }));
+            passwordUpdateSuccessful = false;
+            updateSuccessful = false;
+          }
+        } catch (error) {
+          if (error.response && error.response.data.error === "Current password is incorrect.") {
+            setErrors(prev => ({ ...prev, currentPassword: "Current password is incorrect." }));
+            passwordUpdateSuccessful = false;
+            updateSuccessful = false;
+          } else {
+            throw error;
+          }
+        }
       }
   
-      alert("Profile updated successfully!");
-      
-       // Reset fields to default values after save
-        setFirstName(reader?.first_name || "");
-        setLastName(reader?.last_name || "");
-        setEmail(reader?.email || "");
-        setPassword("");
-        setConfirmPassword("");
-
-        // Force reload to reset the page state
-       // window.location.reload();
+      if (updateSuccessful) {
+        alert("Profile updated successfully!");
+        window.location.reload();
+      } else if (!passwordUpdateSuccessful) {
+        // Don't show alert here - error is already displayed in form
+      } else {
+        alert("Update failed. Please try again.");
+      }
     } catch (error) {
       console.error(error);
-      alert("Update failed.");
+      alert("Update failed. Please try again.");
     } finally {
       setUploading(false);
       setShowOptions(false);
@@ -198,43 +223,93 @@ const AccountPage = ({ userData }) => {
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
   
-      <div className="input-group">
-        <label>New Password</label>
-        <div className="password-input-container">
-          <input
-            type={passwordVisible ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setPasswordVisible(!passwordVisible)}
+      {/* Show change password option */}
+      {!changePasswordMode ? (
+          <p 
+            className="change-password-link" 
+            onClick={() => {
+              setChangePasswordMode(true);
+              setErrors({}); // Clear any previous errors
+            }}
           >
-            {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-          </button>
-        </div>
-        {errors.password && <p className="error-text">{errors.password}</p>}
-      </div>
-  
-      <div className="input-group">
-        <label>Confirm Password</label>
-        <div className="password-input-container">
-          <input
-            type={confirmPasswordVisible ? "text" : "password"}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+            Change Password?
+          </p>
+        ) : (
+        <>
+          {/* Current Password Field */}
+          <div className="input-group">
+            <label>Current Password</label>
+            <div className="password-input-container">
+              <input
+                type={currentPasswordVisible ? "text" : "password"}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setCurrentPasswordVisible(!currentPasswordVisible)}
+              >
+                {currentPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {errors.currentPassword && <p className="error-text">{errors.currentPassword}</p>}
+          </div>
+
+          {/* New Password Field */}
+          <div className="input-group">
+            <label>New Password</label>
+            <div className="password-input-container">
+              <input
+                type={newPasswordVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setNewPasswordVisible(!newPasswordVisible)}
+              >
+                {newPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {errors.password && <p className="error-text">{errors.password}</p>}
+          </div>
+
+          {/* Confirm Password Field */}
+          <div className="input-group">
+            <label>Confirm Password</label>
+            <div className="password-input-container">
+              <input
+                type={confirmPasswordVisible ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+              >
+                {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {errors.password && <p className="error-text">{errors.password}</p>}
+          </div>
+          <p 
+            className="change-password-link" 
+            onClick={() => {
+              setChangePasswordMode(false);
+              setPassword("");
+              setConfirmPassword("");
+              setCurrentPassword("");
+              setErrors({});
+            }}
+            style={{ marginTop: '10px' }}
           >
-            {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-          </button>
-        </div>
-        {errors.password && <p className="error-text">{errors.password}</p>}
-      </div>
+            Cancel Password Change
+          </p>
+        </>
+      )}
   
       <div className="upload-btn-container">
         <button onClick={handleSave} disabled={uploading} className="upload-btn">

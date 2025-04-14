@@ -88,26 +88,36 @@ router.post("/update-reader-info", async (req, res) => {
 });
 // Route to update the reader's password (without bcrypt hashing)
 router.post("/update-password", async (req, res) => {
-    const { readerId, password } = req.body;
+    const { readerId, currentPassword, newPassword } = req.body;
 
-    if (!readerId || !password) {
-        return res.status(400).json({ error: "Reader ID and password are required" });
+    if (!readerId || !currentPassword || !newPassword) {
+        return res.status(400).json({ error: "All fields are required." });
     }
 
     try {
+        const reader = await Reader.findOne({ reader_id: readerId });
+
+        if (!reader) {
+            return res.status(404).json({ error: "Reader not found." });
+        }
+
+        if (reader.password !== currentPassword) {
+            return res.status(401).json({ error: "Current password is incorrect." });
+        }
+
         const updatedReader = await Reader.updateOne(
             { reader_id: readerId },
-            { $set: { password: password } }  // Save the plain password (not hashed)
+            { $set: { password: newPassword } }
         );
 
         if (updatedReader.nModified === 0) {
-            return res.status(400).json({ error: "No changes made or reader not found" });
+            return res.status(400).json({ error: "No changes made." });
         }
 
-        res.json({ message: "Password updated successfully" });
+        res.json({ message: "Password updated successfully." });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Update failed" });
+        res.status(500).json({ error: "Update failed." });
     }
 });
 

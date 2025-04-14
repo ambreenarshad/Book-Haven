@@ -58,8 +58,8 @@
   }
   
   .upload-btn {
-    background-color: #010101;
-    color: white;
+    background: var(--button-bg);
+    color: var(--button-text);
     padding: 0.6rem 1.5rem;
     border: none;
     border-radius: 6px;
@@ -70,7 +70,7 @@
   }
   
   .upload-btn:hover {
-    background-color: #4c4c4e;
+    background: var(--button-hover-bg);
   }
   
   .edit-options-dropdown {
@@ -150,6 +150,35 @@
   }
   
   .toggle-password:hover {
-    color: #4b4a4a;
+    color: var(--button-hover-bg);
+  }
+  .change-password-link {
+    color: #2c83eb; /* A nice blue color */
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 10px 0;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
   
+  .change-password-link:hover {
+    color: #1a6fd8; /* Slightly darker blue on hover */
+    text-decoration: underline;
+  }
+  
+  .change-password-link:active {
+    color: #0d5bb7; /* Even darker when clicked */
+  }
+  
+  /* If you want to add an icon next to it */
+  .change-password-link::after {
+    content: "→";
+    margin-left: 5px;
+    transition: margin-left 0.2s ease;
+  }
+  
+  .change-password-link:hover::after {
+    margin-left: 8px;
+  }

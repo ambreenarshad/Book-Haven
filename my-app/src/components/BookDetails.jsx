@@ -324,7 +324,7 @@ const BookDetails = () => {
           </div>
 
           {/* Timer Dialog */}
-          {isTimerOpen && <ReadingTimerDialog onClose={() => setIsTimerOpen(false)} bookId={book.bookid} />}
+          {isTimerOpen && <ReadingTimerDialog onClose={() => setIsTimerOpen(false)} curr_book={book} />}
 
           {/* Lending Dialog */}
           {isLendingOpen && (

@@ -8,7 +8,7 @@ router.post("/log", async (req, res) => {
     const { reader_id, bookId, duration, real_time, pages_read } = req.body;
 
     // Check for missing required fields
-    if (!reader_id || !bookId || !duration || !real_time || !pages_read) {
+    if (!reader_id || !bookId  || !pages_read) {
         return res.status(400).json({ message: "Missing required fields." });
     }
 

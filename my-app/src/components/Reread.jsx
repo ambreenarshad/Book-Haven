@@ -27,7 +27,6 @@ const Reread = ({ bookid }) => {
       <table >
         <thead>
           <tr>
-            <th >Reread ID</th>
             <th >Start Date</th>
             <th >End Date</th>
           </tr>
@@ -35,7 +34,7 @@ const Reread = ({ bookid }) => {
         <tbody>
           {rereadHistory.map((entry) => (
             <tr key={entry.reread_id}>
-              <td>{entry.reread_id}</td>
+             
               <td >{entry.startDate || '-'}</td>
               <td >{entry.endDate || '-'}</td>
             </tr>

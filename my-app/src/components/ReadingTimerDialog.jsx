@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import "../ReadingTimerDialog.css";
+import { FaPlaneDeparture } from "react-icons/fa";
 
-const ReadingTimerDialog = ({ onClose, bookId }) => {
-    const [duration, setDuration] = useState("");
+const ReadingTimerDialog = ({ onClose, curr_book }) => {
+
+    const [duration, setDuration] = useState(0);
     const [pagesRead, setPagesRead] = useState("");
     const [timeLeft, setTimeLeft] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
     const [isSaving, setIsSaving] = useState(false);  // Loading state for save button
     const [startTime, setStartTime] = useState(null);
     const readerId = sessionStorage.getItem("reader_id");
+    const bookId = curr_book.bookid;
     useEffect(() => {
         let timer;
         if (isRunning && timeLeft !== null && timeLeft > 0) {
@@ -52,6 +55,7 @@ const ReadingTimerDialog = ({ onClose, bookId }) => {
         }
     
         const plannedDuration = Number(duration) * 60; // in seconds
+       
         let actualTime = 0;
         if (startTime) {
             const endTime = Date.now();
@@ -138,7 +142,14 @@ const ReadingTimerDialog = ({ onClose, bookId }) => {
                         id="pages-read" 
                         name="pages-read"
                         value={pagesRead}
-                        onChange={(e) => setPagesRead(e.target.value)}
+                        onChange={(e) => {
+                            const newPages = Number(e.target.value);
+                            if (newPages + curr_book.currently_read <= curr_book.total_pages) {
+                                setPagesRead(newPages);
+                            } else {
+                                alert("Total pages read cannot exceed total pages of the book.");
+                            }
+                        }}
                     />
                 </div>
 

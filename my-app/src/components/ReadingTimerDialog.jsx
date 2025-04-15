@@ -10,18 +10,29 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
     const [isRunning, setIsRunning] = useState(false);
     const [isSaving, setIsSaving] = useState(false);  // Loading state for save button
     const [startTime, setStartTime] = useState(null);
+    const [hasTimeEnded, setHasTimeEnded] = useState(false);
+
     const readerId = sessionStorage.getItem("reader_id");
     const bookId = curr_book.bookid;
     useEffect(() => {
         let timer;
+    
         if (isRunning && timeLeft !== null && timeLeft > 0) {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-        } else if (timeLeft === 0) {
-            alert("Time is up! 🎉");
+        } else if (timeLeft === 0 && !hasTimeEnded) {
+            setHasTimeEnded(true); // Prevent repeat triggers
+            const audio = new Audio("/sounds/levelup.mp3");
+            audio.play().catch((e) => console.error("Audio playback failed:", e));
+    
             setIsRunning(false);
+    
+            setTimeout(() => {
+                alert("Time is up! 🎉");
+            }, 500);
         }
+    
         return () => clearTimeout(timer);
-    }, [isRunning, timeLeft]);
+    }, [isRunning, timeLeft, hasTimeEnded]);    
 
     // Prevent scrolling when dialog is open
     useEffect(() => {
@@ -34,10 +45,11 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
     const startTimer = () => {
         if (timeLeft === null && duration > 0) {
             setTimeLeft(duration * 60);
-            setStartTime(Date.now()); // Store start timestamp
+            setStartTime(Date.now());
+            setHasTimeEnded(false); // Reset alert trigger
         }
         setIsRunning(true);
-    };
+    };    
 
     const stopTimer = () => {
         setIsRunning(false);

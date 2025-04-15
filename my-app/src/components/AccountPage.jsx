@@ -193,10 +193,22 @@ const AccountPage = ({ userData, onLogout }) => {
   
         {showOptions && (
           <div className="edit-options-dropdown">
-            <div onClick={() => fileInputRef.current.click()} className="dropdown-option">
+            <div 
+              onClick={() => {
+                fileInputRef.current.click();
+                setShowOptions(false); // Add this line
+              }} 
+              className="dropdown-option"
+            >
               Edit Photo
             </div>
-            <div onClick={handleRemove} className="dropdown-option remove">
+            <div 
+              onClick={() => {
+                handleRemove();
+                setShowOptions(false); // Add this line
+              }} 
+              className="dropdown-option remove"
+            >
               Remove Photo
             </div>
           </div>

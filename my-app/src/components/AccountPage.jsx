@@ -5,9 +5,8 @@ import { MdEdit } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importing eye icons for toggle
 import "../AccountPage.css";
 
-const AccountPage = ({ userData }) => {
+const AccountPage = ({ userData, onLogout }) => {
   const reader = userData?.reader;
-  
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(reader?.profilePicUrl || null);
   const [uploading, setUploading] = useState(false);
@@ -157,6 +156,25 @@ const AccountPage = ({ userData }) => {
       setShowOptions(false);
     }
   };
+
+  const deleteAccount = async () => {
+    if (!reader?.reader_id) return;
+
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete your account?");
+    if (!confirmDelete) return;
+
+    try {
+      await axios.post("http://localhost:8000/profile-pic/delete-account", {
+        reader_id: reader.reader_id,
+      });
+
+      alert("Your account has been deleted.");
+      onLogout();       // this clears session and user state
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Something went wrong while deleting your account.");
+    }
+  };  
   
   return (
     <div className="account-container">
@@ -223,7 +241,8 @@ const AccountPage = ({ userData }) => {
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
   
-      {/* Show change password option */}
+      <div className="account-links">
+        {/* Show change password option */}
       {!changePasswordMode ? (
           <p 
             className="change-password-link" 
@@ -310,7 +329,11 @@ const AccountPage = ({ userData }) => {
           </p>
         </>
       )}
-  
+
+        {/* Delete Account Option */}
+        <p onClick={deleteAccount} className="delete-acc-link">Delete Account?</p>
+      </div>
+
       <div className="upload-btn-container">
         <button onClick={handleSave} disabled={uploading} className="upload-btn">
           {uploading ? "Saving..." : "Save"}

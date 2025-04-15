@@ -105,24 +105,27 @@
     background-color: #f0f0f0;
   }
 
-  .input-group {
-    margin-bottom: 1rem;
-  }
-  
-  .input-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-    margin-top: 30px;
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
+  /* Update the input group styling */
+.input-group {
+  margin-bottom: 1rem;
+  width: 100%; /* Ensure full width */
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  margin-top: 1rem; /* Consistent margin-top */
+  text-align: left; /* Align labels to the left */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box; /* Include padding in width */
+}
   .error-text {
     color: red;
     font-size: 0.8rem;
@@ -130,24 +133,25 @@
   }
   
 /* Wrapper for password input and toggle button */
+/* Update the password input container styles */
 .password-input-container {
-    position: relative;
-    align-items: center;
-    width: 100%;
-  }
-  
-  /* Style for the toggle password button */
-  .toggle-password {
-    background-color: rgb(252, 252, 252);
-    position: absolute;
-    left: 382px; /* Position the button on the right side */
-    top: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #0a0a0a;
-  }
+  position: relative;
+  width: 100%; /* Changed from 210% to match other fields */
+}
+
+/* Adjust the toggle password button position */
+.toggle-password {
+  position: absolute;
+  right: 2px; /* Position from the right instead of fixed pixel value */
+  top: 65%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #0a0a0a;
+  padding: 0 8px;
+}
   
   .toggle-password:hover {
     color: var(--button-hover-bg);
@@ -182,3 +186,39 @@
   .change-password-link:hover::after {
     margin-left: 8px;
   }
+  .delete-acc-link {
+    color: #eb2c2c; /* A nice red color */
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: auto;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-acc-link:hover {
+    color: #d81a1a; /* Slightly darker red on hover */
+    text-decoration: underline;
+  }
+  
+  .delete-acc-link:active {
+    color: #b70d0d; /* Even darker when clicked */
+  }
+  .delete-acc-link::after {
+    content: "→";
+    margin-left: 5px;
+    transition: margin-left 0.2s ease;
+  }
+  
+  .delete-acc-link:hover::after {
+    margin-left: 8px;
+  }
+  .account-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Or center, depending on your layout */
+    gap: 8px; /* Adds spacing between the two links */
+    margin-top: 16px; /* Optional: space above the links */
+  }
+  

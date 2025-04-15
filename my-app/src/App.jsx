@@ -153,7 +153,8 @@ const App = () => {
                   <Route path="/genre" element={<Genre />} />
                   <Route path="/trash" element={<Trash />} />
                   <Route path="/favorites" element={<Favorites />} />
-                  <Route path="/account" element={<AccountPage userData={userData} />} />
+                  <Route path="/account" element={<AccountPage userData={userData} onLogout={handleLogout} />} />
+                  <Route path="/login" element={<Auth />} />
                 </Routes>
               </div>
             </div>

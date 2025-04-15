@@ -2,7 +2,17 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+
 const Reader = require("../models/Reader");
+const Book = require('../models/Book');
+const Favorite = require('../models/Favorite');
+const LendingTracker = require('../models/LendingTracker');
+const Quote = require('../models/Quote');
+const ReadingGoal = require('../models/ReadingGoal');
+const Rereader = require('../models/Rereader');
+const Tag = require('../models/Tag');
+const Timer = require('../models/Timer');
+const Trash = require('../models/Trash');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -120,5 +130,35 @@ router.post("/update-password", async (req, res) => {
         res.status(500).json({ error: "Update failed." });
     }
 });
+
+router.post("/delete-account", async (req, res) => {
+    const { reader_id } = req.body;
+  
+    if (!reader_id) {
+      return res.status(400).json({ error: "Reader ID is required" });
+    }
+  
+    try {
+      // 1. Find all books owned by the reader
+      const books = await Book.find({ readerid: reader_id });
+      const bookIds = books.map(book => book.bookid);
+  
+      await Favorite.deleteMany({ bookId: { $in: bookIds } });
+      await LendingTracker.deleteMany({ bookId: { $in: bookIds } });
+      await Quote.deleteMany({ bookId: { $in: bookIds } });
+      await ReadingGoal.deleteOne({ reader_id });
+      await Rereader.deleteMany({ bookid: { $in: bookIds } });
+      await Tag.deleteMany({ bookid: { $in: bookIds } });
+      await Timer.deleteMany({ bookId: { $in: bookIds } });
+      await Trash.deleteMany({ bookId: { $in: bookIds } });
+      await Book.deleteMany({ readerid: reader_id });
+      await Reader.deleteOne({ reader_id });
+  
+      res.status(200).json({ message: "Reader and related data deleted successfully." });
+    } catch (error) {
+      console.error("Delete account error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
 
 module.exports = router;

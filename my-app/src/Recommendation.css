@@ -63,12 +63,14 @@
   }
   
   .book-details-r h3 {
+    color:black;
     margin: 0;
     font-size: 1.2em;
     font-weight: bold;
   }
   
   .book-details-r p {
+    color:black;
     margin: 5px 0;
   }
   .book-details-r a {

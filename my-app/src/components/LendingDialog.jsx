@@ -10,7 +10,7 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isLendMode = mode === "lend"
-  const title = isLendMode ? "Lend Book" : "Borrow Book"
+  const titleld = isLendMode ? "Lend Book" : "Borrow Book"
   const label = isLendMode ? "Lend to:" : "Borrowed from:"
   const buttonText = isLendMode ? "Lend Book" : "Record Borrowed Book"
   const submittingText = isLendMode ? "Lending..." : "Recording..."
@@ -41,8 +41,8 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
 
   return (
     <div className="dialog-overlay">
-      <div className={`dialog-content ${isLendMode ? "lending-dialog" : "borrowing-dialog"}`}>
-        <h2>{title}</h2>
+      <div className="dialog-container book-action-dialog">
+        <h2>{titleld}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="personName">{label}</label>
@@ -57,7 +57,13 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
           </div>
           <div className="form-group">
             <label htmlFor="date">{isLendMode ? "Lending" : "Borrowing"} Date:</label>
-            <input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+            <input 
+              type="date" 
+              id="date" 
+              value={date} 
+              onChange={(e) => setDate(e.target.value)} 
+              required 
+            />
           </div>
           <div className="dialog-buttons">
             <button type="button" onClick={onClose} className="cancel-button">
@@ -65,7 +71,7 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
             </button>
             <button
               type="submit"
-              className={isLendMode ? "lend-button" : "borrow-button"}
+              className="action-button"
               disabled={isSubmitting || !personName.trim()}
             >
               {isSubmitting ? submittingText : buttonText}

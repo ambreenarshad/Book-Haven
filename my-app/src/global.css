@@ -203,13 +203,13 @@ body {
   gap: 1rem;
 }
 
-.form-group {
+.form-group-auth {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.form-group label {
+.form-group-auth label {
   font-weight: bold;
   color: var(--foreground);
 }

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ReadingGoal = require("../models/ReadingGoal");
 const Book = require("../models/Book"); // Import the Book model
 const router = express.Router();
-
+const auth = require("../middleware/auth");
 // Helper function to get start & end dates
 const getNewGoalDates = (type) => {
     const now = new Date();
@@ -29,8 +29,11 @@ const getNewGoalDates = (type) => {
 };
 
 // Fetch reading goals by reader_id and reset expired goals
-router.get("/:rID", async (req, res) => {
+router.get("/:rID", auth, async (req, res) => {
     try {
+        if (req.params.rID !== req.user.id) {
+            return res.status(403).json({ message: "Access denied" });
+          }
         const readerId = Number(req.params.rID);
         console.log("Fetching goals for reader_id:", readerId);
 
@@ -143,8 +146,11 @@ const createNewGoals = async (readerId, goalData, res) => {
 };
 
 // Update existing goals or create if not found
-router.put("/:rID", async (req, res) => {
+router.put("/:rID", auth, async (req, res) => {
     try {
+        if (req.params.rID !== req.user.id) {
+            return res.status(403).json({ message: "Access denied" });
+          }
         const readerId = Number(req.params.rID);
         console.log("Updating goals for reader_id:", readerId);
 

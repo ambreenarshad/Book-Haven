@@ -21,7 +21,7 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         } else if (timeLeft === 0 && !hasTimeEnded) {
             setHasTimeEnded(true); // Prevent repeat triggers
-            const audio = new Audio("/sounds/levelup.mp3");
+            const audio = new Audio("/sounds/alarm3.wav");
             audio.play().catch((e) => console.error("Audio playback failed:", e));
     
             setIsRunning(false);

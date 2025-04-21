@@ -31,7 +31,7 @@ const getNewGoalDates = (type) => {
 // Fetch reading goals by reader_id and reset expired goals
 router.get("/:rID", auth, async (req, res) => {
     try {
-        if (req.params.rID !== req.user.id) {
+        if (Number(req.params.rID) !== req.user.id) {
             return res.status(403).json({ message: "Access denied" });
           }
         const readerId = Number(req.params.rID);
@@ -148,7 +148,7 @@ const createNewGoals = async (readerId, goalData, res) => {
 // Update existing goals or create if not found
 router.put("/:rID", auth, async (req, res) => {
     try {
-        if (req.params.rID !== req.user.id) {
+        if (Number(req.params.rID) !== req.user.id) {
             return res.status(403).json({ message: "Access denied" });
           }
         const readerId = Number(req.params.rID);

@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-
+const auth = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const Reader = require("../models/Reader");
 const Book = require('../models/Book');
 const Favorite = require('../models/Favorite');
@@ -96,40 +98,43 @@ router.post("/update-reader-info", async (req, res) => {
         res.status(500).json({ error: "Update failed" });
     }
 });
-// Route to update the reader's password (without bcrypt hashing)
-router.post("/update-password", async (req, res) => {
-    const { readerId, currentPassword, newPassword } = req.body;
-
-    if (!readerId || !currentPassword || !newPassword) {
-        return res.status(400).json({ error: "All fields are required." });
+router.post("/update-password", auth, async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+  
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: "All fields are required." });
     }
-
+  
     try {
-        const reader = await Reader.findOne({ reader_id: readerId });
-
-        if (!reader) {
-            return res.status(404).json({ error: "Reader not found." });
-        }
-
-        if (reader.password !== currentPassword) {
-            return res.status(401).json({ error: "Current password is incorrect." });
-        }
-
-        const updatedReader = await Reader.updateOne(
-            { reader_id: readerId },
-            { $set: { password: newPassword } }
-        );
-
-        if (updatedReader.nModified === 0) {
-            return res.status(400).json({ error: "No changes made." });
-        }
-
-        res.json({ message: "Password updated successfully." });
+      // Use reader_id from the authenticated user
+      const reader = await Reader.findOne({ reader_id: req.user.id });
+  
+      if (!reader) {
+        return res.status(404).json({ error: "Reader not found." });
+      }
+  
+      // Compare current password
+      const isMatch = await bcrypt.compare(currentPassword, reader.password);
+      if (!isMatch) {
+        return res.status(401).json({ error: "Current password is incorrect." });
+      }
+  
+      // Hash the new password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+  
+      // Update the password
+      await Reader.updateOne(
+        { reader_id: req.user.id },
+        { $set: { password: hashedPassword } }
+      );
+  
+      res.json({ message: "Password updated successfully." });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Update failed." });
+      console.error(err);
+      res.status(500).json({ error: "Update failed." });
     }
-});
+  });
 
 router.post("/delete-account", async (req, res) => {
     const { reader_id } = req.body;

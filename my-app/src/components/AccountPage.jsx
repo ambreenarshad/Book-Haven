@@ -26,7 +26,7 @@ const AccountPage = ({ userData, onLogout }) => {
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-    
+  const token = sessionStorage.getItem("token");
   useEffect(() => {
     if (reader?.profilePicUrl) setPreviewUrl(reader.profilePicUrl);
     setFirstName(reader?.first_name || "");
@@ -101,10 +101,16 @@ const AccountPage = ({ userData, onLogout }) => {
       if (changePasswordMode && password) {
         try {
           const passwordResponse = await axios.post("http://localhost:8000/profile-pic/update-password", {
-            readerId: reader.reader_id,
             currentPassword,
             newPassword: password,
-          });
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
           
           if (passwordResponse.data.error) {
             setErrors(prev => ({ ...prev, currentPassword: passwordResponse.data.error }));

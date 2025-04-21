@@ -9,7 +9,7 @@ router.get("/summary/:readerid", auth, async (req, res) => {
   try {
     const readerId = req.params.readerid;
 
-    if (readerId !== req.user.id) {
+    if (Number(readerId) !== req.user.id) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -39,7 +39,7 @@ router.get("/summary/:readerid", auth, async (req, res) => {
 
   router.get("/timer/:readerid", auth, async (req, res) => {
     try {
-      if (req.params.readerid !== req.user.id) {
+      if (Number(req.params.readerid) !== req.user.id) {
         return res.status(403).json({ message: "Access denied" });
       }
         const readerId = Number(req.params.readerid);
@@ -93,7 +93,7 @@ router.get("/summary/:readerid", auth, async (req, res) => {
 router.get("/currently-reading/:readerid", auth, async (req, res) => {
     const { readerid } = req.params;
     try {
-      if (req.params.readerid !== req.user.id) {
+      if (Number(req.params.readerid) !== req.user.id) {
         return res.status(403).json({ message: "Access denied" });
       }
       const books = await Book.find({ readerid, reading_status: "Reading" });
@@ -107,7 +107,7 @@ router.get("/currently-reading/:readerid", auth, async (req, res) => {
     const readerid = Number(req.params.readerid);  // Ensure readerid is a Number
   
     try {
-      if (req.params.readerid !== req.user.id) {
+      if (Number(req.params.readerid) !== req.user.id) {
         return res.status(403).json({ message: "Access denied" });
       }
       const genres = await Book.aggregate([

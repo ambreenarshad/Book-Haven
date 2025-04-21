@@ -44,6 +44,7 @@
     padding: 12px;
     border-bottom: 1px solid #ddd; /* Light border */
     text-align: left;
+    color: black;
   }
   
   .reread-history-table tr:nth-child(odd) {

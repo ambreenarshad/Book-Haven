@@ -251,7 +251,7 @@ const BookDetails = () => {
               className="book-cover-large"
               onError={(e) => {
                 e.target.onerror = null
-                e.target.src = "/empty.jpeg"
+                e.target.src = "/empty.png"
               }}
             />
             <label htmlFor="cover-upload" className="edit-cover-button">
@@ -279,7 +279,7 @@ const BookDetails = () => {
                 <button onClick={() => setIsLendingOpen(true)} className="lend-button" disabled={isBorrowed}>
                   <MdShare style={{ marginBottom: "-2px" }} /> Lend Book
                 </button>
-                <button onClick={() => setIsBorrowingOpen(true)} className="borrow-button" disabled={isLentOut}>
+                <button onClick={() => setIsBorrowingOpen(true)} className="borrow-buttonn" disabled={isLentOut}>
                   <MdShare style={{ marginBottom: "-2px" }} /> Borrow Book
                 </button>
               </div>

@@ -52,13 +52,26 @@
 .book-info {
     width: 100%;
     padding: 10px;
-    color: #000;
+    color: #000000;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;  /* Prevent overflow */
 }
+
+
+.dark .book-info {
+    width: 100%;
+    padding: 10px;
+    color: #cbc7c7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;  /* Prevent overflow */
+}
+
 
 .add-dialogue.open ~ .book-list .book-card:hover {
     transform: none; /* Disable hover scale */
@@ -89,33 +102,27 @@
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
-    color: black;
+    color: rgb(0, 0, 0);
+    background-color: rgb(218, 213, 213);
+    font-weight: bold;
+    margin-top: 5px;
+}
+.dark .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
     font-weight: bold;
     margin-top: 5px;
 }
 
-.status-badge.Reading { background-color: gray; }
+/* .status-badge.Reading { background-color: gray; }
 .status-badge.Completed { background-color: black; }
 .status-badge.To-Read { background-color: lightgray; }
-.status-badge.Wishlist { background-color: red; }
+.status-badge.Wishlist { background-color: red; } */
 
-
-
-/* .progress-bar {
-    height: 8px;
-    width: 100%;
-    background-color: #ddd;
-    border-radius: 4px;
-    margin-top: 8px;
-    position: relative;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: #000;
-    border-radius: 4px;
-    transition: width 0.3s ease-in-out;
-} */
 
 
 .progress-bar {
@@ -178,10 +185,11 @@
     border: 1px solid var(--search-bar-border);
     border-radius: 5px;
     font-size: 16px;
-    margin-left: 800px;
+    margin-left: 1095px;
     background-color: var(--search-bar-bg);
     color: var(--search-bar-text);
 }
+
 
 .trash-icon {
     color: rgb(15, 14, 14);
@@ -191,9 +199,21 @@
     z-index: 100;
     cursor: pointer;
 }
+
+.dark .trash-icon {
+    color: rgb(212, 211, 211);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+
 .trash-icon:hover {
     color: rgb(115, 112, 112);
 }
+
 .favorite-icon {
     color: rgb(118, 28, 28);
     position: absolute;
@@ -205,6 +225,18 @@
 .favorite-icon:hover {
     color: rgb(143, 81, 81);
 }
+
+
+
+/* Different status colors */
+/* .status-badge.Reading { background-color: rgb(245, 238, 238); }
+.status-badge.Completed { background-color: rgb(245, 238, 238); }
+.status-badge.To-Read {  background-color: rgb(245, 238, 238); } */
+
+
+
+
+
 .lent-to-info,
 .lent-date-info {
   font-size: 0.85rem;
@@ -242,8 +274,3 @@
   border-color: #4a6fa5;
   box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
 }
-/* Different status colors */
-.status-badge.Reading { background-color: rgb(245, 238, 238); }
-.status-badge.Completed { background-color: rgb(245, 238, 238); }
-.status-badge.To-Read {  background-color: rgb(245, 238, 238); }
-.status-badge.Wishlist { background-color: red;}

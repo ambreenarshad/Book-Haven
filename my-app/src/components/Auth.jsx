@@ -73,34 +73,34 @@ const Auth = ({ onLogin }) => {
       <form onSubmit={handleSubmit} className="form">
         {activeTab === "login" ? (
           <>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Email</label>
               <input type="email" name="email" className="input" required />
             </div>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Password</label>
               <input type="password" name="password" className="input" required />
             </div>
           </>
         ) : (
           <>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>First Name</label>
               <input type="text" name="firstName" placeholder="John" className="input" required />
             </div>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Last Name</label>
               <input type="text" name="lastName" placeholder="Doe" className="input" required />
             </div>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Email</label>
               <input type="email" name="email" placeholder="name@example.com" className="input" required />
             </div>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Password</label>
               <input type="password" name="password" className="input" required />
             </div>
-            <div className="form-group">
+            <div className="form-group-auth">
               <label>Date of Birth</label>
               <input type="date" name="dateOfBirth" className="input" required />
             </div>

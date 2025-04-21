@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
+const bcrypt = require("bcryptjs");
 
 const readerSchema = new mongoose.Schema({
     reader_id: Number,  // This will be auto-incremented
@@ -14,4 +15,11 @@ const readerSchema = new mongoose.Schema({
 // Apply auto-increment plugin
 readerSchema.plugin(AutoIncrement, { inc_field: "reader_id" });
 
+// Hash password before saving
+readerSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+  });
+  
 module.exports = mongoose.model("Reader", readerSchema);

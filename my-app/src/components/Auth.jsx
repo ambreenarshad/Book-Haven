@@ -37,6 +37,7 @@ const Auth = ({ onLogin }) => {
       if (response.ok) {
         if (activeTab === "login") {
           sessionStorage.setItem("reader_id", data.reader_id); // Store reader_id
+          sessionStorage.setItem("token", data.token); // ⬅️ store the JWT
           if (onLogin) onLogin(data.reader_id); // Call onLogin function which will trigger animation
           navigate("/");
         } else {

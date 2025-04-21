@@ -67,7 +67,8 @@ const Dashboard = () => {
   const [genreData, setGenreData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const readerId = sessionStorage.getItem("reader_id");
-  
+  const token = sessionStorage.getItem("token");
+
   useEffect(() => {
     if (!readerId) {
       console.error("Reader ID is missing from sessionStorage.");
@@ -80,7 +81,11 @@ const Dashboard = () => {
         setIsLoading(true);
         
         // Fetch goals
-        const goalsResponse = await fetch(`http://localhost:8000/reading-goals/${readerId}`);
+        const goalsResponse = await fetch(`http://localhost:8000/reading-goals/${readerId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const goalsData = await goalsResponse.json();
         setGoals(goalsData || {
           yearly_goal: 0,
@@ -100,7 +105,11 @@ const Dashboard = () => {
         });
 
         // Fetch summary
-        const summaryResponse = await fetch(`http://localhost:8000/dashboard/summary/${readerId}`);
+        const summaryResponse = await fetch(`http://localhost:8000/dashboard/summary/${readerId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const summaryData = await summaryResponse.json();
         setSummary(summaryData || {
           totalBooks: 0,
@@ -109,12 +118,20 @@ const Dashboard = () => {
         });
 
         // Fetch currently reading books
-        const readingResponse = await fetch(`http://localhost:8000/dashboard/currently-reading/${readerId}`);
+        const readingResponse = await fetch(`http://localhost:8000/dashboard/currently-reading/${readerId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const readingData = await readingResponse.json();
         setCurrentlyReadingBooks(Array.isArray(readingData) ? readingData : []);
 
         // Fetch genre data
-        const genreResponse = await fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`);
+        const genreResponse = await fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const genreData = await genreResponse.json();
         if (Array.isArray(genreData)) {
           const formattedData = genreData.map((item) => ({
@@ -127,7 +144,11 @@ const Dashboard = () => {
         }
 
         // Fetch chart data
-        const chartResponse = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`);
+        const chartResponse = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const chartData = await chartResponse.json();
         
         if (Array.isArray(chartData)) {
@@ -165,7 +186,7 @@ const Dashboard = () => {
     };
 
     fetchAllData();
-  }, [readerId]);
+  }, [readerId, token]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -187,7 +208,8 @@ const Dashboard = () => {
       const url = `http://localhost:8000/reading-goals/${readerId}`;
       const response = await fetch(url, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
           reader_id: readerId,
           yearly_goal: updatedGoals.yearly_goal || 0,

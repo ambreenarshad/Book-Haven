@@ -31,12 +31,12 @@ const Dashboard = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [updatedGoals, setUpdatedGoals] = useState({
-    yearly_goal: 0,
-    yearly_progress: 0,
-    monthly_goal: 0,
-    monthly_progress: 0,
-    weekly_goal: 0,
-    weekly_progress: 0
+    yearly_goal: '',
+    yearly_progress: '',
+    monthly_goal: '',
+    monthly_progress: '',
+    weekly_goal: '',
+    weekly_progress: ''
   });
   const [summary, setSummary] = useState({
     totalBooks: 0,
@@ -206,24 +206,60 @@ const Dashboard = () => {
     setIsEditing(false);
   };
 
+  // Updated handleChange function with stronger validation
   const handleChange = (e) => {
-    setUpdatedGoals({ 
-      ...updatedGoals, 
-      [e.target.name]: Number(e.target.value) || 0 
-    });
+    const { name, value } = e.target;
+    
+    // Only allow numeric input (empty string or numbers)
+    if (value === '' || /^\d+$/.test(value)) {
+      setUpdatedGoals({ 
+        ...updatedGoals, 
+        [name]: value
+      });
+    }
+    // If input doesn't match our validation, we don't update state
+  };
+
+  // Prevent non-numeric input on keydown
+  const handleKeyDown = (e) => {
+    // Allow: backspace, delete, tab, escape, enter, navigation keys
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'Home', 'End', 'ArrowLeft', 'ArrowRight'];
+    
+    // If it's not a number and not in allowed special keys, prevent default
+    if (!/^\d$/.test(e.key) && !allowedKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  // Handle paste event to prevent non-numeric input
+  const handlePaste = (e) => {
+    // Get pasted data via clipboard API
+    const pastedData = e.clipboardData.getData('Text');
+    
+    // If pasted data is not numeric, prevent default
+    if (!/^\d*$/.test(pastedData)) {
+      e.preventDefault();
+    }
   };
 
   const handleSave = async () => {
     try {
+      // Convert any empty strings to 0 for the API call
+      const goalsToSave = {
+        reader_id: readerId,
+        yearly_goal: updatedGoals.yearly_goal === '' ? 0 : parseInt(updatedGoals.yearly_goal, 10),
+        yearly_progress: updatedGoals.yearly_progress === '' ? 0 : parseInt(updatedGoals.yearly_progress, 10),
+        monthly_goal: updatedGoals.monthly_goal === '' ? 0 : parseInt(updatedGoals.monthly_goal, 10),
+        monthly_progress: updatedGoals.monthly_progress === '' ? 0 : parseInt(updatedGoals.monthly_progress, 10),
+        weekly_goal: updatedGoals.weekly_goal === '' ? 0 : parseInt(updatedGoals.weekly_goal, 10),
+        weekly_progress: updatedGoals.weekly_progress === '' ? 0 : parseInt(updatedGoals.weekly_progress, 10)
+      };
+  
       const url = `http://localhost:8000/reading-goals/${readerId}`;
       const response = await fetch(url, {
         method: "PUT",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-          "Accept": "application/json"
-        },
-        credentials: "include",
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
           reader_id: readerId,
           yearly_goal: updatedGoals.yearly_goal || 0,
@@ -234,17 +270,12 @@ const Dashboard = () => {
           weekly_progress: updatedGoals.weekly_progress || 0
         }),
       });
-
+  
       if (response.status === 404) {
         // If no goals found, create new ones
         await fetch(url, {
           method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json"
-          },
-          credentials: "include",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             reader_id: readerId,
             yearly_goal: updatedGoals.yearly_goal || 0,
@@ -256,13 +287,44 @@ const Dashboard = () => {
           }),
         });
       }
-
+  
       const data = await response.json();
       setGoals(data);
       setIsEditing(false);
     } catch (err) {
       console.error("Error updating or creating goals:", err);
     }
+  };
+
+  const GoalProgress = ({ title, current, total }) => {
+    // Handle 0/0 case specifically
+    if (total === 0 || total === '') {
+      return (
+        <div className="goal">
+          <p>
+            {title} (0 of 0)
+          </p>
+          <div className="ReadingGoals-progress-bar">
+            <div className="ReadingGoals-progress-fill" style={{ width: '0%' }}></div>
+          </div>
+          <span>0%</span>
+        </div>
+      );
+    }
+  
+    const displayCurrent = current > total ? total : current;
+    const progress = Math.min(Math.round((displayCurrent / total) * 100), 100);
+    return (
+      <div className="goal">
+        <p>
+          {title} ({displayCurrent} of {total})
+        </p>
+        <div className="ReadingGoals-progress-bar">
+          <div className="ReadingGoals-progress-fill" style={{ width: `${progress}%` }}></div>
+        </div>
+        <span>{progress}%</span>
+      </div>
+    );
   };
 
   if (isLoading) {
@@ -418,31 +480,40 @@ const Dashboard = () => {
               <label>
                 Yearly Goal: 
                 <input 
-                  type="number" 
+                  type="text" 
                   name="yearly_goal" 
-                  value={updatedGoals.yearly_goal} 
-                  onChange={handleChange} 
-                  min="0"
+                  value={updatedGoals.yearly_goal}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  onPaste={handlePaste}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                 />
               </label>
               <label>
                 Monthly Goal: 
                 <input 
-                  type="number" 
+                  type="text" 
                   name="monthly_goal" 
-                  value={updatedGoals.monthly_goal} 
-                  onChange={handleChange} 
-                  min="0"
+                  value={updatedGoals.monthly_goal}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  onPaste={handlePaste}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                 />
               </label>
               <label>
                 Weekly Goal: 
                 <input 
-                  type="number" 
+                  type="text" 
                   name="weekly_goal" 
-                  value={updatedGoals.weekly_goal} 
-                  onChange={handleChange} 
-                  min="0"
+                  value={updatedGoals.weekly_goal}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+                  onPaste={handlePaste}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                 />
               </label>
 
@@ -454,23 +525,6 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-    </div>
-  );
-};
-
-const GoalProgress = ({ title, current, total }) => {
-  const displayCurrent = current > total ? total : current;
-  const progress = total > 0 ? Math.min(Math.round((current / total) * 100), 100) : 0;
-
-  return (
-    <div className="goal">
-      <p>
-        {title} ({displayCurrent} of {total})
-      </p>
-      <div className="ReadingGoals-progress-bar">
-        <div className="ReadingGoals-progress-fill" style={{ width: `${progress}%` }}></div>
-      </div>
-      <span>{progress}%</span>
     </div>
   );
 };

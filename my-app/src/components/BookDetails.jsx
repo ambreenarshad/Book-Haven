@@ -79,15 +79,20 @@ const BookDetails = () => {
 
   const handleAddTag = async () => {
     if (!newTag.trim()) return
-
+    
+    // Validate tag contains only letters
+    if (!/^[a-zA-Z]+$/.test(newTag.trim())) {
+      alert("Tags can only contain letters. Numbers, spaces, and special characters are not allowed.");
+      return;
+    }
+  
     try {
-      // setIsAddingTag(true);
       const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tag: newTag.trim() }),
       })
-
+  
       if (response.ok) {
         setTags([...tags, { tag: newTag.trim() }])
         setNewTag("")
@@ -96,11 +101,15 @@ const BookDetails = () => {
       }
     } catch (error) {
       console.error("Error adding tag:", error)
-    } //finally {
-    //     setIsAddingTag(false);
-    // }
+    }
   }
-
+  const handleTagInputChange = (e) => {
+    const value = e.target.value;
+    // Only update state if the input contains only letters or is empty
+    if (value === '' || /^[a-zA-Z]+$/.test(value)) {
+      setNewTag(value);
+    }
+  }
   // Add this function to handle tag deletion
   const handleDeleteTag = async (tagToDelete) => {
     try {
@@ -307,8 +316,8 @@ const BookDetails = () => {
                 <input
                   type="text"
                   value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  placeholder="Enter a tag"
+                  onChange={handleTagInputChange}
+                  placeholder="Enter a tag (letters only)"
                   className="tag-input"
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && newTag.trim()) {

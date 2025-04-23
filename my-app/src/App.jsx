@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-//import "./app.css";
+import { Routes, Route, useNavigate } from "react-router-dom"
+
 
 import Header from "./components/Header"
 import AddBookModal from "./components/AddBookModal"
@@ -19,7 +19,9 @@ import BookAnimation from "./components/BookAnimation"
 import Recommendations from "./components/Recommendations"
 import LentOut from "./components/LentOut"
 import Borrowed from "./components/Borrowed"
-import AccountPage from "./components/AccountPage";
+import AccountPage from "./components/AccountPage"
+import SessionHandler from "./components/SessionHandler"
+
 const App = () => {
   const [theme, setTheme] = useState("light")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -29,22 +31,36 @@ const App = () => {
   const [showAnimation, setShowAnimation] = useState(false)
   const [showMainContent, setShowMainContent] = useState(false)
   const [mainContentVisible, setMainContentVisible] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(true)
+  const navigate = useNavigate();
+  const handleLogin = async (readerId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include'
+      })
 
-  const handleLogin = (readerId) => {
-    console.log("Logging in with Reader ID:", readerId) // Debugging
-    setCurrentReaderId(readerId)
-    sessionStorage.setItem("reader_id", readerId) // Store in sessionStorage
-    // Show animation first
-    setShowAnimation(true)
-    fetchUserData(readerId)
+      if (response.ok) {
+        const data = await response.json()
+        setCurrentReaderId(readerId)
+        setUserData(data)
+        sessionStorage.setItem("reader_id", readerId)
+        setShowAnimation(true)
+      } else {
+        handleLogout()
+      }
+    } catch (error) {
+      console.error("Error during login:", error)
+      handleLogout()
+    }
   }
-
+  
   const handleAnimationComplete = () => {
     setShowAnimation(false)
     setIsAuthenticated(true)
     setShowMainContent(true)
 
-    // Add a small delay before fading in the main content
     setTimeout(() => {
       setMainContentVisible(true)
     }, 100)
@@ -56,7 +72,8 @@ const App = () => {
     setUserData(null)
     setShowMainContent(false)
     setMainContentVisible(false)
-    sessionStorage.removeItem("reader_id")
+    sessionStorage.clear()
+    navigate("/")
   }
 
   const fetchUserData = async (readerId) => {
@@ -77,20 +94,52 @@ const App = () => {
     }
   }
 
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") || "light"
-    setTheme(storedTheme)
-    document.documentElement.classList.toggle("dark", storedTheme === "dark")
+  const checkSession = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/reader/check-session', {
+        credentials: 'include'
+      });
 
-    const storedReaderId = sessionStorage.getItem("reader_id")
-    console.log("Retrieved Reader ID from sessionStorage:", storedReaderId) // Debugging
-    if (storedReaderId) {
-      setIsAuthenticated(true)
-      setShowMainContent(true)
-      setMainContentVisible(true)
-      setCurrentReaderId(storedReaderId)
-      fetchUserData(storedReaderId)
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isAuthenticated && data.readerId) {
+          return data.readerId;
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error('Session check failed:', error);
+      return null;
     }
+  }
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      const storedTheme = localStorage.getItem("theme") || "light"
+      setTheme(storedTheme)
+      document.documentElement.classList.toggle("dark", storedTheme === "dark")
+
+      const readerId = await checkSession()
+      const storedReaderId = sessionStorage.getItem("reader_id")
+
+      if (readerId) {
+        setCurrentReaderId(readerId)
+        await fetchUserData(readerId)
+        setIsAuthenticated(true)
+        setShowMainContent(true)
+      } else if (storedReaderId) {
+        setCurrentReaderId(storedReaderId)
+        await fetchUserData(storedReaderId)
+        setIsAuthenticated(true)
+        setShowMainContent(true)
+      } else {
+        handleLogout()
+      }
+
+      setIsInitializing(false)
+    }
+
+    initializeApp()
   }, [])
 
   const toggleTheme = () => {
@@ -104,11 +153,12 @@ const App = () => {
   const closeModal = () => setIsModalOpen(false)
 
   return (
-    <Router>
+    <>
       <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
+       
         {showAnimation && <BookAnimation onAnimationComplete={handleAnimationComplete} />}
-
-        {!isAuthenticated && !showAnimation ? (
+        <SessionHandler userData={userData} onLogout={handleLogout} />
+        {!isInitializing && !isAuthenticated && !showAnimation ? (
           <div className="app">
             <SiteHeader toggleTheme={toggleTheme} theme={theme} />
             <main className="main flex flex-col justify-center p-4">
@@ -125,9 +175,7 @@ const App = () => {
           </div>
         ) : (
           showMainContent && (
-            <div
-              className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}
-            >
+            <div className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}>
               <Sidebar userData={userData} onLogout={handleLogout} />
               <div className="content flex-grow">
                 <Header
@@ -138,15 +186,13 @@ const App = () => {
                   onLogout={handleLogout}
                 />
                 <AddBookModal isOpen={isModalOpen} closeModal={closeModal} readerId={currentReaderId} />
-
                 <Routes>
-                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/all-books" element={<AllBooks />} />
                   <Route path="/recommendations" element={<Recommendations />} />
                   <Route path="/book/:id" element={<BookDetails />} />
                   <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
                   <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
-                  <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
                   <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
                   <Route path="/lent-out" element={<LentOut />} />
                   <Route path="/borrowed" element={<Borrowed />} />
@@ -168,7 +214,7 @@ const App = () => {
           to { opacity: 1; }
         }
       `}</style>
-    </Router>
+    </>
   )
 }
 

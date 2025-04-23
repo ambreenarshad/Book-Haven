@@ -19,7 +19,7 @@ import SidebarUserProfile from "./SidebarUserProfile";
 const Sidebar = ({ userData, onLogout }) => {
   console.log("user data in tempsidebar: ", userData);
   const categories = [
-    { name: "Dashboard", path: "/", icon: <MdDashboard /> },
+    { name: "Dashboard", path: "/dashboard", icon: <MdDashboard /> },
     { name: "All Books", path: "/all-books", icon: <MdMenuBook /> },
     {name: "Recommendations", path: "/recommendations",icon:<TiThumbsOk />},
     { name: "Currently Reading", path: "/currently-reading", icon: <MdAutoStories /> },

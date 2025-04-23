@@ -18,7 +18,28 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!personName.trim()) return
+
+    // Validate name: must start with a letter, and only contain letters, numbers, spaces
+    const trimmedName = personName.trim()
+    const nameRegex = /^[A-Za-z][A-Za-z0-9\s]*$/
+    if (!nameRegex.test(trimmedName)) {
+      alert("Please enter a valid name. It should start with a letter and cannot be only numbers.")
+      return
+    }
+
+    // Convert the selected date to a date object without time
+    const selectedDate = new Date(date)
+    selectedDate.setHours(0, 0, 0, 0)
+    
+    // Get today's date without time
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    // Allow today's date, but not future dates
+    if (selectedDate > today) {
+      alert("You cannot select a future date.")
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -62,6 +83,7 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
               id="date" 
               value={date} 
               onChange={(e) => setDate(e.target.value)} 
+              max={new Date().toISOString().split("T")[0]} // Prevent future dates in the date picker
               required 
             />
           </div>

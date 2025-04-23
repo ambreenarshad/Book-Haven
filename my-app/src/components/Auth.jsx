@@ -5,43 +5,81 @@ const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     const form = new FormData(e.target);
-    const email = form.get("email");
-    const password = form.get("password");
-
-    // Determine API endpoint based on login or register
-    const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
-
-    // Prepare user data
-    const userData = { email, password };
-
-    if (activeTab === "register") {
-      userData.first_name = form.get("firstName");
-      userData.last_name = form.get("lastName");
-      userData.date_of_birth = form.get("dateOfBirth");
+    const email = form.get("email").trim();
+    const password = form.get("password").trim();
+  
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
     }
+  
+    // Password length check
+    if (password.length < 4) {
+      alert("Password must be at least 6 characters long.");
+      setIsLoading(false);
+      return;
+    }
+  
+    // Additional fields for registration
+    let userData = { email, password };
+    if (activeTab === "register") {
+      const first_name = form.get("firstName").trim();
+      const last_name = form.get("lastName").trim();
+      const date_of_birth = form.get("dateOfBirth");
+  
+      const nameRegex = /^[A-Za-z\s]+$/; // allows only alphabets and spaces
 
+      if (!first_name || !last_name) {
+        alert("First and last names are required.");
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!nameRegex.test(first_name) || !nameRegex.test(last_name)) {
+        alert("Names must only contain letters and spaces. Numbers are not allowed.");
+        setIsLoading(false);
+        return;
+      }
+  
+      const birthDate = new Date(date_of_birth);
+      if (isNaN(birthDate) || birthDate >= new Date()) {
+        alert("Please enter a valid date of birth in the past.");
+        setIsLoading(false);
+        return;
+      }
+  
+      userData = { email, password, first_name, last_name, date_of_birth };
+    }
+  
+    // Fetch API call
+    const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
+  
     try {
       const response = await fetch(`http://localhost:8000${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         if (activeTab === "login") {
-          sessionStorage.setItem("reader_id", data.reader_id); // Store reader_id
-          sessionStorage.setItem("token", data.token); // ⬅️ store the JWT
-          if (onLogin) onLogin(data.reader_id); // Call onLogin function which will trigger animation
+          sessionStorage.setItem("reader_id", data.reader_id);
+          sessionStorage.setItem("token", data.token);
+          if (onLogin) onLogin(data.reader_id);
           navigate("/");
         } else {
-          alert(data.message); // Show message for registration
+          alert(data.message);
         }
       } else {
         alert(data.message);

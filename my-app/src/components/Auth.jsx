@@ -1,10 +1,18 @@
 import "../global.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const validatePassword = (pass) => {
+    if (/\s/.test(pass)) return false; // No spaces allowed
+    if (pass.length < 6) return false;
+    // Must contain at least one lowercase, one uppercase, one number and one special character
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(pass);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,16 +23,16 @@ const Auth = ({ onLogin }) => {
     const password = form.get("password").trim();
   
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[A-Za-z]+[A-Za-z0-9]*@[A-Za-z]+\.[A-Za-z]+$/;
     if (!emailRegex.test(email)) {
       alert("Please enter a valid email address.");
       setIsLoading(false);
       return;
     }
   
-    // Password length check
-    if (password.length < 4) {
-      alert("Password must be at least 6 characters long.");
+    // Enhanced password validation
+    if (!validatePassword(password)) {
+      alert("Password must be at least 6 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character. Spaces are not allowed.");
       setIsLoading(false);
       return;
     }
@@ -91,7 +99,7 @@ const Auth = ({ onLogin }) => {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className="auth-form">
       <div className="tabs">
@@ -137,7 +145,13 @@ const Auth = ({ onLogin }) => {
             </div>
             <div className="form-group-auth">
               <label>Password</label>
-              <input type="password" name="password" className="input" required />
+              <input 
+                type="password" 
+                name="password" 
+                className="input" 
+                required 
+                placeholder="Min 6 chars, with uppercase, lowercase, number & special char"
+              />
             </div>
             <div className="form-group-auth">
               <label>Date of Birth</label>

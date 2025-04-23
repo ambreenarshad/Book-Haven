@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importing eye icons for toggle
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../AccountPage.css";
 
 const AccountPage = ({ userData, onLogout }) => {
@@ -16,8 +16,8 @@ const AccountPage = ({ userData, onLogout }) => {
   const [firstName, setFirstName] = useState(reader?.first_name || "");
   const [lastName, setLastName] = useState(reader?.last_name || "");
   const [email, setEmail] = useState(reader?.email || "");
-  const [password, setPassword] = useState(""); // New password field
-  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm password field
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [changePasswordMode, setChangePasswordMode] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
 
@@ -27,6 +27,7 @@ const AccountPage = ({ userData, onLogout }) => {
   const [newPasswordVisible, setNewPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const token = sessionStorage.getItem("token");
+
   useEffect(() => {
     if (reader?.profilePicUrl) setPreviewUrl(reader.profilePicUrl);
     setFirstName(reader?.first_name || "");
@@ -42,24 +43,61 @@ const AccountPage = ({ userData, onLogout }) => {
       setPreviewUrl(url);
     }
   };
+
+  // Validation functions
+  const validateName = (name) => {
+    return /^[A-Za-z\s]+$/.test(name);
+  };
+
+  const validateEmail = (email) => {
+    return /^[A-Za-z]+[A-Za-z0-9]*@[A-Za-z]+\.[A-Za-z]+$/.test(email);
+  };
+
+  const validatePassword = (pass) => {
+    if (/\s/.test(pass)) return false; // No spaces allowed
+    if (pass.length < 6) return false;
+    // Must contain at least one lowercase, one uppercase, one number and one special character
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(pass);
+  };
   
   const validateFields = () => {
     const newErrors = {};
-    if (!firstName.trim()) newErrors.firstName = "First name is required.";
-    if (!lastName.trim()) newErrors.lastName = "Last name is required.";
-    if (!email.trim()) newErrors.email = "Email is required.";
+    
+    // First name validation
+    if (!firstName.trim()) {
+      newErrors.firstName = "First name is required.";
+    } else if (!validateName(firstName)) {
+      newErrors.firstName = "First name can only contain letters and spaces.";
+    }
+    
+    // Last name validation
+    if (!lastName.trim()) {
+      newErrors.lastName = "Last name is required.";
+    } else if (!validateName(lastName)) {
+      newErrors.lastName = "Last name can only contain letters and spaces.";
+    }
+    
+    // Email validation
+    if (!email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
   
     // Password validation
     if (changePasswordMode) {
-      if (!currentPassword && (password && confirmPassword)) {
+      if (!currentPassword && (password || confirmPassword)) {
         newErrors.currentPassword = "Current password is required.";
       }
+      
       if (currentPassword && (!password || !confirmPassword)) {
         newErrors.password = "New password and confirmation are required.";
-      } else if (password !== confirmPassword) {
-        newErrors.password = "Passwords do not match.";
-      } else if (password && password.length < 6) {
-        newErrors.password = "Password must be at least 6 characters long.";
+      } else if (password || confirmPassword) {
+        if (password !== confirmPassword) {
+          newErrors.password = "Passwords do not match.";
+        } else if (!validatePassword(password)) {
+          newErrors.password = "Password must be at least 6 characters long and contain uppercase, lowercase, number, and special character.";
+        }
       }
     }    
   
@@ -202,7 +240,7 @@ const AccountPage = ({ userData, onLogout }) => {
             <div 
               onClick={() => {
                 fileInputRef.current.click();
-                setShowOptions(false); // Add this line
+                setShowOptions(false);
               }} 
               className="dropdown-option"
             >
@@ -211,7 +249,7 @@ const AccountPage = ({ userData, onLogout }) => {
             <div 
               onClick={() => {
                 handleRemove();
-                setShowOptions(false); // Add this line
+                setShowOptions(false);
               }} 
               className="dropdown-option remove"
             >
@@ -260,20 +298,18 @@ const AccountPage = ({ userData, onLogout }) => {
       </div>
   
       <div className="account-links">
-        {/* Show change password option */}
-      {!changePasswordMode ? (
+        {!changePasswordMode ? (
           <p 
             className="change-password-link" 
             onClick={() => {
               setChangePasswordMode(true);
-              setErrors({}); // Clear any previous errors
+              setErrors({});
             }}
           >
             Change Password?
           </p>
         ) : (
         <>
-          {/* Current Password Field */}
           <div className="input-group">
             <label>Current Password</label>
             <div className="password-input-container">
@@ -293,7 +329,6 @@ const AccountPage = ({ userData, onLogout }) => {
             {errors.currentPassword && <p className="error-text">{errors.currentPassword}</p>}
           </div>
 
-          {/* New Password Field */}
           <div className="input-group">
             <label>New Password</label>
             <div className="password-input-container">
@@ -313,7 +348,6 @@ const AccountPage = ({ userData, onLogout }) => {
             {errors.password && <p className="error-text">{errors.password}</p>}
           </div>
 
-          {/* Confirm Password Field */}
           <div className="input-group">
             <label>Confirm Password</label>
             <div className="password-input-container">
@@ -348,7 +382,6 @@ const AccountPage = ({ userData, onLogout }) => {
         </>
       )}
 
-        {/* Delete Account Option */}
         <p onClick={deleteAccount} className="delete-acc-link">Delete Account?</p>
       </div>
 

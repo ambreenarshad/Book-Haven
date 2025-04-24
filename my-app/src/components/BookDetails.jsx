@@ -153,8 +153,30 @@ const BookDetails = () => {
     }
   }
 
+  // const handleGenerateSummary = async () => {
+  //   setLoadingSummary(true)
+  //   try {
+  //     const response = await fetch("http://localhost:8000/api/summary", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         bookName: book.book_name,
+  //         authorName: book.author_name,
+  //       }),
+  //     })
+
+  //     const data = await response.json()
+  //     setSummary(data.summary)
+  //   } catch (err) {
+  //     console.error("Failed to generate summary", err)
+  //     setSummary("Failed to generate summary. Please try again.")
+  //   } finally {
+  //     setLoadingSummary(false)
+  //   }
+  // }
+
   const handleGenerateSummary = async () => {
-    setLoadingSummary(true)
+    setLoadingSummary(true);
     try {
       const response = await fetch("http://localhost:8000/api/summary", {
         method: "POST",
@@ -163,17 +185,17 @@ const BookDetails = () => {
           bookName: book.book_name,
           authorName: book.author_name,
         }),
-      })
-
-      const data = await response.json()
-      setSummary(data.summary)
+      });
+  
+      const data = await response.json();
+      setSummary(data.summary);
     } catch (err) {
-      console.error("Failed to generate summary", err)
-      setSummary("Failed to generate summary. Please try again.")
+      console.error("Failed to generate summary", err);
+      setSummary("Failed to generate summary. Please try again.");
     } finally {
-      setLoadingSummary(false)
+      setLoadingSummary(false);
     }
-  }
+  };
 
   const updateReview = async () => {
     setIsUpdating(true)
@@ -459,7 +481,7 @@ const BookDetails = () => {
               <Reread bookid={book.bookid} />
             </TabsContent>
 
-            <TabsContent value="ai" className="space-y-4">
+            {/* <TabsContent value="ai" className="space-y-4">
               <div>
                 <button onClick={handleGenerateSummary} className="generate-summary-button" disabled={loadingSummary}>
                   {loadingSummary ? "Generating..." : "Generate Summary"}
@@ -472,7 +494,37 @@ const BookDetails = () => {
                   </div>
                 )}
               </div>
-            </TabsContent>
+            </TabsContent> */}
+            <TabsContent value="ai" className="space-y-4">
+            <div className="ai-summary-container">
+              <h3 className="asummary-title">AI-Generated Book Summary</h3>
+              <p className="summary-description">
+                Get an AI-generated summary of "{book.book_name}" by {book.author_name}.
+                {/* This summary is created using Google's Gemini AI model. */}
+              </p>
+              
+              <button 
+                onClick={handleGenerateSummary} 
+                className="generate-summary-button" 
+                disabled={loadingSummary}
+              >
+                {loadingSummary ? 
+                  <><span className="spinner"></span> Generating...</> : 
+                  "Generate Summary"}
+              </button>
+
+              {summary && (
+                <div className="summary-output">
+                  <h4 className="asummary-heading">Summary:</h4>
+                  <div className="summary-content">
+                    {summary.split('\n').map((paragraph, idx) => (
+                      paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </TabsContent>
           </Tabs>
         </div>
       </div>

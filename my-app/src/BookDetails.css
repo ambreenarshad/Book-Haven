@@ -241,24 +241,6 @@ color:#000000;
   font-weight: bold;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-/* /styling for AI Summary/ */
-.generate-summary-button {
-  padding: 0.5rem 1rem;
-  background: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.summary-output {
-  background-color: #f9fafb;
-  padding: 1rem;
-  border-radius: 8px;
-  line-height: 1.5;
-} 
-
  .re-read-button {
   background: var(--button-bg);
   color: var(--button-text);
@@ -295,7 +277,7 @@ color:#000000;
   margin: 1px;
   display: inline-block; /* change from block to inline-block */
   text-align: center;
-  font-size: 0.85rem; /* 👈 makes the text a bit smaller */
+  font-size: 0.85rem; /*  makes the text a bit smaller */
   z-index: 1;
 }
 
@@ -555,12 +537,6 @@ color: #040404;
   }
 }
 
-
-
-
-
-
-
 .dialog-overlay {
   position: fixed;
   inset: 0;
@@ -584,44 +560,6 @@ color: #040404;
   position: relative;
 }
 
-/* .lending-dialog {
-  max-width: 400px;
-  width: 100%;
-  margin-left: 200px; 
-  margin-top: 50px;
-} */
-
-/* yes */
-/* .lending-dialog h2 {        
-  margin-top: 0;
-  color: #fffefe;
-  font-size: 1.5rem;
-} */
-
-/* .form-group {
-  margin-bottom: 16px;
-} */
-
-/* yes */
-/* .form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: rgb(255, 255, 255);
-} */
-
-
-/* yes */
-/* .form-group input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #060606;
-  border-radius: 4px;
-  font-size: 14px;
-} */
-
-
-
 .dialog-buttons {
   display: flex;
   justify-content: flex-end;
@@ -629,34 +567,6 @@ color: #040404;
   margin-top: 20px;
 }
 
-/* yes */
-/* .cancel-button {
-  background-color: #f5f3f3;
-  color: #000000;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-} */
-
-
-/* yes */
-/* .lend-button:disabled {
-  background-color: #eeecec;
-  cursor: not-allowed;
-  color: rgb(0, 0, 0);
-} */
-
-
-/* .lending-info {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 4px;
-} */
-
-/* yes */
 .lending-info h3 {
   margin-top: 0;
   color: #000000;
@@ -714,7 +624,6 @@ color: #040404;
   cursor: not-allowed;
 }
 
-
 .lent-badge {
   display: inline-block;
   background-color: #dc3545;
@@ -728,41 +637,6 @@ color: #040404;
 .always-white {
   color: white;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Add these styles to your existing BookDetails.css file */
 
 /* yes */
 .lending-borrowing-section {
@@ -819,13 +693,10 @@ color: #040404;
   color: rgb(0, 0, 0);
 }
 
-
-
 /* yes */
 .borrow-button:hover {
   background-color: var(--button-hover-bg);
 }
-
 
   /* class in book details */
 .borrow-buttonn {    
@@ -843,7 +714,6 @@ color: #040404;
   background-color: var(--button-hover-bg);
 }
 
-
 .dark .borrow-buttonn {
   background-color: #ffffff;
   color: rgb(0, 0, 0);
@@ -858,11 +728,6 @@ color: #040404;
 .dark .borrow-buttonn:hover {
   background-color: var(--button-hover-bg);
 }
-
-
-
-/*  */
-
 
 .dark .lend-button {
 background-color: #ffffff;
@@ -884,11 +749,6 @@ color: rgb(0, 0, 0);
 .dark .borrow-button:hover {
 background-color: var(--button-hover-bg);
 }
-
-
-
-
-/* this */
 
 .lending-info,
 .borrowing-info {
@@ -920,11 +780,6 @@ background-color: var(--button-hover-bg);
   background-color: rgba(67, 65, 65, 0.605);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
-
-/* this */
-
-
 
 .clear-lending-button,
 .clear-borrowing-button {
@@ -1093,4 +948,102 @@ background-color: var(--button-hover-bg);
 .dark .dialog-container {
   background-color: var(--background);
   color: var(--foreground);
+}
+.ai-summary-container {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.asummary-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.summary-description {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.generate-summary-button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.dark .generate-summary-button {
+  background-color: #000000;
+  color: rgb(252, 252, 252);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.generate-summary-button:hover {
+  background-color:  rgb(67, 67, 67);
+}
+
+.generate-summary-button:disabled {
+  background-color: #b3cdf0;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.summary-output {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.358);
+}
+
+.dark .summary-output {
+  color:#000;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.892);
+}
+
+.asummary-heading {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+.summary-content p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
 }

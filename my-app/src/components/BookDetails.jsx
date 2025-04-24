@@ -81,7 +81,7 @@ const BookDetails = () => {
     if (!newTag.trim()) return
     
     // Validate tag contains only letters
-    if (!/^[a-zA-Z]+$/.test(newTag.trim())) {
+    if (!/^[a-zA-Z\u00C0-\u017F'-]+$/.test(newTag.trim())) {
       alert("Tags can only contain letters. Numbers, spaces, and special characters are not allowed.");
       return;
     }
@@ -106,7 +106,7 @@ const BookDetails = () => {
   const handleTagInputChange = (e) => {
     const value = e.target.value;
     // Only update state if the input contains only letters or is empty
-    if (value === '' || /^[a-zA-Z]+$/.test(value)) {
+    if (value === '' || /^[a-zA-Z\u00C0-\u017F'-]+$/.test(value)) {
       setNewTag(value);
     }
   }

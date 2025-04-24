@@ -70,22 +70,39 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const removeTag = (index) => {
     setTags(tags.filter((_, i) => i !== index));
   };
-
+  const isValidTag = (tag) => {
+    // Only allow letters (including non-English), hyphens, and apostrophes
+    return tag.trim() !== "" && /^[a-zA-Z\u00C0-\u017F'-]+$/.test(tag);
+  };
   const handleAddTag = () => {
-    if (tagInput.trim() !== "") {
-      // Check if tag contains numbers
-      if (containsNumbers(tagInput)) {
-        setErrors({...errors, tagInput: "Tags should not contain numbers"});
-        return;
-      }
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
-      // Clear the error if it exists
-      if (errors.tagInput) {
-        const newErrors = {...errors};
-        delete newErrors.tagInput;
-        setErrors(newErrors);
-      }
+    const trimmedTag = tagInput.trim();
+    
+    if (trimmedTag === "") {
+      setErrors({...errors, tagInput: "Tag cannot be empty"});
+      return;
+    }
+  
+    // Check if tag contains invalid characters
+    if (!isValidTag(trimmedTag)) {
+      setErrors({...errors, tagInput: "Tags can only contain letters, hyphens (-), and apostrophes (')"});
+      return;
+    }
+  
+    // Check if tag already exists (case insensitive)
+    if (tags.some(t => t.toLowerCase() === trimmedTag.toLowerCase())) {
+      setErrors({...errors, tagInput: "This tag already exists"});
+      return;
+    }
+  
+    // If all validations pass
+    setTags([...tags, trimmedTag]);
+    setTagInput("");
+    
+    // Clear any existing errors
+    if (errors.tagInput) {
+      const newErrors = {...errors};
+      delete newErrors.tagInput;
+      setErrors(newErrors);
     }
   };
 
@@ -95,8 +112,6 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     // Validate text fields don't contain numbers
     if (!title.trim()) {
       newErrors.title = "Title is required.";
-    } else if (containsNumbers(title)) {
-      newErrors.title = "Title should not contain numbers.";
     }
     
     if (!author.trim()) {
@@ -112,10 +127,10 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     }
     
     // Validate tags don't contain numbers
-    const invalidTags = tags.filter(tag => containsNumbers(tag));
-    if (invalidTags.length > 0) {
-      newErrors.tags = "Tags should not contain numbers.";
-    }
+    const invalidTags = tags.filter(tag => !isValidTag(tag));
+  if (invalidTags.length > 0) {
+    newErrors.tags = "Tags can only contain letters, hyphens (-), and apostrophes (')";
+  }
     
     // Fixed: Check if totalPages is empty instead of using trim()
     if (totalPages === "") {
@@ -238,7 +253,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
         {/* Form Fields (Required) */}
         <input
           type="text"
-          placeholder={errors.title ? errors.title : "Title"}
+          placeholder="Title"
           className={`input-field ${errors.title ? "input-error" : ""}`}
           value={title}
           onChange={(e) => {
@@ -252,10 +267,11 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             }
           }}
         />
+        {errors.title && <p className="error-text">{errors.title}</p>}
 
         <input
           type="text"
-          placeholder={errors.author ? errors.author : "Author"}
+          placeholder="Author"
           className={`input-field ${errors.author ? "input-error" : ""}`}
           value={author}
           onChange={(e) => {
@@ -269,10 +285,11 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             }
           }}
         />
+        {errors.author && <p className="error-text">{errors.author}</p>}
 
         <input
           type="text"
-          placeholder={errors.genre ? errors.genre : "Genre"}
+          placeholder="Genre"
           className={`input-field ${errors.genre ? "input-error" : ""}`}
           value={genre}
           onChange={(e) => {
@@ -286,6 +303,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             }
           }}
         />
+        {errors.genre && <p className="error-text">{errors.genre}</p>}
 
         <div className="flex-row">
           {/* Year Dropdown (Required) */}
@@ -295,7 +313,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             onChange={(e) => setYear(e.target.value)}
           >
             <option value="" disabled>
-              {errors.year ? errors.year : "Select Year"}
+              Select Year
             </option>
             {years.map((yr) => (
               <option key={yr} value={yr}>
@@ -303,10 +321,11 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
               </option>
             ))}
           </select>
+          {errors.year && <p className="error-text">{errors.year}</p>}
 
           <input
             type="number"
-            placeholder={errors.totalPages ? errors.totalPages : "Total Pages"}
+            placeholder="Total Pages"
             className={`input-field small ${errors.totalPages ? "input-error" : ""}`}
             value={totalPages}
             onChange={(e) => {
@@ -326,6 +345,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             }}
           />
         </div>
+        {errors.totalPages && <p className="error-text">{errors.totalPages}</p>}
 
         {/* Wishlist or Library Toggle */}
         <div className="toggle-container">
@@ -353,71 +373,72 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             </select>
             {errors.status && <p className="error-text">{errors.status}</p>}
 
- {/* Show Currently Read input if status is 'Reading' or 'Completed' */}
-{(status === "Reading") && (
-  <>
-    <p className="date-heading">Start Date</p>
-    <input
-        type="date"
-        placeholder="Start Date"
-        className="input-field"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-      />
-    <p className="date-heading">Pages Read</p>
-    <input
-      type="number"
-      placeholder="Enter pages read"
-      className={`input-field ${errors.currentlyRead ? "input-error" : ""}`}
-      value={currentlyRead}
-      onChange={(e) => {
-        const value = parseInt(e.target.value, 10);
-        if (!isNaN(value) && value > 0 && value <= totalPages) {  // Ensure value is positive
-          setCurrentlyRead(value);
-        } else if (e.target.value === "") {
-          setCurrentlyRead("");  // Allow empty string for clearing the field
-        }
-        
-        // Clear error when typing
-        if (errors.currentlyRead) {
-          const newErrors = {...errors};
-          delete newErrors.currentlyRead;
-          setErrors(newErrors);
-        }
-      }}
-    />
-    
-    {errors.currentlyRead && <p className="error-text">{errors.currentlyRead}</p>}
-  </>
-)}
+            {/* Show Currently Read input if status is 'Reading' or 'Completed' */}
+            {(status === "Reading") && (
+              <>
+                <p className="date-heading">Start Date</p>
+                <input
+                    type="date"
+                    placeholder="Start Date"
+                    className={`input-field ${errors.startDate ? "input-error" : ""}`}
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                />
+                {errors.startDate && <p className="error-text">{errors.startDate}</p>}
+                
+                <p className="date-heading">Pages Read</p>
+                <input
+                  type="number"
+                  placeholder="Enter pages read"
+                  className={`input-field ${errors.currentlyRead ? "input-error" : ""}`}
+                  value={currentlyRead}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value, 10);
+                    if (!isNaN(value) && value > 0 && value <= totalPages) {  // Ensure value is positive
+                      setCurrentlyRead(value);
+                    } else if (e.target.value === "") {
+                      setCurrentlyRead("");  // Allow empty string for clearing the field
+                    }
+                    
+                    // Clear error when typing
+                    if (errors.currentlyRead) {
+                      const newErrors = {...errors};
+                      delete newErrors.currentlyRead;
+                      setErrors(newErrors);
+                    }
+                  }}
+                />
+                {errors.currentlyRead && <p className="error-text">{errors.currentlyRead}</p>}
+              </>
+            )}
 
-    {/* End Date Input (Required for Completed) */}
-{status === "Completed" && (
-  <>
-    <p className="date-heading">Start Date</p>
-    <input
-      type="date"
-      placeholder="Start Date"
-      className="input-field"
-      value={startDate}
-      onChange={(e) => setStartDate(e.target.value)}
-    />
+            {/* End Date Input (Required for Completed) */}
+            {status === "Completed" && (
+              <>
+                <p className="date-heading">Start Date</p>
+                <input
+                  type="date"
+                  placeholder="Start Date"
+                  className={`input-field ${errors.startDate ? "input-error" : ""}`}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+                {errors.startDate && <p className="error-text">{errors.startDate}</p>}
 
-    <p className="date-heading">End Date</p>
-    <input
-      type="date"
-      placeholder="End Date"
-      className="input-field"
-      value={endDate}
-      onChange={(e) => {
-        setEndDate(e.target.value);
-        setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
-      }}
-    />
-
-    {errors.endDate && <p className="error-text">{errors.endDate}</p>}
-  </>
-)}
+                <p className="date-heading">End Date</p>
+                <input
+                  type="date"
+                  placeholder="End Date"
+                  className={`input-field ${errors.endDate ? "input-error" : ""}`}
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                    setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
+                  }}
+                />
+                {errors.endDate && <p className="error-text">{errors.endDate}</p>}
+              </>
+            )}
 
             {/* Star Rating (Optional) */}
             <div className="rating-container">
@@ -446,7 +467,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
         
         {/* Tags Input (Optional) */}
         <div className="tag-input-container">
-          <input
+        <input
             type="text"
             placeholder="Add a tag"
             className={`input-field tag-input ${errors.tagInput ? "input-error" : ""}`}
@@ -457,6 +478,12 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
                 const newErrors = {...errors};
                 delete newErrors.tagInput;
                 setErrors(newErrors);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAddTag();
               }
             }}
           />

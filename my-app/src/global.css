@@ -291,3 +291,75 @@ body {
   color: var(--primary-foreground);
   transform: scale(1.1);
 }
+/* Responsive Media Queries */
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0.025rem 1rem;
+  }
+  
+  .gheader .logo {
+    padding-left: 1rem !important;
+  }
+  
+  .Welcome-h1 {
+    padding-left: 1rem !important;
+  }
+  
+  .AccountSignIn {
+    padding-left: 1rem !important;
+  }
+  
+  .auth-form {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+  
+  .theme-toggle-container {
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+  
+  .gheader .container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .gheader .logo {
+    padding-left: 0 !important;
+    text-align: center;
+  }
+  
+  .main {
+    padding: 1rem;
+    margin-top: 80px;
+  }
+  
+  .auth-form {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  
+  .tabs button {
+    padding: 0.5rem;
+  }
+  
+  .input {
+    padding: 0.5rem;
+  }
+  
+  .button {
+    padding: 0.5rem;
+  }
+  
+  .theme-toggle-container {
+    margin-right: 0;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+}

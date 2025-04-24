@@ -3,9 +3,10 @@ const Book = require("../models/Book");
 const Timer = require("../models/Timer")
 const router = express.Router();
 const auth = require("../middleware/auth");
+const sessionAuth = require("../middleware/sessionAuth");
 
 // GET /dashboard/summary/:readerid
-router.get("/summary/:readerid", auth, async (req, res) => {
+router.get("/summary/:readerid", auth,sessionAuth, async (req, res) => {
   try {
     const readerId = req.params.readerid;
 
@@ -37,7 +38,7 @@ router.get("/summary/:readerid", auth, async (req, res) => {
   }
 });
 
-  router.get("/timer/:readerid", auth, async (req, res) => {
+  router.get("/timer/:readerid", auth,sessionAuth, async (req, res) => {
     try {
       if (Number(req.params.readerid) !== req.user.id) {
         return res.status(403).json({ message: "Access denied" });
@@ -90,7 +91,7 @@ router.get("/summary/:readerid", auth, async (req, res) => {
         res.status(500).json({ error: "Server error while fetching timer data" });
     }
 });
-router.get("/currently-reading/:readerid", auth, async (req, res) => {
+router.get("/currently-reading/:readerid", auth,sessionAuth, async (req, res) => {
     const { readerid } = req.params;
     try {
       if (Number(req.params.readerid) !== req.user.id) {
@@ -102,7 +103,7 @@ router.get("/currently-reading/:readerid", auth, async (req, res) => {
       res.status(500).json({ message: "Error fetching currently reading books" });
     }
   });
-  router.get("/genre-counts/:readerid", auth, async (req, res) => {
+  router.get("/genre-counts/:readerid", auth,sessionAuth, async (req, res) => {
     // Convert readerid to a Number
     const readerid = Number(req.params.readerid);  // Ensure readerid is a Number
   

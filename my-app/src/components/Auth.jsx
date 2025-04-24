@@ -74,7 +74,11 @@ const Auth = ({ onLogin }) => {
     try {
       const response = await fetch(`http://localhost:8000${endpoint}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        credentials: "include",
         body: JSON.stringify(userData),
       });
   
@@ -82,10 +86,14 @@ const Auth = ({ onLogin }) => {
   
       if (response.ok) {
         if (activeTab === "login") {
+          // Only set session data on successful login
           sessionStorage.setItem("reader_id", data.reader_id);
           sessionStorage.setItem("token", data.token);
+          
+          // Call the onLogin callback to update the app state
           if (onLogin) onLogin(data.reader_id);
           navigate("/dashboard");
+        
         } else {
           alert(data.message);
         }

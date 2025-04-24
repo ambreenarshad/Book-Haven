@@ -1,6 +1,8 @@
 .all-books {
     padding: 2rem;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .book-list {
@@ -8,16 +10,20 @@
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 50px;
     justify-content: center;
+    width: 100%;
 }
+
 .add-dialogue .progress-bar {
     display: none;
 }
+
 .add-dialogue .book-card {
     position: relative;
     z-index: 50;
     max-width: 100%; /* Prevents it from exceeding modal width */
     margin: 0 auto; /* Centers the book card */
 }
+
 .book-card {
     background: white;
     position: relative;
@@ -36,6 +42,7 @@
     word-wrap: break-word; /* Ensure text stays inside */
     position: relative;
     z-index: 10;
+    margin: 0 auto; /* Center the card */
 }
 
 .book-card:hover {
@@ -60,7 +67,6 @@
     overflow: hidden;  /* Prevent overflow */
 }
 
-
 .dark .book-info {
     width: 100%;
     padding: 10px;
@@ -72,10 +78,10 @@
     overflow: hidden;  /* Prevent overflow */
 }
 
-
 .add-dialogue.open ~ .book-list .book-card:hover {
     transform: none; /* Disable hover scale */
 }
+
 .book-info h3 {
     font-size: 16px;
     margin: 5px 0;
@@ -107,6 +113,7 @@
     font-weight: bold;
     margin-top: 5px;
 }
+
 .dark .status-badge {
     display: inline-block;
     padding: 5px 10px;
@@ -117,13 +124,6 @@
     font-weight: bold;
     margin-top: 5px;
 }
-
-/* .status-badge.Reading { background-color: gray; }
-.status-badge.Completed { background-color: black; }
-.status-badge.To-Read { background-color: lightgray; }
-.status-badge.Wishlist { background-color: red; } */
-
-
 
 .progress-bar {
     height: 8px;
@@ -145,7 +145,6 @@
 :root {
     --progress-bar-bg: #ddd; /* Light gray for progress bar */
     --progress-fill-bg: #000; /* Black for progress fill */
-
     --search-bar-bg: white;
     --search-bar-border: #ccc;
     --search-bar-text: black;
@@ -155,27 +154,14 @@
 .dark {
     --progress-bar-bg: #000; /* Black for progress bar */
     --progress-fill-bg: #fff; /* White for progress fill */
-
     --search-bar-bg: white; /* White background in dark mode */
     --search-bar-border: #666;
     --search-bar-text: black; /* Black text in dark mode */
-    
 }
 
-.all-books h1 , p {
+.all-books h1, .all-books p {
     text-align: left;
 }
-
-/* .search-bar {
-    width: 100%;
-    max-width: 300px;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-left: 1150px;
-} */
 
 .search-bar {
     width: 100%;
@@ -185,11 +171,12 @@
     border: 1px solid var(--search-bar-border);
     border-radius: 5px;
     font-size: 16px;
-    margin-left: 1095px;
+    margin-left: auto; /* Changed from fixed margin-left */
+    margin-right: 0; /* Align to right */
+    display: block; /* Ensure it's a block for margin auto to work */
     background-color: var(--search-bar-bg);
     color: var(--search-bar-text);
 }
-
 
 .trash-icon {
     color: rgb(15, 14, 14);
@@ -209,7 +196,6 @@
     cursor: pointer;
 }
 
-
 .trash-icon:hover {
     color: rgb(115, 112, 112);
 }
@@ -222,20 +208,10 @@
     z-index: 100;
     cursor: pointer;
 }
+
 .favorite-icon:hover {
     color: rgb(143, 81, 81);
 }
-
-
-
-/* Different status colors */
-/* .status-badge.Reading { background-color: rgb(245, 238, 238); }
-.status-badge.Completed { background-color: rgb(245, 238, 238); }
-.status-badge.To-Read {  background-color: rgb(245, 238, 238); } */
-
-
-
-
 
 .lent-to-info,
 .lent-date-info {
@@ -264,6 +240,7 @@
   margin-bottom: 20px;
   padding: 10px;
   width: 100%;
+  max-width: 300px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
@@ -273,4 +250,147 @@
   outline: none;
   border-color: #4a6fa5;
   box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+}
+
+/* Responsive Media Queries */
+
+/* Large screens */
+@media (max-width: 1200px) {
+    .book-list {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 30px;
+    }
+    
+    .book-card {
+        width: 220px;
+        height: 380px;
+    }
+    
+    .search-bar {
+        margin-right: 0;
+        margin-left: auto;
+    }
+    
+    .all-books {
+        padding: 1.5rem;
+    }
+}
+
+/* Medium screens */
+@media (max-width: 992px) {
+    .book-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px;
+    }
+    
+    .book-card {
+        width: 200px;
+        height: 360px;
+    }
+    
+    .book-cover {
+        width: 130px;
+        height: 180px;
+    }
+    
+    .search-bar {
+        max-width: 250px;
+    }
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+    .book-list {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+    }
+    
+    .book-card {
+        width: 180px;
+        height: 340px;
+        padding: 15px;
+    }
+    
+    .book-cover {
+        width: 120px;
+        height: 160px;
+    }
+    
+    .book-info h3 {
+        font-size: 14px;
+    }
+    
+    .book-info p {
+        font-size: 12px;
+    }
+    
+    .search-bar {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    
+    .all-books {
+        padding: 1rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 576px) {
+    .book-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .book-card {
+        width: 150px;
+        height: 300px;
+        padding: 10px;
+    }
+    
+    .book-cover {
+        width: 100px;
+        height: 140px;
+    }
+    
+    .trash-icon, .dark .trash-icon {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .favorite-icon {
+        top: 35px;
+        right: 10px;
+    }
+    
+    .status-badge, .dark .status-badge {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+    .book-list {
+        grid-template-columns: 1fr; /* Single column */
+        gap: 15px;
+    }
+    
+    .book-card {
+        width: 100%;
+        max-width: 200px;
+        height: 330px;
+    }
+    
+    .book-cover {
+        width: 110px;
+        height: 150px;
+    }
+    
+    .all-books h1 {
+        font-size: 20px;
+    }
+    
+    .all-books p {
+        font-size: 14px;
+    }
 }

@@ -5,6 +5,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = express.Router();
+
+// Test endpoint to check session status - MUST BE BEFORE /:id route
+router.get("/check-session", auth, (req, res) => {
+  res.json({
+    sessionExists: !!req.session,
+    sessionId: req.sessionID,
+    readerId: req.session?.reader_id,
+    user: req.user,
+    message: "Session check successful"
+  });
+});
+
 // Get All Readers
 router.get("/", async (req, res) => {
     try {
@@ -24,18 +36,20 @@ router.get("/", async (req, res) => {
         res.status(500).json({ message: "Error fetching reader details", error });
       }
 });
+
+// Get reader by ID - MUST BE AFTER /check-session route
 router.get("/:id", async (req, res) => {
     try {
-            const reader = await Reader.findOne({ reader_id: req.params.id }) || await Reader.findById(req.params.id);
-            if (!reader) {
-                return res.status(404).json({ message: "Reader not found" });
-            }
-    
-            res.json({ reader });
-        } catch (error) {
-            console.error("Error fetching reader:", error);
-            res.status(500).json({ message: "Error fetching reader details", error });
+        const reader = await Reader.findOne({ reader_id: req.params.id }) || await Reader.findById(req.params.id);
+        if (!reader) {
+            return res.status(404).json({ message: "Reader not found" });
         }
+    
+        res.json({ reader });
+    } catch (error) {
+        console.error("Error fetching reader:", error);
+        res.status(500).json({ message: "Error fetching reader details", error });
+    }
 });
 
 router.post("/login", async (req, res) => {
@@ -91,17 +105,6 @@ router.post("/register", async (req, res) => {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error" });
     }
-});
-
-// Test endpoint to check session status
-router.get("/check-session", auth, (req, res) => {
-  res.json({
-    sessionExists: !!req.session,
-    sessionId: req.sessionID,
-    readerId: req.session?.reader_id,
-    user: req.user,
-    message: "Session check successful"
-  });
 });
 
 module.exports = router;

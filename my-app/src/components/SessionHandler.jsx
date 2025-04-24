@@ -7,37 +7,40 @@ const SessionHandler = ({ userData, onLogout }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Don't check session on login page
-    if (location.pathname === '/') {
-      return;
-    }
-
-    // Check session status every 30 seconds
+    if (location.pathname === '/') return;
+  
+    const controller = new AbortController();
     const checkSession = async () => {
       try {
         const response = await fetch('http://localhost:8000/reader/check-session', {
-          credentials: 'include'
+          credentials: 'include',
+          signal: controller.signal
         });
-        
+  
         if (!response.ok) {
           sessionStorage.clear(); 
           alert('Your session has expired. Please log in again.');
           onLogout();
+          navigate('/');
         }
       } catch (error) {
         console.error('Session check failed:', error);
         sessionStorage.clear();
         alert('Session error. Please log in again.');
-      
+        onLogout();
+        navigate('/');
       }
     };
-
-    const interval = setInterval(checkSession, 30000); // Check every 30 seconds
-
-    // Cleanup on unmount
-    return () => clearInterval(interval);
+  
+    const interval = setInterval(checkSession, 30000);
+  
+    return () => {
+      clearInterval(interval);
+      controller.abort();
+    };
   }, [location.pathname, navigate]);
-
+  
+   
   return null; // This component doesn't render anything
 };
 

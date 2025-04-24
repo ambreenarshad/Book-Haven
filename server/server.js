@@ -33,11 +33,11 @@ app.use(cors({
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "keyboard cat",
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     cookie: {
       secure: false, // Set to true in production with HTTPS
-      maxAge: 1000 * 60 , // 1 minute for testing
+      maxAge: 1000 * 60 * 60 * 24, // 24 hours (1 day)
       httpOnly: true,
       sameSite: 'lax'
     },

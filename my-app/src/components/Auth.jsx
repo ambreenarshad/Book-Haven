@@ -85,7 +85,7 @@ const Auth = ({ onLogin }) => {
           sessionStorage.setItem("reader_id", data.reader_id);
           sessionStorage.setItem("token", data.token);
           if (onLogin) onLogin(data.reader_id);
-          navigate("/");
+          navigate("/dashboard");
         } else {
           alert(data.message);
         }

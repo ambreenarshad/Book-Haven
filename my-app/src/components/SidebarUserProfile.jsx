@@ -41,7 +41,7 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
   };
   const goToAccount = () => {
     setIsOpen(false);
-    navigate("/account"); // 👈 Change this path to your actual account route
+    navigate("/account"); // Change this path to your actual account route
   };
   // Render a fallback UI if userData is not available yet
   if (!userData?.reader) {

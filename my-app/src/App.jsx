@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Routes, Route, useNavigate } from "react-router-dom"
 //import "./app.css";
 
 import Header from "./components/Header"
@@ -29,7 +29,8 @@ const App = () => {
   const [showAnimation, setShowAnimation] = useState(false)
   const [showMainContent, setShowMainContent] = useState(false)
   const [mainContentVisible, setMainContentVisible] = useState(false)
-
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
   const handleLogin = (readerId) => {
     console.log("Logging in with Reader ID:", readerId) // Debugging
     setCurrentReaderId(readerId)
@@ -57,13 +58,15 @@ const App = () => {
     setShowMainContent(false)
     setMainContentVisible(false)
     sessionStorage.removeItem("reader_id")
+    navigate("/");
   }
 
   const fetchUserData = async (readerId) => {
     try {
       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` },
       })
 
       if (response.ok) {
@@ -104,10 +107,10 @@ const App = () => {
   const closeModal = () => setIsModalOpen(false)
 
   return (
-    <Router>
+    <>
       <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
         {showAnimation && <BookAnimation onAnimationComplete={handleAnimationComplete} />}
-
+  
         {!isAuthenticated && !showAnimation ? (
           <div className="app">
             <SiteHeader toggleTheme={toggleTheme} theme={theme} />
@@ -138,9 +141,9 @@ const App = () => {
                   onLogout={handleLogout}
                 />
                 <AddBookModal isOpen={isModalOpen} closeModal={closeModal} readerId={currentReaderId} />
-
+  
                 <Routes>
-                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/all-books" element={<AllBooks />} />
                   <Route path="/recommendations" element={<Recommendations />} />
                   <Route path="/book/:id" element={<BookDetails />} />
@@ -161,15 +164,15 @@ const App = () => {
           )
         )}
       </div>
-
-      <style jsx>{`
+  
+      <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
       `}</style>
-    </Router>
-  )
+    </>
+  )  
 }
 
 const SiteHeader = ({ toggleTheme, theme }) => (

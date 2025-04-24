@@ -21,7 +21,7 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         } else if (timeLeft === 0 && !hasTimeEnded) {
             setHasTimeEnded(true); // Prevent repeat triggers
-            const audio = new Audio("/sounds/alarm3.wav");
+            const audio = new Audio("/sounds/levelup.mp3");
             audio.play().catch((e) => console.error("Audio playback failed:", e));
     
             setIsRunning(false);
@@ -139,12 +139,27 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
 
                 <div className="input-section">
                     <label htmlFor="duration">Duration (min):</label>
-                    <input 
+                    {/* <input 
                         type="number" 
                         id="duration" 
                         name="duration"
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
+                        disabled={isRunning}
+                    /> */}
+                    <input 
+                        type="number" 
+                        id="duration" 
+                        name="duration"
+                        value={duration}
+                        onChange={(e) => {
+                            const newDuration = Number(e.target.value);
+                            if (newDuration >= 0) {
+                                setDuration(newDuration);
+                            } else {
+                                alert("Duration must be greater than or equal 0.");
+                            }
+                        }}
                         disabled={isRunning}
                     />
 
@@ -154,8 +169,13 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
                         id="pages-read" 
                         name="pages-read"
                         value={pagesRead}
+
                         onChange={(e) => {
                             const newPages = Number(e.target.value);
+                            if (newPages < 0) {
+                                alert("Pages read cannot be negative.");
+                                return;
+                            }
                             if (newPages + curr_book.currently_read <= curr_book.total_pages) {
                                 setPagesRead(newPages);
                             } else {

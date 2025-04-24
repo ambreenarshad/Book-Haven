@@ -26,6 +26,11 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
   const [endDate, setEndDate] = useState("");
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
+  // Validation function to check if string contains numbers
+  const containsNumbers = (text) => {
+    return /\d/.test(text);
+  };
+
   useEffect(() => {
     if (isWishlist) {
       setStatus("To Read");
@@ -68,45 +73,84 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
 
   const handleAddTag = () => {
     if (tagInput.trim() !== "") {
+      // Check if tag contains numbers
+      if (containsNumbers(tagInput)) {
+        setErrors({...errors, tagInput: "Tags should not contain numbers"});
+        return;
+      }
       setTags([...tags, tagInput.trim()]);
       setTagInput("");
+      // Clear the error if it exists
+      if (errors.tagInput) {
+        const newErrors = {...errors};
+        delete newErrors.tagInput;
+        setErrors(newErrors);
+      }
     }
   };
 
   const handleAddBook = async () => {
     const newErrors = {};
-    if (!title.trim()) newErrors.title = "Title is required.";
-    if (!author.trim()) newErrors.author = "Author is required.";
-    if (!genre.trim()) newErrors.genre = "Genre is required.";
-    if (!totalPages.trim()) newErrors.totalPages = "Total Pages is required.";
+    
+    // Validate text fields don't contain numbers
+    if (!title.trim()) {
+      newErrors.title = "Title is required.";
+    } else if (containsNumbers(title)) {
+      newErrors.title = "Title should not contain numbers.";
+    }
+    
+    if (!author.trim()) {
+      newErrors.author = "Author is required.";
+    } else if (containsNumbers(author)) {
+      newErrors.author = "Author should not contain numbers.";
+    }
+    
+    if (!genre.trim()) {
+      newErrors.genre = "Genre is required.";
+    } else if (containsNumbers(genre)) {
+      newErrors.genre = "Genre should not contain numbers.";
+    }
+    
+    // Validate tags don't contain numbers
+    const invalidTags = tags.filter(tag => containsNumbers(tag));
+    if (invalidTags.length > 0) {
+      newErrors.tags = "Tags should not contain numbers.";
+    }
+    
+    // Fixed: Check if totalPages is empty instead of using trim()
+    if (totalPages === "") {
+      newErrors.totalPages = "Total Pages is required.";
+    }
+    
     if (!year) newErrors.year = "Year of publication is required.";
     if (!isWishlist && !status) newErrors.status = "Status is required.";
   
-      // Validate dates based on status
-      if (status === "Reading" && (!currentlyRead || currentlyRead < 1)) {
-        newErrors.currentlyRead = "Please enter pages read for 'Reading' status.";
-      }
-      if (status === "Completed" && currentlyRead !== totalPages) {
-        newErrors.currentlyRead = "For 'Completed' status, pages read must be equal to total pages.";
-      }
+    // Validate dates based on status
+    if (status === "Reading" && (!currentlyRead || currentlyRead < 1)) {
+      newErrors.currentlyRead = "Please enter pages read for 'Reading' status.";
+    }
+    
+    if (status === "Completed" && currentlyRead !== totalPages) {
+      newErrors.currentlyRead = "For 'Completed' status, pages read must be equal to total pages.";
+    }
      
-      if (status === "Reading" || status === "Completed") {
-        if (!startDate) {
-          newErrors.startDate = "Start date is required.";
-        } else if (startDate > today) {
-          newErrors.startDate = "Start date cannot be in the future.";
-        }
+    if (status === "Reading" || status === "Completed") {
+      if (!startDate) {
+        newErrors.startDate = "Start date is required.";
+      } else if (startDate > today) {
+        newErrors.startDate = "Start date cannot be in the future.";
       }
+    }
 
-      if (status === "Completed") {
-        if (!endDate) {
-          newErrors.endDate = "End date is required.";
-        } else if (endDate > today) {
-          newErrors.endDate = "End date cannot be in the future.";
-        } else if (startDate && endDate < startDate) {
-          newErrors.endDate = "End date cannot be earlier than start date.";
-        }
+    if (status === "Completed") {
+      if (!endDate) {
+        newErrors.endDate = "End date is required.";
+      } else if (endDate > today) {
+        newErrors.endDate = "End date cannot be in the future.";
+      } else if (startDate && endDate < startDate) {
+        newErrors.endDate = "End date cannot be earlier than start date.";
       }
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -118,7 +162,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       alert("Error: Reader ID is missing. Please log in again.");
       return;
     }
-    //Check for duplicate book
+    /*Check for duplicate book*/
     try {
       // First check for existing books
       const checkResponse = await axios.get(`http://localhost:8000/book/check`, {
@@ -133,6 +177,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
         alert("You already have a book with this title and author in your collection.");
         return;
       }
+    /**************************************/
     const formData = new FormData();
     formData.append("book_name", title);
     formData.append("author_name", author);
@@ -144,7 +189,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     formData.append("book_review", notes);
     formData.append("start_date", startDate || ""); // Add start_date
     formData.append("end_date", endDate || ""); // Add end_date
-    formData.append("add_date", today);
+    formData.append("add_date", today);
     formData.append("currently_read", currentlyRead || "0");
     formData.append("tags", tags); // Add tags to form data
 
@@ -154,7 +199,9 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     // Add readerId to associate the book with a specific reader
     if (readerId) {
       formData.append("readerid", readerId);
-    } 
+    }
+  
+    
       const response = await axios.post("http://localhost:8000/book/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -194,7 +241,16 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           placeholder={errors.title ? errors.title : "Title"}
           className={`input-field ${errors.title ? "input-error" : ""}`}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            setTitle(val);
+            // Clear error when typing
+            if (errors.title) {
+              const newErrors = {...errors};
+              delete newErrors.title;
+              setErrors(newErrors);
+            }
+          }}
         />
 
         <input
@@ -202,7 +258,16 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           placeholder={errors.author ? errors.author : "Author"}
           className={`input-field ${errors.author ? "input-error" : ""}`}
           value={author}
-          onChange={(e) => setAuthor(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            setAuthor(val);
+            // Clear error when typing
+            if (errors.author) {
+              const newErrors = {...errors};
+              delete newErrors.author;
+              setErrors(newErrors);
+            }
+          }}
         />
 
         <input
@@ -210,7 +275,16 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           placeholder={errors.genre ? errors.genre : "Genre"}
           className={`input-field ${errors.genre ? "input-error" : ""}`}
           value={genre}
-          onChange={(e) => setGenre(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            setGenre(val);
+            // Clear error when typing
+            if (errors.genre) {
+              const newErrors = {...errors};
+              delete newErrors.genre;
+              setErrors(newErrors);
+            }
+          }}
         />
 
         <div className="flex-row">
@@ -235,7 +309,21 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             placeholder={errors.totalPages ? errors.totalPages : "Total Pages"}
             className={`input-field small ${errors.totalPages ? "input-error" : ""}`}
             value={totalPages}
-            onChange={(e) => setTotalPages(e.target.value)}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value) && value > 0) {  // Ensure value is positive
+                setTotalPages(value);
+              } else if (e.target.value === "") {
+                setTotalPages("");  // Allow empty string for clearing the field
+              }
+              
+              // Clear error when typing
+              if (errors.totalPages) {
+                const newErrors = {...errors};
+                delete newErrors.totalPages;
+                setErrors(newErrors);
+              }
+            }}
           />
         </div>
 
@@ -284,8 +372,17 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       value={currentlyRead}
       onChange={(e) => {
         const value = parseInt(e.target.value, 10);
-        if (!isNaN(value) && value <= totalPages) {
+        if (!isNaN(value) && value > 0 && value <= totalPages) {  // Ensure value is positive
           setCurrentlyRead(value);
+        } else if (e.target.value === "") {
+          setCurrentlyRead("");  // Allow empty string for clearing the field
+        }
+        
+        // Clear error when typing
+        if (errors.currentlyRead) {
+          const newErrors = {...errors};
+          delete newErrors.currentlyRead;
+          setErrors(newErrors);
         }
       }}
     />
@@ -314,7 +411,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
       value={endDate}
       onChange={(e) => {
         setEndDate(e.target.value);
-        setCurrentlyRead(totalPages); // Automatically set currentlyRead when End Date is selected
+        setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
       }}
     />
 
@@ -352,14 +449,22 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
           <input
             type="text"
             placeholder="Add a tag"
-            className="input-field tag-input"
+            className={`input-field tag-input ${errors.tagInput ? "input-error" : ""}`}
             value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
+            onChange={(e) => {
+              setTagInput(e.target.value);
+              if (errors.tagInput) {
+                const newErrors = {...errors};
+                delete newErrors.tagInput;
+                setErrors(newErrors);
+              }
+            }}
           />
           <button className="add-tag-btn" onClick={handleAddTag}>
             Add
           </button>
         </div>
+        {errors.tagInput && <p className="error-text">{errors.tagInput}</p>}
 
         {/* Display Added Tags */}
         <div className="tags-display">
@@ -370,6 +475,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
             </span>
           ))}
         </div>
+        {errors.tags && <p className="error-text">{errors.tags}</p>}
 
         {/* Buttons */}
         <div className="modal-footer">

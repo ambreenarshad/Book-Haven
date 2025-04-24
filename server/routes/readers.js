@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const Reader = require("../models/Reader");
@@ -36,9 +37,11 @@ router.get("/", async (req, res) => {
         res.status(500).json({ message: "Error fetching reader details", error });
       }
 });
-router.get("/:id", auth, async (req, res) => {
+
+// Get reader by ID - MUST BE AFTER /check-session route
+router.get("/:id",  auth, async (req, res) => {
     try {
-      if (Number(req.params.readerid) !== req.user.id) {
+      if (Number(req.params.id) !== req.user.id) {
         return res.status(403).json({ message: "Access denied" });
       }
         const reader = await Reader.findOne({ reader_id: req.params.id }) || await Reader.findById(req.params.id);

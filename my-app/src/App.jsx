@@ -39,8 +39,7 @@ const App = () => {
       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-         },
+          "Authorization": `Bearer ${token}`},
         credentials: 'include'
       })
 

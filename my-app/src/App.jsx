@@ -31,23 +31,16 @@ const App = () => {
   const [showAnimation, setShowAnimation] = useState(false)
   const [showMainContent, setShowMainContent] = useState(false)
   const [mainContentVisible, setMainContentVisible] = useState(false)
-  const navigate = useNavigate();
-  const token = sessionStorage.getItem("token");
-  const handleLogin = (readerId) => {
-    console.log("Logging in with Reader ID:", readerId) // Debugging
-    setCurrentReaderId(readerId)
-    sessionStorage.setItem("reader_id", readerId) // Store in sessionStorage
-    // Show animation first
-    setShowAnimation(true)
-    fetchUserData(readerId)
   const [isInitializing, setIsInitializing] = useState(true)
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
   const handleLogin = async (readerId) => {
     try {
       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" ,
-          "Authorization": `Bearer ${token}`},
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+         },
         credentials: 'include'
       })
 
@@ -91,7 +84,8 @@ const App = () => {
       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` },
+          "Authorization": `Bearer ${token}`
+         },
       })
 
       if (response.ok) {
@@ -165,14 +159,11 @@ const App = () => {
 
   return (
     <>
-    <>
       <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
        
         {showAnimation && <BookAnimation onAnimationComplete={handleAnimationComplete} />}
         <SessionHandler userData={userData} onLogout={handleLogout} />
         {!isInitializing && !isAuthenticated && !showAnimation ? (
-  
-        {!isAuthenticated && !showAnimation ? (
           <div className="app">
             <SiteHeader toggleTheme={toggleTheme} theme={theme} />
             <main className="main flex flex-col justify-center p-4">
@@ -200,9 +191,7 @@ const App = () => {
                   onLogout={handleLogout}
                 />
                 <AddBookModal isOpen={isModalOpen} closeModal={closeModal} readerId={currentReaderId} />
-  
                 <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/all-books" element={<AllBooks />} />
                   <Route path="/recommendations" element={<Recommendations />} />
@@ -223,8 +212,8 @@ const App = () => {
           )
         )}
       </div>
-  
-      <style>{`
+
+      <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -232,8 +221,6 @@ const App = () => {
       `}</style>
     </>
   )
-    </>
-  )  
 }
 
 const SiteHeader = ({ toggleTheme, theme }) => (

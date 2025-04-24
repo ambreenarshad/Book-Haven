@@ -38,6 +38,9 @@ router.get("/", async (req, res) => {
 });
 router.get("/:id", auth, async (req, res) => {
     try {
+      if (Number(req.params.readerid) !== req.user.id) {
+        return res.status(403).json({ message: "Access denied" });
+      }
         const reader = await Reader.findOne({ reader_id: req.params.id }) || await Reader.findById(req.params.id);
         if (!reader) {
             return res.status(404).json({ message: "Reader not found" });

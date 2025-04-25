@@ -8,5 +8,3 @@ Excel Link: https://docs.google.com/spreadsheets/d/1zV4AWr6rr7Rd7yLx1xx-n7uiBLfd
 
 
 Doc 2 Link: https://docs.google.com/document/d/1s1x6f9j-MLegilRvVtQ3gj0LuaDRjhzyW4ScUHs_jXc/edit?usp=sharing 
-
-Group Members: Athaar, Ambreen, Bilal

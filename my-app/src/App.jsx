@@ -197,7 +197,7 @@ const App = () => {
                   <Route path="/book/:id" element={<BookDetails />} />
                   <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
                   <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
-                  <Route path="/wishlist" element={<PlaceholderPage title="Wishlist" />} />
+                  <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
                   <Route path="/lent-out" element={<LentOut />} />
                   <Route path="/borrowed" element={<Borrowed />} />
                   <Route path="/genre" element={<Genre />} />

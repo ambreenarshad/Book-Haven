@@ -24,6 +24,8 @@ const BookQuotes = ({ bookId }) => {
       
       const data = await response.json();
       setQuotes(data);
+      // Clear any previous error when quotes are successfully loaded
+      setError(null);
     } catch (err) {
       console.error("Error fetching quotes:", err);
       setError("Failed to load quotes. Please try again later.");

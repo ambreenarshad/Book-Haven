@@ -235,7 +235,7 @@ router.get('/check', async (req, res) => {
     } catch (error) {
       console.error('Error checking for duplicate book:', error);
       res.status(500).json({ error: 'Error checking for duplicate book' });
-    }
+ }
 });
 
 

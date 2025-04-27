@@ -3,7 +3,10 @@ const jwt = require("jsonwebtoken");
 const auth = (req, res, next) => {
   // First check if we have a valid session
   if (req.session && req.session.reader_id) {
-    req.user = { id: req.session.reader_id };
+    req.user = { 
+      id: req.session.reader_id,
+      isAdmin: req.session.isAdmin || false
+    };
     return next();
   }
 
@@ -24,6 +27,7 @@ const auth = (req, res, next) => {
     if (!req.session.reader_id) {
       req.session.reader_id = decoded.id;
       req.session.token = token;
+      req.session.isAdmin = decoded.isAdmin || false;
     }
     
     next(); // Continue to the next middleware or route handler

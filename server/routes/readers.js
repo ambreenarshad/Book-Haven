@@ -1,4 +1,3 @@
-
 const express = require("express");
 
 const Reader = require("../models/Reader");
@@ -71,18 +70,23 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate token
-    const token = jwt.sign({ id: reader.reader_id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ 
+      id: reader.reader_id,
+      isAdmin: reader.isAdmin 
+    }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
     // Initialize session
     req.session.reader_id = reader.reader_id;
     req.session.reader_email = reader.email;
     req.session.token = token;
+    req.session.isAdmin = reader.isAdmin;
 
     // Return success with token and reader info
     res.json({ 
       message: "Login successful", 
       reader_id: reader.reader_id,
-      token: token
+      token: token,
+      isAdmin: reader.isAdmin
     });
   } catch (error) {
     console.error("Login error:", error);

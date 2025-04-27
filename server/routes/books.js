@@ -43,42 +43,47 @@ router.get("/", async (req, res) => {
 router.get("/:id/quotes", async (req, res) => {
     try {
       const { id } = req.params;
-      const Quote = require("../models/Quote"); // Import Quote model
-      
+      if (!id) {
+        return res.status(400).json({ message: "Book ID is required" });
+      }
+  
       const quotes = await Quote.find({ bookId: Number(id) }).sort({ createdAt: -1 });
+  
       res.status(200).json(quotes);
     } catch (error) {
       console.error("Error fetching quotes:", error);
       res.status(500).json({ message: "Error fetching quotes", error });
     }
   });
+  
   // Add a tag to a book
-router.post('/:bookid/tags', async (req, res) => {
+  router.post('/:bookid/tags', async (req, res) => {
     try {
-        const { bookid } = req.params;
-        const { tag } = req.body;
-
-        // Check if book exists
-        const book = await Book.findOne({ bookid: parseInt(bookid) });
-        if (!book) {
-            return res.status(404).json({ error: 'Book not found' });
-        }
-
-        // Create new tag
-        const newTag = new Tags({
-            bookid: parseInt(bookid),
-            tag: tag.trim()
-        });
-
-        await newTag.save();
-
-        res.status(201).json(newTag);
+      const { bookid } = req.params;
+      const { tag } = req.body;
+  
+      if (!tag || tag.trim() === "") {
+        return res.status(400).json({ error: 'Tag is required' });
+      }
+  
+      const book = await Book.findOne({ bookid: parseInt(bookid) });
+      if (!book) {
+        return res.status(404).json({ error: 'Book not found' });
+      }
+  
+      const newTag = new Tags({
+        bookid: parseInt(bookid),
+        tag: tag.trim(),
+      });
+  
+      await newTag.save();
+  
+      res.status(201).json(newTag);
     } catch (error) {
-        console.error('Error adding tag:', error);
-        res.status(500).json({ error: 'Failed to add tag' });
+      console.error('Error adding tag:', error);
+      res.status(500).json({ error: 'Failed to add tag' });
     }
-});
-
+  });
 // Remove a tag from a book
 router.delete('/:bookid/tags', async (req, res) => {
     try {
@@ -119,17 +124,18 @@ router.get('/:bookid/tags', async (req, res) => {
     try {
       const { id } = req.params;
       const { quote } = req.body;
-      const Quote = require("../models/Quote"); // Import Quote model
-      
-      // Validate required fields
-      if (!quote) {
+  
+      if (!id) {
+        return res.status(400).json({ message: "Book ID is required" });
+      }
+  
+      if (!quote || quote.trim() === "") {
         return res.status(400).json({ message: "Quote text is required" });
       }
   
-      // Create new quote
       const newQuote = new Quote({
         bookId: Number(id),
-        quote
+        quote: quote.trim(),
       });
   
       const savedQuote = await newQuote.save();
@@ -139,7 +145,6 @@ router.get('/:bookid/tags', async (req, res) => {
       res.status(500).json({ message: "Error adding quote", error });
     }
   });
-  
   // Delete a quote
   router.delete("/quotes/:quoteId", async (req, res) => {
     try {
@@ -209,24 +214,31 @@ router.post("/favorite", async (req, res) => {
     }
 });
 // In your backend routes
-/*For duplicate books check*/
+//For duplicate books check/
 router.get('/check', async (req, res) => {
     try {
-      const { readerId, title, author } = req.query;
+      let { readerId, title, author } = req.query;
       
+      // 🧹 Clean the title and author: Trim and Lowercase
+      title = title.trim().toLowerCase();
+      author = author.trim().toLowerCase();
+  
       const existingBook = await Book.findOne({
         readerid: readerId,
-        book_name: { $regex: new RegExp(`^${title}$`, 'i') },
+        book_name: { $regex: new RegExp(`^${title}$`, 'i') }, 
         author_name: { $regex: new RegExp(`^${author}$`, 'i') },
-        reading_status: { $ne: "Trash" } // Exclude books with status "Trash"
+        
+        reading_status: { $ne: "Trash" } // Exclude trashed books
       });
   
       res.json({ exists: !!existingBook });
     } catch (error) {
       console.error('Error checking for duplicate book:', error);
-      res.status(500).json({ error: 'Error checking for duplicate book' });
-    }
-  });
+      res.status(500).json({ error: 'Error checking for duplicate book' });
+    }
+});
+
+
 // Get favorites for a reader
 router.get("/favorites", async (req, res) => {
     const { readerid } = req.query;
@@ -259,8 +271,14 @@ router.get("/favorites", async (req, res) => {
 
 // GET /book/trash?readerid=123
 router.get("/trash", async (req, res) => {
-    const readerid = req.query.readerid;
     try {
+        const readerid = req.query.readerid;
+        
+        // Validate readerid
+        if (!readerid) {
+            return res.status(400).json({ message: "Reader ID is required" });
+        }
+
         const trashedBooks = await Trash.find({ readerId: readerid });
 
         // Fetch full book details for each trashed book
@@ -268,22 +286,27 @@ router.get("/trash", async (req, res) => {
             trashedBooks.map(async (trash) => {
                 const book = await Book.findOne({ bookid: trash.bookId });
                 if (!book) return null; // skip if book not found
+                
+                // Handle objects without toObject method (like mocks in tests)
+                // Convert to plain objects safely
+                const trashData = trash.toObject ? trash.toObject() : {...trash};
+                const bookData = book.toObject ? book.toObject() : {...book};
+                
                 return {
-                    ...trash.toObject(),
-                    ...book.toObject()
+                    ...trashData,
+                    ...bookData
                 };
             })
         );
         
-        res.status(200).json(booksWithDetails.filter(Boolean));
+        // Filter out null values and return
+        return res.status(200).json(booksWithDetails.filter(Boolean));
         
     } catch (err) {
-        // Log the actual error for debugging
         console.error("Error fetching trash:", err);
-        res.status(500).json({ message: "Error fetching trash", error: err });
+        return res.status(500).json({ message: "Error fetching trash", error: err.message });
     }
 });
-
 
 
 // 🗑 Move a book to trash
@@ -338,7 +361,6 @@ router.post("/trash/restore", async (req, res) => {
             const book = await Book.findOne({ bookid: trashedBook.bookId });
             if (!book) {
                 return res.status(404).json({ message: `Book with ID ${trashedBook.bookId} not found` });
-
             }
 
             // Restore the original reading status
@@ -565,21 +587,22 @@ router.post('/:id/reread', async (req, res) => {
 
 router.get('/:id/rereads', async (req, res) => {
     try {
-        const bookid = Number(req.params.id);  // Get bookid from the URL params
-        console.log("Fetching reread history for bookid:", bookid);
-
-        // Fetch rereading history by matching bookid in Rereader
-        const history = await Rereader.find({ bookid }).sort({ reread_id: 1 }); // Optional sorting by reread_id
-        
-        if (history.length === 0) {
-            return res.status(404).json({ error: 'No reread history found for this book.' });
-        }
-
-        res.status(200).json(history);
+      const bookid = Number(req.params.id);
+  
+      if (!bookid) {
+        return res.status(400).json({ error: 'Book ID is required' });
+      }
+  
+      const history = await Rereader.find({ bookid }).sort({ reread_id: 1 });
+  
+      if (!history.length) {
+        return res.status(404).json({ error: 'No reread history found for this book.' });
+      }
+  
+      res.status(200).json(history);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to fetch reread history' });
+      console.error('Failed to fetch reread history:', err);
+      res.status(500).json({ error: 'Failed to fetch reread history' });
     }
-});  
-
+  });
 module.exports = router;

@@ -1,3 +1,210 @@
+
+// const express = require("express")
+// const router = express.Router()
+// const LendingTracker = require("../models/LendingTracker")
+// const Book = require("../models/Book")
+
+// // Get all lent out books (for the Lent Out section in sidebar)
+// // This needs to be before the /:bookId route to avoid conflict
+// router.get("/lent-out", async (req, res) => {
+//   try {
+//     const { readerid } = req.query
+
+//     if (!readerid) {
+//       return res.status(400).json({ error: "Reader ID is required" })
+//     }
+
+//     console.log("Fetching lent out books for reader:", readerid)
+
+//     // Get all books for this reader
+//     const books = await Book.find({ readerid: Number(readerid) })
+//     const bookIds = books.map((book) => book.bookid)
+
+//     console.log("Found books for reader:", bookIds)
+
+//     // Find all lending records for these books
+//     const lendingRecords = await LendingTracker.find({
+//       bookId: { $in: bookIds },
+//       status: "lent",
+//     })
+
+//     console.log("Found lending records:", lendingRecords)
+
+//     // Get full book details for each lent book
+//     const lentBookIds = lendingRecords.map((record) => record.bookId)
+//     const lentBooks = await Book.find({ bookid: { $in: lentBookIds } })
+
+//     console.log(
+//       "Found lent books:",
+//       lentBooks.map((b) => b.bookid),
+//     )
+
+//     // Combine book details with lending information
+//     const booksWithLendingInfo = lentBooks.map((book) => {
+//       const lendingInfo = lendingRecords.find((record) => record.bookId === book.bookid)
+//       return {
+//         ...book.toObject(),
+//         lendingInfo: lendingInfo,
+//       }
+//     })
+
+//     console.log("Returning books with lending info:", booksWithLendingInfo.length)
+//     res.json(booksWithLendingInfo)
+//   } catch (error) {
+//     console.error("Error fetching lent out books:", error)
+//     res.status(500).json({ error: "Failed to fetch lent out books" })
+//   }
+// })
+
+// // Get lending status for a specific book
+// router.get("/:bookId", async (req, res) => {
+//   try {
+//     const { bookId } = req.params
+
+//     const lendingRecord = await LendingTracker.findOne({
+//       bookId: Number(bookId),
+//       status: "lent",
+//     })
+
+//     if (!lendingRecord) {
+//       return res.status(404).json({ message: "No lending record found for this book" })
+//     }
+
+//     res.json(lendingRecord)
+//   } catch (error) {
+//     console.error("Error fetching lending status:", error)
+//     res.status(500).json({ error: "Failed to fetch lending status" })
+//   }
+// })
+
+// // Get all lent books for a reader
+// router.get("/", async (req, res) => {
+//   try {
+//     const { readerid } = req.query
+
+//     if (!readerid) {
+//       return res.status(400).json({ error: "Reader ID is required" })
+//     }
+
+//     // First get all books for this reader
+//     const books = await Book.find({ readerid: Number(readerid) })
+//     const bookIds = books.map((book) => book.bookid)
+
+//     // Then find all lending records for these books
+//     const lendingRecords = await LendingTracker.find({
+//       bookId: { $in: bookIds },
+//       status: "lent",
+//     })
+
+//     res.json(lendingRecords)
+//   } catch (error) {
+//     console.error("Error fetching lent books:", error)
+//     res.status(500).json({ error: "Failed to fetch lent books" })
+//   }
+// })
+
+// // Lend a book
+// router.post("/", async (req, res) => {
+//   try {
+//     const { bookId, personName, status, date, readerid } = req.body
+
+//     if (!bookId || !personName || !status || !date) {
+//       return res.status(400).json({ error: "Missing required fields" })
+//     }
+
+//     // Check if book exists
+//     const book = await Book.findOne({ bookid: Number(bookId) })
+//     if (!book) {
+//       return res.status(404).json({ error: "Book not found" })
+//     }
+
+//     // Check if book is already lent out
+//     const existingRecord = await LendingTracker.findOne({
+//       bookId: Number(bookId),
+//       status: "lent",
+//     })
+
+//     if (existingRecord) {
+//       return res.status(400).json({ error: "This book is already lent out" })
+//     }
+
+//     // Create new lending record
+//     const newLending = new LendingTracker({
+//       bookId: Number(bookId),
+//       personName,
+//       status,
+//       date,
+//       readerid: Number(readerid) || book.readerid, // Use provided readerid or get from book
+//     })
+
+//     await newLending.save()
+
+//     res.status(201).json({ message: "Book lent successfully", lending: newLending })
+//   } catch (error) {
+//     console.error("Error lending book:", error)
+//     res.status(500).json({ error: "Failed to lend book" })
+//   }
+// })
+
+// // Clear lending status (delete record)
+// router.delete("/:bookId", async (req, res) => {
+//   try {
+//     const { bookId } = req.params
+
+//     const result = await LendingTracker.deleteMany({ bookId: Number(bookId) })
+
+//     if (result.deletedCount === 0) {
+//       return res.status(404).json({ message: "No lending record found for this book" })
+//     }
+
+//     res.json({ message: "Lending status cleared successfully" })
+//   } catch (error) {
+//     console.error("Error clearing lending status:", error)
+//     res.status(500).json({ error: "Failed to clear lending status" })
+//   }
+// })
+
+// module.exports = router
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const express = require("express")
 const router = express.Router()
 const LendingTracker = require("../models/LendingTracker")
@@ -41,7 +248,8 @@ router.get("/lent-out", async (req, res) => {
     const booksWithLendingInfo = lentBooks.map((book) => {
       const lendingInfo = lendingRecords.find((record) => record.bookId === book.bookid)
       return {
-        ...book.toObject(),
+        // ...book.toObject(),
+        ...(book.toObject ? book.toObject() : book),
         lendingInfo: lendingInfo,
       }
     })
@@ -92,7 +300,8 @@ router.get("/borrowed", async (req, res) => {
     const booksWithLendingInfo = borrowedBooks.map((book) => {
       const lendingInfo = borrowingRecords.find((record) => record.bookId === book.bookid)
       return {
-        ...book.toObject(),
+        // ...book.toObject(),
+        ...(book.toObject ? book.toObject() : book),
         lendingInfo: lendingInfo,
       }
     })
@@ -237,3 +446,7 @@ router.delete("/:bookId", async (req, res) => {
 })
 
 module.exports = router
+
+
+
+

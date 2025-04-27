@@ -11,6 +11,7 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
     const [isSaving, setIsSaving] = useState(false);  // Loading state for save button
     const [startTime, setStartTime] = useState(null);
     const [hasTimeEnded, setHasTimeEnded] = useState(false);
+    const [accumulatedTime, setAccumulatedTime] = useState(0);
 
     const readerId = sessionStorage.getItem("reader_id");
     const bookId = curr_book.bookid;
@@ -18,9 +19,12 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
         let timer;
     
         if (isRunning && timeLeft !== null && timeLeft > 0) {
-            timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+            timer = setTimeout(() => {
+                setTimeLeft(prev => prev - 1);
+                setAccumulatedTime(prev => prev + 1); // Add 1 second only if timer is running
+            }, 1000);
         } else if (timeLeft === 0 && !hasTimeEnded) {
-            setHasTimeEnded(true); // Prevent repeat triggers
+            setHasTimeEnded(true);
             const audio = new Audio("/sounds/levelup.mp3");
             audio.play().catch((e) => console.error("Audio playback failed:", e));
     
@@ -32,7 +36,8 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
         }
     
         return () => clearTimeout(timer);
-    }, [isRunning, timeLeft, hasTimeEnded]);    
+    }, [isRunning, timeLeft, hasTimeEnded]);
+       
 
     // Prevent scrolling when dialog is open
     useEffect(() => {
@@ -44,6 +49,7 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
 
     const startTimer = () => {
         if (timeLeft === null && duration > 0) {
+            setAccumulatedTime(0);
             setTimeLeft(duration * 60);
             setStartTime(Date.now());
             setHasTimeEnded(false); // Reset alert trigger
@@ -68,13 +74,8 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
     
         const plannedDuration = Number(duration) * 60; // in seconds
        
-        let actualTime = 0;
-        if (startTime) {
-            const endTime = Date.now();
-            actualTime = Math.floor((endTime - startTime) / 1000); // in seconds
-        } else {
-            actualTime = 0;
-        }
+        const actualTime = accumulatedTime;
+
         setIsSaving(true);
     
         try {

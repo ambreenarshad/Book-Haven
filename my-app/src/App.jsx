@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Routes, Route, useNavigate } from "react-router-dom"
-
+import { IoLibrary } from "react-icons/io5";
 
 import Header from "./components/Header"
 import AddBookModal from "./components/AddBookModal"
@@ -226,7 +226,8 @@ const SiteHeader = ({ toggleTheme, theme }) => (
   <header className="gheader">
     <div className="container">
       <a href="/" className="logo">
-        BookHaven
+
+       <IoLibrary style={{ marginBottom: '-2px'}}/> BookHaven
       </a>
       <div className="theme-toggle-container">
         <button onClick={toggleTheme} className="theme-toggle">

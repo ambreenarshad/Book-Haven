@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Routes, Route, useNavigate } from "react-router-dom"
 import { IoLibrary } from "react-icons/io5";
 
@@ -21,6 +21,14 @@ import LentOut from "./components/LentOut"
 import Borrowed from "./components/Borrowed"
 import AccountPage from "./components/AccountPage"
 import SessionHandler from "./components/SessionHandler"
+import AdminSidebar from "./components/Admin/AdminSidebar"
+import AdminHeader from "./components/Admin/AdminHeader"
+import AdminWelcomePage from "./components/Admin/AdminWelcomePage"
+import UserManagement from "./components/Admin/UserManagement"
+import ContentManagement from "./components/Admin/ContentManagement"
+import Analytics from "./components/Admin/Analytics"
+import RoleManagement from "./components/Admin/RoleManagement"
+import SystemSettings from "./components/Admin/SystemSettings"
 
 const App = () => {
   const [theme, setTheme] = useState("light")
@@ -32,6 +40,7 @@ const App = () => {
   const [showMainContent, setShowMainContent] = useState(false)
   const [mainContentVisible, setMainContentVisible] = useState(false)
   const [isInitializing, setIsInitializing] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const handleLogin = async (readerId) => {
@@ -47,6 +56,7 @@ const App = () => {
         const data = await response.json()
         setCurrentReaderId(readerId)
         setUserData(data)
+        setIsAdmin(data.reader.isAdmin || false)
         sessionStorage.setItem("reader_id", readerId)
         setShowAnimation(true)
       } else {
@@ -180,30 +190,54 @@ const App = () => {
         ) : (
           showMainContent && (
             <div className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}>
-              <Sidebar userData={userData} onLogout={handleLogout} />
+              {isAdmin ? (
+                <AdminSidebar userData={userData} onLogout={handleLogout} />
+              ) : (
+                <Sidebar userData={userData} onLogout={handleLogout} />
+              )}
               <div className="content flex-grow">
-                <Header
-                  toggleTheme={toggleTheme}
-                  theme={theme}
-                  openModal={openModal}
-                  userData={userData}
-                  onLogout={handleLogout}
-                />
+                {isAdmin ? (
+                  <AdminHeader
+                    toggleTheme={toggleTheme}
+                    isDarkMode={theme === "dark"}
+                  />
+                ) : (
+                  <Header
+                    toggleTheme={toggleTheme}
+                    theme={theme}
+                    openModal={openModal}
+                    userData={userData}
+                    onLogout={handleLogout}
+                  />
+                )}
                 <AddBookModal isOpen={isModalOpen} closeModal={closeModal} readerId={currentReaderId} />
                 <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/all-books" element={<AllBooks />} />
-                  <Route path="/recommendations" element={<Recommendations />} />
-                  <Route path="/book/:id" element={<BookDetails />} />
-                  <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
-                  <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
-                  <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
-                  <Route path="/lent-out" element={<LentOut />} />
-                  <Route path="/borrowed" element={<Borrowed />} />
-                  <Route path="/genre" element={<Genre />} />
-                  <Route path="/trash" element={<Trash />} />
-                  <Route path="/favorites" element={<Favorites />} />
-                  <Route path="/account" element={<AccountPage userData={userData} onLogout={handleLogout} />} />
+                  {isAdmin ? (
+                    <>
+                      <Route path="/admin/dashboard" element={<AdminWelcomePage />} />
+                      <Route path="/admin/users" element={<UserManagement />} />
+                      <Route path="/admin/content" element={<ContentManagement />} />
+                      <Route path="/admin/analytics" element={<Analytics />} />
+                      <Route path="/admin/roles" element={<RoleManagement />} />
+                      <Route path="/admin/settings" element={<SystemSettings />} />
+                    </>
+                  ) : (
+                    <>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/all-books" element={<AllBooks />} />
+                      <Route path="/recommendations" element={<Recommendations />} />
+                      <Route path="/book/:id" element={<BookDetails />} />
+                      <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
+                      <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
+                      <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
+                      <Route path="/lent-out" element={<LentOut />} />
+                      <Route path="/borrowed" element={<Borrowed />} />
+                      <Route path="/genre" element={<Genre />} />
+                      <Route path="/trash" element={<Trash />} />
+                      <Route path="/favorites" element={<Favorites />} />
+                      <Route path="/account" element={<AccountPage userData={userData} onLogout={handleLogout} />} />
+                    </>
+                  )}
                   <Route path="/login" element={<Auth />} />
                 </Routes>
               </div>

@@ -92,8 +92,13 @@ const Auth = ({ onLogin }) => {
           
           // Call the onLogin callback to update the app state
           if (onLogin) onLogin(data.reader_id);
-          navigate("/dashboard");
-        
+          
+          // Redirect based on admin status
+          if (data.isAdmin) {
+            navigate("/admin/AdminWelcomePage");
+          } else {
+            navigate("/");
+          }
         } else {
           alert(data.message);
         }

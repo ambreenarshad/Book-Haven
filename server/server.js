@@ -69,7 +69,7 @@ app.use("/admin", adminRoutes);
 
 // Startup Cleanup
 console.log("Running startup trash cleanup...");
-deleteOldTrash();
+//deleteOldTrash();
 
 // Start server
 app.listen(8000, () => {

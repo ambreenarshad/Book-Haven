@@ -97,7 +97,7 @@ const Auth = ({ onLogin }) => {
           if (data.isAdmin) {
             navigate("/admin/AdminWelcomePage");
           } else {
-            navigate("/");
+            navigate("/dashboard");
           }
         } else {
           alert(data.message);

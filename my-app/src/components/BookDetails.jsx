@@ -36,6 +36,7 @@ const BookDetails = () => {
   const [isLentOut, setIsLentOut] = useState(false)
   const [isBorrowed, setIsBorrowed] = useState(false)
   const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState('details')
 
   useEffect(() => {
     fetch(`http://localhost:8000/book/${id}`)
@@ -382,150 +383,159 @@ const BookDetails = () => {
           )}
         </div>
         <div className="Book-Segment">
-          <Tabs defaultValue="details">
-            <TabsList className="pretty-tabs">
-              <TabsTrigger value="details" className="pretty-tab">
-                Details
-              </TabsTrigger>
-              <TabsTrigger value="quotes" className="pretty-tab">
-                Quotes
-              </TabsTrigger>
-              <TabsTrigger value="reread" className="pretty-tab">
-                Reread History
-              </TabsTrigger>
-              <TabsTrigger value="ai" className="pretty-tab">
-                AI Summary
-              </TabsTrigger>
-            </TabsList>
+          <div className="tab-navigation">
+            <input 
+              type="button" 
+              value="Details" 
+              onClick={() => setActiveTab('details')} 
+              className={activeTab === 'details' ? 'active' : ''}
+            />
+            <input 
+              type="button" 
+              value="Quotes" 
+              onClick={() => setActiveTab('quotes')} 
+              className={activeTab === 'quotes' ? 'active' : ''}
+            />
+            <input 
+              type="button" 
+              value="Reread History" 
+              onClick={() => setActiveTab('reread')} 
+              className={activeTab === 'reread' ? 'active' : ''}
+            />
+            <input 
+              type="button" 
+              value="AI Summary" 
+              onClick={() => setActiveTab('ai')} 
+              className={activeTab === 'ai' ? 'active' : ''}
+            />
+          </div>
 
-            <TabsContent value="details" className="space-y-4">
-              <div className="mybook-info">
-                <p>
-                  <strong>Author:</strong> {book.author_name}
-                </p>
-                <p>
-                  <strong>Genre:</strong> {book.genre}
-                </p>
-                <p>
-                  <strong>Year of Publication:</strong> {book.year_of_publication}
-                </p>
-                <p>
-                  <strong>Pages:</strong> {book.total_pages}
-                </p>
-                <p>
-                  <strong>Pages Read:</strong> {book.currently_read} / {book.total_pages}
-                </p>
+          <div className="tab-content">
+            {activeTab === 'details' && (
+              <div className="space-y-4">
+                <div className="mybook-info">
+                  <p>
+                    <strong>Author:</strong> {book.author_name}
+                  </p>
+                  <p>
+                    <strong>Genre:</strong> {book.genre}
+                  </p>
+                  <p>
+                    <strong>Year of Publication:</strong> {book.year_of_publication}
+                  </p>
+                  <p>
+                    <strong>Pages:</strong> {book.total_pages}
+                  </p>
+                  <p>
+                    <strong>Pages Read:</strong> {book.currently_read} / {book.total_pages}
+                  </p>
+                  {/* Render Tags */}
+                  {tags.length > 0 && (
+                    <div className="tag-container">
+                      {tags.map((tagObj, index) => (
+                        <span key={index} className="tag-pill">
+                          {tagObj.tag}
+                          <button onClick={() => handleDeleteTag(tagObj.tag)} className="delete-tag-button">
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {/* Rating */}
+                  <p className="rating-container">
+                    <strong>Rating:</strong>
+                    {[...Array(5)].map((_, index) => {
+                      const starIndex = index + 1
+                      return (
+                        <span
+                          key={starIndex}
+                          onClick={() => setRating(starIndex)}
+                          className={`star ${starIndex <= rating ? "filled" : "empty"}`}
+                        >
+                          {starIndex <= rating ? <FaStar /> : <FaRegStar />}
+                        </span>
+                      )
+                    })}
+                  </p>
 
-                {/* Rating */}
-                <p className="rating-container">
-                  <strong>Rating:</strong>
-                  {[...Array(5)].map((_, index) => {
-                    const starIndex = index + 1
-                    return (
-                      <span
-                        key={starIndex}
-                        onClick={() => setRating(starIndex)}
-                        className={`star ${starIndex <= rating ? "filled" : "empty"}`}
-                      >
-                        {starIndex <= rating ? <FaStar /> : <FaRegStar />}
-                      </span>
-                    )
-                  })}
-                </p>
+                  {/* Review */}
+                  <p>
+                    <strong>Review:</strong>
+                  </p>
+                  <textarea
+                    value={review}
+                    onChange={(e) => setReview(e.target.value)}
+                    className="review-textarea"
+                    rows="2"
+                  ></textarea>
+                  <button onClick={updateReview} className="save-review-button" disabled={isUpdating}>
+                    {isUpdating ? "Saving..." : "Save"}
+                  </button>
 
-                {/* Review */}
-                <p>
-                  <strong>Review:</strong>
-                </p>
-                <textarea
-                  value={review}
-                  onChange={(e) => setReview(e.target.value)}
-                  className="review-textarea"
-                  rows="2"
-                ></textarea>
-                <button onClick={updateReview} className="save-review-button" disabled={isUpdating}>
-                  {isUpdating ? "Saving..." : "Save"}
-                </button>
-                <p>
-                  <strong>Started:</strong> {book.start_date}
-                </p>
-                <p>
-                  <strong>Completed:</strong> {book.end_date}
-                </p>
-                <p>
-                  <strong>Added on:</strong> {book.add_date}
-                </p>
-                {/* Render Tags */}
-                {tags.length > 0 && (
-                  <div className="tag-container">
-                    {tags.map((tagObj, index) => (
-                      <span key={index} className="tag-pill">
-                        {tagObj.tag}
-                        <button onClick={() => handleDeleteTag(tagObj.tag)} className="delete-tag-button">
-                          ×
-                        </button>
-                      </span>
-                    ))}
+                  {/* Date Fields Row */}
+                  <div className="date-fields-row">
+                    <div className="date-field">
+                      <strong>Added on:</strong> {book.add_date}
+                    </div>
+                    <div className="date-field">
+                      <strong>Started:</strong> {book.start_date}
+                    </div>
+                    <div className="date-field">
+                      <strong>Completed:</strong> {book.end_date}
+                    </div>
                   </div>
-                )}
-              </div>
-            </TabsContent>
 
-            {/* Quotes Tab Content */}
-            <TabsContent value="quotes" className="space-y-4">
-              <BookQuotes bookId={book.bookid} />
-            </TabsContent>
-
-            {/* Other tabs content remains unchanged */}
-            <TabsContent value="reread" className="space-y-4">
-              <Reread bookid={book.bookid} />
-            </TabsContent>
-
-            {/* <TabsContent value="ai" className="space-y-4">
-              <div>
-                <button onClick={handleGenerateSummary} className="generate-summary-button" disabled={loadingSummary}>
-                  {loadingSummary ? "Generating..." : "Generate Summary"}
-                </button>
-
-                {summary && (
-                  <div className="summary-output">
-                    <h3>AI Summary:</h3>
-                    <p>{summary}</p>
-                  </div>
-                )}
-              </div>
-            </TabsContent> */}
-            <TabsContent value="ai" className="space-y-4">
-            <div className="ai-summary-container">
-              <h3 className="asummary-title">AI-Generated Book Summary</h3>
-              <p className="summary-description">
-                Get an AI-generated summary of "{book.book_name}" by {book.author_name}.
-                {/* This summary is created using Google's Gemini AI model. */}
-              </p>
-              
-              <button 
-                onClick={handleGenerateSummary} 
-                className="generate-summary-button" 
-                disabled={loadingSummary}
-              >
-                {loadingSummary ? 
-                  <><span className="spinner"></span> Generating...</> : 
-                  "Generate Summary"}
-              </button>
-
-              {summary && (
-                <div className="summary-output">
-                  <h4 className="asummary-heading">Summary:</h4>
-                  <div className="summary-content">
-                    {summary.split('\n').map((paragraph, idx) => (
-                      paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />
-                    ))}
-                  </div>
+                  
                 </div>
-              )}
-            </div>
-          </TabsContent>
-          </Tabs>
+              </div>
+            )}
+
+            {activeTab === 'quotes' && (
+              <div className="space-y-4">
+                <BookQuotes bookId={book.bookid} />
+              </div>
+            )}
+
+            {activeTab === 'reread' && (
+              <div className="space-y-4">
+                <Reread bookid={book.bookid} />
+              </div>
+            )}
+
+            {activeTab === 'ai' && (
+              <div className="space-y-4">
+                <div className="ai-summary-container">
+                  <h3 className="asummary-title">AI-Generated Book Summary</h3>
+                  <p className="summary-description">
+                    Get an AI-generated summary of "{book.book_name}" by {book.author_name}.
+                    {/* This summary is created using Google's Gemini AI model. */}
+                  </p>
+                  
+                  <button 
+                    onClick={handleGenerateSummary} 
+                    className="generate-summary-button" 
+                    disabled={loadingSummary}
+                  >
+                    {loadingSummary ? 
+                      <><span className="spinner"></span> Generating...</> : 
+                      "Generate Summary"}
+                  </button>
+
+                  {summary && (
+                    <div className="summary-output">
+                      <h4 className="asummary-heading">Summary:</h4>
+                      <div className="summary-content">
+                        {summary.split('\n').map((paragraph, idx) => (
+                          paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

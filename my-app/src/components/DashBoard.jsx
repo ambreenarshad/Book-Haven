@@ -206,7 +206,7 @@ const Dashboard = () => {
     setIsEditing(false);
   };
 
-  // Updated handleChange function with stronger validation
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
@@ -217,26 +217,26 @@ const Dashboard = () => {
         [name]: value
       });
     }
-    // If input doesn't match our validation, we don't update state
+    
   };
 
-  // Prevent non-numeric input on keydown
+  
   const handleKeyDown = (e) => {
-    // Allow: backspace, delete, tab, escape, enter, navigation keys
+   
     const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'Home', 'End', 'ArrowLeft', 'ArrowRight'];
     
-    // If it's not a number and not in allowed special keys, prevent default
+   
     if (!/^\d$/.test(e.key) && !allowedKeys.includes(e.key)) {
       e.preventDefault();
     }
   };
 
-  // Handle paste event to prevent non-numeric input
+  
   const handlePaste = (e) => {
-    // Get pasted data via clipboard API
+    
     const pastedData = e.clipboardData.getData('Text');
     
-    // If pasted data is not numeric, prevent default
+    
     if (!/^\d*$/.test(pastedData)) {
       e.preventDefault();
     }
@@ -244,7 +244,7 @@ const Dashboard = () => {
 
   const handleSave = async () => {
     try {
-      // Convert any empty strings to 0 for the API call
+      
       const goalsToSave = {
         reader_id: readerId,
         yearly_goal: updatedGoals.yearly_goal === '' ? 0 : parseInt(updatedGoals.yearly_goal, 10),

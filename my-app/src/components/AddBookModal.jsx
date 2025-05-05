@@ -433,7 +433,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
                   value={endDate}
                   onChange={(e) => {
                     setEndDate(e.target.value);
-                    setCurrentlyRead(totalPages); // ✅ Automatically set currentlyRead when End Date is selected
+                    setCurrentlyRead(totalPages); //  Automatically set currentlyRead when End Date is selected
                   }}
                 />
                 {errors.endDate && <p className="error-text">{errors.endDate}</p>}

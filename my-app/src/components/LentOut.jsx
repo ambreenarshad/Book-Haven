@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import "../allbooks.css" // Assuming you want to reuse styling from AllBooks
+import "../allbooks.css" 
 
 const LentOut = () => {
   const [books, setBooks] = useState([])

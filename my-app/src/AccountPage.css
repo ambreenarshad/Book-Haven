@@ -132,11 +132,10 @@
     margin-top: 4px;
   }
   
-/* Wrapper for password input and toggle button */
-/* Update the password input container styles */
+
 .password-input-container {
   position: relative;
-  width: 100%; /* Changed from 210% to match other fields */
+  width: 100%;
 }
 
 /* Adjust the toggle password button position */
@@ -157,7 +156,7 @@
     color: var(--button-hover-bg);
   }
   .change-password-link {
-    color: #2c83eb; /* A nice blue color */
+    color: #2c83eb; 
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -168,15 +167,15 @@
   }
   
   .change-password-link:hover {
-    color: #1a6fd8; /* Slightly darker blue on hover */
+    color: #1a6fd8; 
     text-decoration: underline;
   }
   
   .change-password-link:active {
-    color: #0d5bb7; /* Even darker when clicked */
+    color: #0d5bb7;
   }
   
-  /* If you want to add an icon next to it */
+ 
   .change-password-link::after {
     content: "→";
     margin-left: 5px;
@@ -187,7 +186,7 @@
     margin-left: 8px;
   }
   .delete-acc-link {
-    color: #eb2c2c; /* A nice red color */
+    color: #eb2c2c;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -198,12 +197,12 @@
   }
   
   .delete-acc-link:hover {
-    color: #d81a1a; /* Slightly darker red on hover */
+    color: #d81a1a;
     text-decoration: underline;
   }
   
   .delete-acc-link:active {
-    color: #b70d0d; /* Even darker when clicked */
+    color: #b70d0d;
   }
   .delete-acc-link::after {
     content: "→";
@@ -217,8 +216,8 @@
   .account-links {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Or center, depending on your layout */
-    gap: 8px; /* Adds spacing between the two links */
-    margin-top: 16px; /* Optional: space above the links */
+    align-items: center; 
+    gap: 8px;
+    margin-top: 16px; 
   }
   

@@ -62,7 +62,7 @@ const Trash = () => {
     selectedBooks.includes(book.bookId)
   );
 
-  // Check 1: Verify we're not restoring multiple books with same title/author
+  
   const titleAuthorMap = {};
   for (const book of booksToRestore) {
     const key = `${book.book_name.toLowerCase()}|${book.author_name.toLowerCase()}`;
@@ -73,7 +73,7 @@ const Trash = () => {
     titleAuthorMap[key] = true;
   }
 
-  // Check 2: Verify no duplicates exist in the library
+  
   for (const book of booksToRestore) {
     const isDuplicate = await checkDuplicate(book.book_name, book.author_name);
     if (isDuplicate) {
@@ -111,16 +111,16 @@ const Trash = () => {
   const handleSelectBook = (bookId) => {
     setSelectedBooks((prevSelected) =>
       prevSelected.includes(bookId)
-        ? prevSelected.filter((id) => id !== bookId) // Deselect if already selected
-        : [...prevSelected, bookId] // Select if not selected
+        ? prevSelected.filter((id) => id !== bookId) 
+        : [...prevSelected, bookId] 
     );
   };
 
   const handleSelectAll = () => {
     if (selectedBooks.length === trashedBooks.length) {
-      setSelectedBooks([]); // Deselect all if all are selected
+      setSelectedBooks([]); 
     } else {
-      setSelectedBooks(trashedBooks.map((book) => book.bookId)); // Select all books
+      setSelectedBooks(trashedBooks.map((book) => book.bookId)); 
     }
   };
 

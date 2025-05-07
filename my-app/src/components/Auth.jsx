@@ -6,6 +6,7 @@ const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const validatePassword = (pass) => {
     if (/\s/.test(pass)) return false; // No spaces allowed
@@ -72,7 +73,7 @@ const Auth = ({ onLogin }) => {
     const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
   
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`${backendUrl}${endpoint}`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

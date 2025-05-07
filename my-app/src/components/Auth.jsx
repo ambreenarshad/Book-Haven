@@ -6,7 +6,6 @@ const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "https://book-haven-production.up.railway.app";;
 
   const validatePassword = (pass) => {
     if (/\s/.test(pass)) return false; // No spaces allowed
@@ -73,14 +72,13 @@ const Auth = ({ onLogin }) => {
     const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
   
     try {
-      const response = await fetch(`${backendUrl}${endpoint}`, {
+      const response = await fetch(`http://localhost:8000${endpoint}`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         credentials: "include",
-        mode:"cors",
         body: JSON.stringify(userData),
       });
   

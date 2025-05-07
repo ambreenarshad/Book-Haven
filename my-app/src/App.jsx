@@ -43,14 +43,15 @@ const App = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || "https://book-haven-production.up.railway.app";;
   const handleLogin = async (readerId) => {
     try {
       const response = await fetch(`${backendUrl}/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`},
-        credentials: 'include'
+        credentials: 'include',
+        mode:"cors"
       })
 
       if (response.ok) {
@@ -96,6 +97,8 @@ const App = () => {
         headers: { "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
          },
+         credentials:"include",
+         mode:"cors"
       })
 
       if (response.ok) {
@@ -112,7 +115,9 @@ const App = () => {
   const checkSession = async () => {
     try {
       const response = await fetch(`${backendUrl}/reader/check-session`, {
-        credentials: 'include'
+        method:"GET",
+        credentials: 'include',
+        mode: "cors"
       });
 
       if (response.ok) {

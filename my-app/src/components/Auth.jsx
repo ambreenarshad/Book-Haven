@@ -6,7 +6,7 @@ const Auth = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const validatePassword = (pass) => {
     if (/\s/.test(pass)) return false; // No spaces allowed

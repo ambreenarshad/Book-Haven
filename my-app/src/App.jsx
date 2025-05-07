@@ -43,9 +43,10 @@ const App = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const handleLogin = async (readerId) => {
     try {
-      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+      const response = await fetch(`${backendUrl}/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`},
@@ -90,7 +91,7 @@ const App = () => {
 
   const fetchUserData = async (readerId) => {
     try {
-      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+      const response = await fetch(`${backendUrl}/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
@@ -110,7 +111,7 @@ const App = () => {
 
   const checkSession = async () => {
     try {
-      const response = await fetch('http://localhost:8000/reader/check-session', {
+      const response = await fetch('${backendUrl}/reader/check-session', {
         credentials: 'include'
       });
 

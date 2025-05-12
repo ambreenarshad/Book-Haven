@@ -25,8 +25,6 @@ import AdminSidebar from "./components/Admin/AdminSidebar"
 import AdminHeader from "./components/Admin/AdminHeader"
 import AdminWelcomePage from "./components/Admin/AdminWelcomePage"
 import UserManagement from "./components/Admin/UserManagement"
-import ContentManagement from "./components/Admin/ContentManagement"
-import Analytics from "./components/Admin/Analytics"
 import RoleManagement from "./components/Admin/RoleManagement"
 import SystemSettings from "./components/Admin/SystemSettings"
 
@@ -43,49 +41,96 @@ const App = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const readerId = sessionStorage.getItem("reader_id");
+      if (readerId) {
+        try {
+          const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+            method: "GET",
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUserData(data);
+            setIsAdmin(data.reader.isAdmin || false);
+            setIsAuthenticated(true);
+            setShowMainContent(true);
+            setMainContentVisible(true);
+            
+            if (data.reader.isAdmin && !window.location.pathname.startsWith('/admin')) {
+              navigate('/admin/dashboard');
+            }
+          } else {
+            handleLogout();
+          }
+        } catch (error) {
+          console.error("Error checking admin status:", error);
+          handleLogout();
+        }
+      }
+      setIsInitializing(false);
+    };
+
+    checkAdminStatus();
+  }, [navigate, token]);
+
   const handleLogin = async (readerId) => {
     try {
       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`},
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         credentials: 'include'
-      })
+      });
 
       if (response.ok) {
-        const data = await response.json()
-        setCurrentReaderId(readerId)
-        setUserData(data)
-        setIsAdmin(data.reader.isAdmin || false)
-        sessionStorage.setItem("reader_id", readerId)
-        setShowAnimation(true)
+        const data = await response.json();
+        setCurrentReaderId(readerId);
+        setUserData(data);
+        setIsAdmin(data.reader.isAdmin || false);
+        sessionStorage.setItem("reader_id", readerId);
+        setShowAnimation(true);
+        
+        if (data.reader.isAdmin) {
+          navigate('/admin/dashboard');
+        }
       } else {
-        handleLogout()
+        handleLogout();
       }
     } catch (error) {
-      console.error("Error during login:", error)
-      handleLogout()
+      console.error("Error during login:", error);
+      handleLogout();
     }
-  }
+  };
   
   const handleAnimationComplete = () => {
-    setShowAnimation(false)
-    setIsAuthenticated(true)
-    setShowMainContent(true)
+    setShowAnimation(false);
+    setIsAuthenticated(true);
+    setShowMainContent(true);
 
     setTimeout(() => {
-      setMainContentVisible(true)
-    }, 100)
+      setMainContentVisible(true);
+    }, 100);
   }
 
   const handleLogout = () => {
-    setIsAuthenticated(false)
-    setCurrentReaderId(null)
-    setUserData(null)
-    setShowMainContent(false)
-    setMainContentVisible(false)
-    sessionStorage.clear()
-    navigate("/")
+    setIsAuthenticated(false);
+    setCurrentReaderId(null);
+    setUserData(null);
+    setShowMainContent(false);
+    setMainContentVisible(false);
+    setShowAnimation(false);
+    sessionStorage.clear();
+    navigate("/");
   }
 
   const fetchUserData = async (readerId) => {
@@ -169,7 +214,6 @@ const App = () => {
   return (
     <>
       <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
-       
         {showAnimation && <BookAnimation onAnimationComplete={handleAnimationComplete} />}
         <SessionHandler userData={userData} onLogout={handleLogout} />
         {!isInitializing && !isAuthenticated && !showAnimation ? (
@@ -188,7 +232,7 @@ const App = () => {
             </main>
           </div>
         ) : (
-          showMainContent && (
+          showMainContent && !showAnimation && (
             <div className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}>
               {isAdmin ? (
                 <AdminSidebar userData={userData} onLogout={handleLogout} />
@@ -216,8 +260,6 @@ const App = () => {
                     <>
                       <Route path="/admin/dashboard" element={<AdminWelcomePage />} />
                       <Route path="/admin/users" element={<UserManagement />} />
-                      <Route path="/admin/content" element={<ContentManagement />} />
-                      <Route path="/admin/analytics" element={<Analytics />} />
                       <Route path="/admin/roles" element={<RoleManagement />} />
                       <Route path="/admin/settings" element={<SystemSettings />} />
                     </>

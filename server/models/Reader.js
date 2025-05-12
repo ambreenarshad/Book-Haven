@@ -10,7 +10,8 @@ const readerSchema = new mongoose.Schema({
     password: String, 
     date_of_birth: Date,
     profilePicUrl: { type: String, default: "" },
-    isAdmin: { type: Boolean, default: false }  // New field for admin status
+    isAdmin: { type: Boolean, default: false },  // New field for admin status
+    last_login: { type: Date, default: null }  // New field for last login date
 }, { collection: "Reader" });
 
 // Apply auto-increment plugin

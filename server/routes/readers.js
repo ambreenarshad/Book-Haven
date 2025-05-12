@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = express.Router();
+const SystemSettings = require('../models/SystemSettings');
 
 // Test endpoint to check session status - MUST BE BEFORE /:id route
 router.get("/check-session", auth, (req, res) => {
@@ -56,9 +57,23 @@ router.get("/:id",  auth, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
+    // Check system downtime
+    const settings = await SystemSettings.getSettings();
+    if (settings.isDowntimeEnabled) {
+      // First check if the user is an admin
+      const reader = await Reader.findOne({ email });
+      if (!reader || !reader.isAdmin) {
+        return res.status(503).json({ 
+          message: settings.downtimeMessage,
+          isDowntime: true
+        });
+      }
+      // If we get here, the user is an admin, so we continue with login
+    }
+
     const reader = await Reader.findOne({ email });
     if (!reader) {
       return res.status(400).json({ message: "Invalid email or password." });
@@ -90,7 +105,7 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Error logging in" });
   }
 });
 
@@ -113,6 +128,21 @@ router.post("/register", async (req, res) => {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Server error" });
     }
+});
+
+// Add update-last-login endpoint
+router.post("/update-last-login", auth, async (req, res) => {
+  const { reader_id } = req.body;
+  if (!reader_id) {
+    return res.status(400).json({ error: "Reader ID is required" });
+  }
+  try {
+    await Reader.updateOne({ reader_id }, { $set: { last_login: new Date() } });
+    res.json({ message: "Last login updated successfully" });
+  } catch (error) {
+    console.error("Error updating last login:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 module.exports = router;

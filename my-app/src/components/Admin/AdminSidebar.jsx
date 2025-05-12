@@ -4,8 +4,6 @@ import "../../side.css";
 import { 
   MdDashboard, 
   MdPeople, 
-  MdMenuBook, 
-  MdAnalytics, 
   MdAdminPanelSettings, 
   MdSettings 
 } from "react-icons/md";
@@ -17,8 +15,6 @@ const AdminSidebar = ({ userData, onLogout }) => {
   const categories = [
     { name: "Dashboard", path: "/admin/dashboard", icon: <MdDashboard /> },
     { name: "User Management", path: "/admin/users", icon: <MdPeople /> },
-    { name: "Content Management", path: "/admin/content", icon: <MdMenuBook /> },
-    { name: "Analytics", path: "/admin/analytics", icon: <MdAnalytics /> },
     { name: "Role Management", path: "/admin/roles", icon: <MdAdminPanelSettings /> },
     { name: "System Settings", path: "/admin/settings", icon: <MdSettings /> },
   ];

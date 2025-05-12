@@ -90,6 +90,14 @@ const Auth = ({ onLogin }) => {
           sessionStorage.setItem("reader_id", data.reader_id);
           sessionStorage.setItem("token", data.token);
           
+          // Update last_login date
+          await fetch(`http://localhost:8000/reader/update-last-login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ reader_id: data.reader_id })
+          });
+          
           // Call the onLogin callback to update the app state
           if (onLogin) onLogin(data.reader_id);
           
@@ -103,7 +111,12 @@ const Auth = ({ onLogin }) => {
           alert(data.message);
         }
       } else {
-        alert(data.message);
+        // Handle system downtime message
+        if (data.isDowntime) {
+          alert(data.message);
+        } else {
+          alert(data.message);
+        }
       }
     } catch (error) {
       console.error("Authentication error:", error);

@@ -7,7 +7,7 @@ import {
   MdAdminPanelSettings, 
   MdSettings 
 } from "react-icons/md";
-import SidebarUserProfile from "../SidebarUserProfile";
+import AdminProfileMenu from "./AdminProfileMenu";
 
 const AdminSidebar = ({ userData, onLogout }) => {
   const navigate = useNavigate();
@@ -18,11 +18,6 @@ const AdminSidebar = ({ userData, onLogout }) => {
     { name: "Role Management", path: "/admin/roles", icon: <MdAdminPanelSettings /> },
     { name: "System Settings", path: "/admin/settings", icon: <MdSettings /> },
   ];
-
-  const handleLogout = () => {
-    onLogout();
-    navigate('/');
-  };
 
   return (
     <div className="sidebar">
@@ -38,9 +33,9 @@ const AdminSidebar = ({ userData, onLogout }) => {
         ))}
       </ul>
       
-      {/* User profile at bottom of sidebar */}
+      {/* Profile Menu at bottom */}
       <div className="sidebar-footer">
-        <SidebarUserProfile userData={userData} onLogout={handleLogout} />
+        <AdminProfileMenu userData={userData} onLogout={onLogout} />
       </div>
     </div>
   );

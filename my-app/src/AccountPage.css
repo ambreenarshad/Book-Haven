@@ -11,14 +11,14 @@
     margin-bottom: 1.5rem;
   }
   
-  .profile-pic-wrapper {
+  .profile-pic-wrapper-user {
     position: relative;
     width: 128px;
     height: 128px;
     margin: 0 auto;
   }
   
-  .profile-image {
+  .profile-image-user {
     width: 100%;
     height: 100%;
     object-fit: cover;

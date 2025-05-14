@@ -224,9 +224,9 @@ const AccountPage = ({ userData, onLogout }) => {
     <div className="account-container">
       <h2 className="account-title">Edit Account Details</h2>
   
-      <div className="profile-pic-wrapper">
+      <div className="profile-pic-wrapper-user">
         {previewUrl ? (
-          <img src={previewUrl} alt="Profile" className="profile-image" />
+          <img src={previewUrl} alt="Profile" className="profile-image-user" />
         ) : (
           <FaUserCircle className="default-user-icon" />
         )}

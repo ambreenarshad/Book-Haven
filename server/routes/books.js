@@ -606,3 +606,38 @@ router.get('/:id/rereads', async (req, res) => {
     }
   });
 module.exports = router;
+
+
+
+router.put("/:id/genre", async (req, res) => {
+  try {
+    const { genre } = req.body
+
+    // Validate genre (no numbers allowed, consistent with frontend validation)
+    if (genre && /\d/.test(genre)) {
+      return res.status(400).json({
+        message: "Genre should not contain numbers",
+        error: "Invalid genre format",
+      })
+    }
+
+    const updatedBook = await Book.findOneAndUpdate(
+      { bookid: req.params.id },
+      { genre: genre || "" }, // Allow empty string to clear genre
+      { new: true },
+    )
+
+    if (!updatedBook) {
+      return res.status(404).json({ message: "Book not found" })
+    }
+
+    res.json({
+      message: "Genre updated successfully!",
+      book: updatedBook,
+      genre: updatedBook.genre,
+    })
+  } catch (error) {
+    console.error("Error updating genre:", error)
+    res.status(500).json({ message: "Error updating book genre", error })
+  }
+})

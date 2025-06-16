@@ -1,3 +1,4 @@
+
 /* Light Mode (Default) */
 :root {
   --background: #ffffff;
@@ -1128,4 +1129,141 @@ background-color: var(--button-hover-bg);
 
 .dark .date-field strong {
   color: #bbb;
+}
+
+
+
+.no-cover-large {
+  width: 800px; /* Adjusted width */
+  height: 200px;
+  background-color: #f0f0f0;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #666;
+  font-family: inherit;
+}
+
+
+/* Additional CSS for genre editing functionality */
+/* Additional CSS for genre editing functionality */
+
+.genre-section {
+  margin: 0; /* Remove extra margin to match other fields */
+}
+
+.genre-section p {
+  margin: 0; /* Ensure no extra margin on the paragraph */
+  font-size: 16px;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Consistent gap between label and value/edit button */
+}
+
+.genre-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0; /* Remove any left margin */
+}
+
+.edit-genre-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+  color: var(--foreground);
+}
+
+.edit-genre-button:hover {
+  background-color: var(--card-bg);
+}
+
+.edit-icon-small {
+  font-size: 14px;
+}
+
+.genre-edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 0; /* Remove left margin to align properly */
+  width: 100%;
+}
+
+.genre-input {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: var(--input-bg);
+  color: var(--foreground);
+  min-width: 200px;
+}
+
+.genre-input:focus {
+  border-color: var(--input-focus-border);
+  outline: none;
+}
+
+.genre-input.input-error {
+  border-color: #dc3545;
+}
+
+.genre-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.save-genre-button,
+.cancel-genre-button {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-genre-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+.save-genre-button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.cancel-genre-button {
+  background-color: var(--card-bg);
+  color: var(--foreground);
+  border: 1px solid var(--border-color);
+}
+
+.cancel-genre-button:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-text);
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-left: 8px;
+}
+
+/* Dark mode adjustments */
+.dark .edit-genre-button {
+  color: var(--foreground);
+}
+
+.dark .edit-genre-button:hover {
+  background-color: var(--card-bg);
 }

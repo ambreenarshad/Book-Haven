@@ -1,3 +1,4 @@
+
 .all-books {
     padding: 2rem;
     text-align: center;
@@ -371,7 +372,7 @@
 /* Mobile screens */
 @media (max-width: 480px) {
     .book-list {
-        grid-template-columns: 1fr; /* Single column */
+        grid-template-columns: 1fr; 
         gap: 15px;
     }
     

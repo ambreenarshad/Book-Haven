@@ -641,3 +641,25 @@ router.put("/:id/genre", async (req, res) => {
     res.status(500).json({ message: "Error updating book genre", error })
   }
 })
+
+
+router.delete("/:id/remove-cover", async (req, res) => {
+    try {
+        const bookId = req.params.id;
+
+        const updated = await Book.findOneAndUpdate(
+            { bookid: bookId },
+            { cover_image: null },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        res.json({ message: "Cover removed successfully" });
+    } catch (err) {
+        console.error("Remove cover error:", err);
+        res.status(500).json({ message: "Cover removal failed" });
+    }
+});

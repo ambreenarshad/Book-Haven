@@ -1,4 +1,3 @@
-
 /* Light Mode (Default) */
 :root {
   --background: #ffffff;
@@ -80,9 +79,8 @@
   padding: 20px;
   width: 100%;
 }
-.Book-Segment{
+.Book-Segment {
   width: 100%;
-  
 }
 
 .book-cover-large {
@@ -203,7 +201,7 @@
 }
 
 .dark .tag-pill {
-color:#000000;
+  color: #000000;
 }
 
 /* Tab Navigation */
@@ -300,9 +298,8 @@ color:#000000;
 }
 
 .re-read-button:hover {
-    background: var(--button-hover-bg);
-} 
-
+  background: var(--button-hover-bg);
+}
 
 .reread-content {
   color: black;
@@ -315,7 +312,7 @@ color:#000000;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-   width: 90%;  /* <-- remove this */
+  width: 100%; /* Adjusted width */
   max-width: 210px; /* optional, or remove if not needed */
   margin: 1px;
   display: inline-block; /* change from block to inline-block */
@@ -363,7 +360,6 @@ color:#000000;
   font-family: inherit;
 }
 
-
 .quote-form-bottom {
   display: flex;
   justify-content: flex-end;
@@ -381,7 +377,7 @@ color:#000000;
 }
 
 .add-quote-button:hover {
-  background:#333;
+  background: #333;
 }
 
 .add-quote-button:disabled {
@@ -410,7 +406,7 @@ color:#000000;
   line-height: 1.5;
   margin-bottom: 8px;
   font-style: italic;
-  color:#000000;
+  color: #000000;
 }
 
 .quote-date {
@@ -441,7 +437,8 @@ color:#000000;
   padding: 20px 0;
 }
 
-.quote-loading, .quotes-error {
+.quote-loading,
+.quotes-error {
   text-align: center;
   padding: 20px;
   color: #666;
@@ -453,138 +450,214 @@ color:#000000;
 
 /* Cover with edit button */
 .cover-with-edit {
-position: relative;
-display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .edit-cover-button {
-position: absolute;
-top: 10px;
-right: 10px;
-background: white;
-color: black;
-border-radius: 50%;
-width: 25px;
-height: 25px;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: all 0.2s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  color: black;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
 }
 
 .edit-cover-button:hover {
-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .edit-icon {
-font-size: 16px;
+  font-size: 16px;
 }
+
+/* Cover options dropdown - FIXED VERSION */
+.cover-options-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 140px;
+  overflow: hidden; /* This prevents content from overflowing */
+}
+
+.dark .cover-options-dropdown {
+position: absolute;
+  top: 40px;
+  right: 10px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 140px;
+  overflow: hidden;
+}
+
+.dropdown-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  border: none; /* Remove any default borders */
+  width: 100%; /* Ensure full width */
+  text-align: left; /* Align text to left */
+  display: block; /* Make it block level */
+  position: relative; /* For proper positioning */
+}
+
+.dropdown-option:hover {
+  background-color: #f5f5f5;
+}
+
+.dark .dropdown-option:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.dropdown-option.remove {
+  color: #dc3545;
+  border-top: 1px solid #eee; /* Add a subtle divider */
+}
+
+.dark .dropdown-option.remove {
+  border-top: 1px solid #555; /* Darker divider for dark mode */
+}
+
+.dropdown-option.remove:hover {
+  background-color: #f8d7da;
+}
+
+.dark .dropdown-option.remove:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+}
+
+.dropdown-option:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdown-option:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
 /* Tags Section */
 .tags-section {
-margin-top: 10px;
-display: flex;
-flex-direction: column;
-gap: 8px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .add-tags-button {
-background: var(--button-bg);
-color: var(--button-text);
-padding: 10px 12px;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-width: 210px; /* Fixed width instead of max-width */
-margin: 1px 1px;
-display: block;
-text-align: center;
-transition: all 0.2s ease; /* Smooth transition for hover effects */
+  background: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 210px; /* Fixed width instead of max-width */
+  margin: 1px 1px;
+  display: block;
+  text-align: center;
+  transition: all 0.2s ease; /* Smooth transition for hover effects */
 }
 
 .add-tags-button:hover {
-background: var(--button-hover-bg);
+  background: var(--button-hover-bg);
 }
 
 .tag-input-container {
-display: flex;
-gap: 8px;
-margin-bottom: 10px;
-width: 210px; /* Match the button width */
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  width: 210px; /* Match the button width */
 }
 
 .tag-input {
-padding: 8px;
-border: 1px solid #ddd;
-border-radius: 4px;
-flex-grow: 1;
-min-width: 0; /* Prevents input from overflowing */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+  min-width: 0; /* Prevents input from overflowing */
 }
 
 .save-tag-button {
-background: var(--button-bg);
-color: var(--button-text);
-border: none;
-padding: 8px 12px;
-border-radius: 4px;
-cursor: pointer;
-flex-shrink: 0; /* Prevents button from shrinking */
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevents button from shrinking */
 }
 
 .save-tag-button:disabled {
-background-color: #cccccc;
-cursor: not-allowed;
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .save-tag-button:hover:not(:disabled) {
-background: var(--button-hover-bg);
+  background: var(--button-hover-bg);
 }
 
 .tag-pill {
-background-color: #e0e0e0;
-padding: 6px 12px;
-border-radius: 16px;
-font-size: 14px;
-display: flex;
-align-items: center;
-gap: 6px;
+  background-color: #e0e0e0;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .delete-tag-button {
-background: none;
-border: none;
-color: #666;
-cursor: pointer;
-font-size: 16px;
-line-height: 1;
-padding: 0;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
 }
 
 .delete-tag-button:hover {
-color: #040404;
+  color: #040404;
 }
 /* Responsive Styles */
 @media (max-width: 768px) {
   .book-container {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .book-cover-large {
-      width: 160px;
-      height: 220px;
+    width: 160px;
+    height: 220px;
   }
 
   .mybook-info {
-      text-align: center;
+    text-align: center;
   }
 }
 
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5); 
-  backdrop-filter: blur(6px); 
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -647,11 +720,9 @@ color: #040404;
   background-color: var(--button-hover-bg);
 }
 
-
 .dark .clear-lending-button:hover {
   background-color: var(--button-hover-bg);
 }
-
 
 .clear-borrowing-button:hover {
   background-color: var(--button-hover-bg);
@@ -660,7 +731,6 @@ color: #040404;
 .dark .clear-borrowing-button:hover {
   background-color: var(--button-hover-bg);
 }
-
 
 .clear-lending-button:disabled {
   background-color: #e9a8ad;
@@ -697,7 +767,7 @@ color: #040404;
   /* border: 1px solid #e0e0e0; */
   border: 1px solid #716f6f;
   border-radius: 8px;
-  background-color:  #1a1a1a; 
+  background-color: #1a1a1a;
 }
 
 /* yes */
@@ -726,10 +796,9 @@ color: #040404;
 
 /* yes */
 .lend-button:hover {
-  background-color: var(--button-hover-bg); 
+  background-color: var(--button-hover-bg);
 }
 
-  
 /* yes */
 .borrow-button {
   background-color: #ffffff;
@@ -741,8 +810,8 @@ color: #040404;
   background-color: var(--button-hover-bg);
 }
 
-  /* class in book details */
-.borrow-buttonn {    
+/* class in book details */
+.borrow-buttonn {
   background-color: #000000;
   color: rgb(255, 255, 255);
   padding: 8px 16px;
@@ -773,24 +842,24 @@ color: #040404;
 }
 
 .dark .lend-button {
-background-color: #ffffff;
-color: rgb(0, 0, 0);
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
 }
 
 /* yes */
 .dark .lend-button:hover {
-background-color: var(--button-hover-bg); 
+  background-color: var(--button-hover-bg);
 }
 
 /* yes */
 .dark .borrow-button {
-background-color: #ffffff;
-color: rgb(0, 0, 0);
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
 }
 
 /* yes */
 .dark .borrow-button:hover {
-background-color: var(--button-hover-bg);
+  background-color: var(--button-hover-bg);
 }
 
 .lending-info,
@@ -798,7 +867,6 @@ background-color: var(--button-hover-bg);
   padding: 10px;
   border-radius: 6px;
   margin-top: 5px;
-
 }
 
 .lending-info {
@@ -818,7 +886,7 @@ background-color: var(--button-hover-bg);
   background-color: rgba(251, 251, 251, 0.978);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
- 
+
 .dark .borrowing-info {
   background-color: rgba(67, 65, 65, 0.605);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -845,7 +913,6 @@ background-color: var(--button-hover-bg);
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
 }
-
 
 .clear-borrowing-button {
   background-color: rgb(0, 0, 0);
@@ -884,7 +951,6 @@ background-color: var(--button-hover-bg);
   color: white;
 }
 
-
 /* for lent out and borrowd page */
 .lending-badge,
 .borrowing-badge {
@@ -903,7 +969,7 @@ background-color: var(--button-hover-bg);
 }
 
 .borrowing-badge {
-  background-color:rgb(46, 153, 151);
+  background-color: rgb(46, 153, 151);
   color: white;
 }
 /*  */
@@ -921,11 +987,11 @@ background-color: var(--button-hover-bg);
   max-width: 400px;
   width: 100%;
   margin-left: 0; /* Remove specific margin */
-  margin-top: 0;  /* Remove specific margin */
+  margin-top: 0; /* Remove specific margin */
 }
 
 /* Ensure consistent title styling */
-.book-action-dialog h2 {        
+.book-action-dialog h2 {
   margin-top: 0;
   color: var(--foreground);
   font-size: 1.5rem;
@@ -1040,7 +1106,7 @@ background-color: var(--button-hover-bg);
 }
 
 .generate-summary-button:hover {
-  background-color:  rgb(67, 67, 67);
+  background-color: rgb(67, 67, 67);
 }
 
 .generate-summary-button:disabled {
@@ -1052,7 +1118,7 @@ background-color: var(--button-hover-bg);
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
@@ -1060,7 +1126,9 @@ background-color: var(--button-hover-bg);
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .summary-output {
@@ -1072,7 +1140,7 @@ background-color: var(--button-hover-bg);
 }
 
 .dark .summary-output {
-  color:#000;
+  color: #000;
   margin-top: 1.5rem;
   padding: 1rem;
   background-color: rgb(255, 255, 255);
@@ -1131,8 +1199,6 @@ background-color: var(--button-hover-bg);
   color: #bbb;
 }
 
-
-
 .no-cover-large {
   width: 800px; /* Adjusted width */
   height: 200px;
@@ -1147,7 +1213,6 @@ background-color: var(--button-hover-bg);
   color: #666;
   font-family: inherit;
 }
-
 
 /* Additional CSS for genre editing functionality */
 /* Additional CSS for genre editing functionality */

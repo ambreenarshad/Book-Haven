@@ -1,7 +1,6 @@
 // "use client"
 
 // import { useEffect, useState } from "react"
-// import { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs"
 // import { useParams, useNavigate } from "react-router-dom"
 // import { FaTags, FaStar, FaRegStar } from "react-icons/fa"
 // import { MdTimer } from "react-icons/md"
@@ -33,7 +32,12 @@
 //   const [isLentOut, setIsLentOut] = useState(false)
 //   const [isBorrowed, setIsBorrowed] = useState(false)
 //   const navigate = useNavigate()
-//   const [activeTab, setActiveTab] = useState('details')
+//   const [activeTab, setActiveTab] = useState("details")
+
+//   // New state for genre editing
+//   const [isEditingGenre, setIsEditingGenre] = useState(false)
+//   const [editGenre, setEditGenre] = useState("")
+//   const [genreError, setGenreError] = useState("")
 
 //   useEffect(() => {
 //     fetch(`http://localhost:8000/book/${id}`)
@@ -43,6 +47,7 @@
 //         setTags(data.tags || [])
 //         setRating(data.book.book_rating || 0)
 //         setReview(data.book.book_review || "")
+//         setEditGenre(data.book.genre || "") // Initialize edit genre
 //       })
 //       .catch((error) => console.error("Error fetching book details:", error))
 
@@ -75,22 +80,73 @@
 //     }
 //   }
 
+//   // Function to validate genre (no numbers allowed)
+//   const containsNumbers = (text) => {
+//     return /\d/.test(text)
+//   }
+
+//   // Function to handle genre edit
+//   const handleEditGenre = () => {
+//     setIsEditingGenre(true)
+//     setEditGenre(book.genre || "")
+//     setGenreError("")
+//   }
+
+//   // Function to save genre
+//   const handleSaveGenre = async () => {
+//     const trimmedGenre = editGenre.trim()
+
+//     // Validate genre
+//     if (trimmedGenre && containsNumbers(trimmedGenre)) {
+//       setGenreError("Genre should not contain numbers.")
+//       return
+//     }
+
+//     try {
+//       const response = await fetch(`http://localhost:8000/book/${id}/genre`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ genre: trimmedGenre }),
+//       })
+
+//       if (response.ok) {
+//         //const updatedData = await response.json()
+//         setBook((prev) => ({ ...prev, genre: trimmedGenre }))
+//         setIsEditingGenre(false)
+//         setGenreError("")
+//       } else {
+//         console.error("Failed to update genre")
+//         setGenreError("Failed to update genre. Please try again.")
+//       }
+//     } catch (error) {
+//       console.error("Error updating genre:", error)
+//       setGenreError("Error updating genre. Please try again.")
+//     }
+//   }
+
+//   // Function to cancel genre edit
+//   const handleCancelGenreEdit = () => {
+//     setIsEditingGenre(false)
+//     setEditGenre(book.genre || "")
+//     setGenreError("")
+//   }
+
 //   const handleAddTag = async () => {
 //     if (!newTag.trim()) return
-    
+
 //     // Validate tag contains only letters
 //     if (!/^[a-zA-Z\u00C0-\u017F'-]+$/.test(newTag.trim())) {
-//       alert("Tags can only contain letters. Numbers, spaces, and special characters are not allowed.");
-//       return;
+//       alert("Tags can only contain letters. Numbers, spaces, and special characters are not allowed.")
+//       return
 //     }
-  
+
 //     try {
 //       const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ tag: newTag.trim() }),
 //       })
-  
+
 //       if (response.ok) {
 //         setTags([...tags, { tag: newTag.trim() }])
 //         setNewTag("")
@@ -102,10 +158,10 @@
 //     }
 //   }
 //   const handleTagInputChange = (e) => {
-//     const value = e.target.value;
+//     const value = e.target.value
 //     // Only update state if the input contains only letters or is empty
-//     if (value === '' || /^[a-zA-Z\u00C0-\u017F'-]+$/.test(value)) {
-//       setNewTag(value);
+//     if (value === "" || /^[a-zA-Z\u00C0-\u017F'-]+$/.test(value)) {
+//       setNewTag(value)
 //     }
 //   }
 //   // Add this function to handle tag deletion
@@ -151,30 +207,8 @@
 //     }
 //   }
 
-//   // const handleGenerateSummary = async () => {
-//   //   setLoadingSummary(true)
-//   //   try {
-//   //     const response = await fetch("http://localhost:8000/api/summary", {
-//   //       method: "POST",
-//   //       headers: { "Content-Type": "application/json" },
-//   //       body: JSON.stringify({
-//   //         bookName: book.book_name,
-//   //         authorName: book.author_name,
-//   //       }),
-//   //     })
-
-//   //     const data = await response.json()
-//   //     setSummary(data.summary)
-//   //   } catch (err) {
-//   //     console.error("Failed to generate summary", err)
-//   //     setSummary("Failed to generate summary. Please try again.")
-//   //   } finally {
-//   //     setLoadingSummary(false)
-//   //   }
-//   // }
-
 //   const handleGenerateSummary = async () => {
-//     setLoadingSummary(true);
+//     setLoadingSummary(true)
 //     try {
 //       const response = await fetch("http://localhost:8000/api/summary", {
 //         method: "POST",
@@ -183,17 +217,17 @@
 //           bookName: book.book_name,
 //           authorName: book.author_name,
 //         }),
-//       });
-  
-//       const data = await response.json();
-//       setSummary(data.summary);
+//       })
+
+//       const data = await response.json()
+//       setSummary(data.summary)
 //     } catch (err) {
-//       console.error("Failed to generate summary", err);
-//       setSummary("Failed to generate summary. Please try again.");
+//       console.error("Failed to generate summary", err)
+//       setSummary("Failed to generate summary. Please try again.")
 //     } finally {
-//       setLoadingSummary(false);
+//       setLoadingSummary(false)
 //     }
-//   };
+//   }
 
 //   const updateReview = async () => {
 //     setIsUpdating(true)
@@ -273,59 +307,42 @@
 //       <h1 className="BookDetails-h1">{book.book_name}</h1>
 //       <div className="book-container">
 //         <div className="book-image-container">
-//           {/* <div className="cover-with-edit">
-//             <img
-//               src={book.cover_image || "https://via.placeholder.com/150"}
-//               alt={book.book_name}
-//               className="book-cover-large"
-//               onError={(e) => {
-//                 e.target.onerror = null
-//                 e.target.src = "/empty.png"
+//           <div className="cover-with-edit">
+//             {book.cover_image ? (
+//               <img
+//                 src={book.cover_image || "/placeholder.svg"}
+//                 alt={book.book_name}
+//                 className="book-cover-large"
+//                 onError={(e) => {
+//                   e.target.style.display = "none"
+//                   e.target.nextSibling.style.display = "flex"
+//                 }}
+//               />
+//             ) : null}
+
+//             <div
+//               className="no-cover-large"
+//               style={{
+//                 display: book.cover_image ? "none" : "flex",
+//                 width: "195px",
+//                 height: "300px",
+//                 backgroundColor: "#f0f0f0",
+//                 border: "2px solid #ddd",
+//                 borderRadius: "8px",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 fontSize: "3rem",
+//                 fontWeight: "bold",
+//                 color: "#666",
 //               }}
-//             />
+//             >
+//               <span>{book.book_name.charAt(0)}</span>
+//             </div>
+
 //             <label htmlFor="cover-upload" className="edit-cover-button">
 //               <MdEdit className="edit-icon" />
 //             </label>
-//           </div> */}
-//         <div className="cover-with-edit">
-//   {book.cover_image ? (
-//     <img
-//       src={book.cover_image}
-//       alt={book.book_name}
-//       className="book-cover-large"
-//       onError={(e) => {
-//         e.target.style.display = 'none';
-//         e.target.nextSibling.style.display = 'flex';
-//       }}
-//     />
-//   ) : null}
-  
-//   <div 
-//     className="no-cover-large" 
-//     style={{ 
-//       display: book.cover_image ? 'none' : 'flex',
-//       width: '195px', // Adjust to match your book-cover-large width
-//       height: '300px', 
-//       backgroundColor: '#f0f0f0',
-//       border: '2px solid #ddd',
-//       borderRadius: '8px',
-//       alignItems: 'center',
-//       justifyContent: 'center',
-//       fontSize: '3rem',
-//       fontWeight: 'bold',
-//       color: '#666',
-//       //textTransform: 'uppercase'
-//     }}
-//   >
-//     <span>{book.book_name.charAt(0)}</span>
-//   </div>
-  
-//   <label htmlFor="cover-upload" className="edit-cover-button">
-//     <MdEdit className="edit-icon" />
-//   </label>
-// </div>
-
-
+//           </div>
 
 //           {/* Log Reading Session Button */}
 //           <button onClick={handleOpenTimer} className="log-reading-button">
@@ -421,42 +438,85 @@
 //         </div>
 //         <div className="Book-Segment">
 //           <div className="tab-navigation">
-//             <input 
-//               type="button" 
-//               value="Details" 
-//               onClick={() => setActiveTab('details')} 
-//               className={activeTab === 'details' ? 'active' : ''}
+//             <input
+//               type="button"
+//               value="Details"
+//               onClick={() => setActiveTab("details")}
+//               className={activeTab === "details" ? "active" : ""}
 //             />
-//             <input 
-//               type="button" 
-//               value="Quotes" 
-//               onClick={() => setActiveTab('quotes')} 
-//               className={activeTab === 'quotes' ? 'active' : ''}
+//             <input
+//               type="button"
+//               value="Quotes"
+//               onClick={() => setActiveTab("quotes")}
+//               className={activeTab === "quotes" ? "active" : ""}
 //             />
-//             <input 
-//               type="button" 
-//               value="Reread History" 
-//               onClick={() => setActiveTab('reread')} 
-//               className={activeTab === 'reread' ? 'active' : ''}
+//             <input
+//               type="button"
+//               value="Reread History"
+//               onClick={() => setActiveTab("reread")}
+//               className={activeTab === "reread" ? "active" : ""}
 //             />
-//             <input 
-//               type="button" 
-//               value="AI Summary" 
-//               onClick={() => setActiveTab('ai')} 
-//               className={activeTab === 'ai' ? 'active' : ''}
+//             <input
+//               type="button"
+//               value="AI Summary"
+//               onClick={() => setActiveTab("ai")}
+//               className={activeTab === "ai" ? "active" : ""}
 //             />
 //           </div>
 
 //           <div className="tab-content">
-//             {activeTab === 'details' && (
+//             {activeTab === "details" && (
 //               <div className="space-y-4">
 //                 <div className="mybook-info">
 //                   <p>
 //                     <strong>Author:</strong> {book.author_name}
 //                   </p>
-//                   <p>
-//                     <strong>Genre:</strong> {book.genre}
-//                   </p>
+
+//                   {/* Editable Genre Section */}
+//                   <div className="genre-section">
+//                     <p>
+//                       <strong>Genre:</strong>
+//                       {!isEditingGenre ? (
+//                         <span className="genre-display">
+//                           {book.genre || "Not specified"}
+//                           <button onClick={handleEditGenre} className="edit-genre-button" title="Edit genre">
+//                             <MdEdit className="edit-icon-small" />
+//                           </button>
+//                         </span>
+//                       ) : (
+//                         <div className="genre-edit-container">
+//                           <input
+//                             type="text"
+//                             value={editGenre}
+//                             onChange={(e) => {
+//                               setEditGenre(e.target.value)
+//                               if (genreError) setGenreError("")
+//                             }}
+//                             placeholder="Enter genre"
+//                             className={`genre-input ${genreError ? "input-error" : ""}`}
+//                             onKeyDown={(e) => {
+//                               if (e.key === "Enter") {
+//                                 handleSaveGenre()
+//                               } else if (e.key === "Escape") {
+//                                 handleCancelGenreEdit()
+//                               }
+//                             }}
+//                             autoFocus
+//                           />
+//                           <div className="genre-buttons">
+//                             <button onClick={handleSaveGenre} className="save-genre-button">
+//                               Save
+//                             </button>
+//                             <button onClick={handleCancelGenreEdit} className="cancel-genre-button">
+//                               Cancel
+//                             </button>
+//                           </div>
+//                         </div>
+//                       )}
+//                     </p>
+//                     {genreError && <p className="error-text">{genreError}</p>}
+//                   </div>
+
 //                   <p>
 //                     <strong>Year of Publication:</strong> {book.year_of_publication}
 //                   </p>
@@ -522,50 +582,47 @@
 //                       <strong>Completed:</strong> {book.end_date}
 //                     </div>
 //                   </div>
-
-                  
 //                 </div>
 //               </div>
 //             )}
 
-//             {activeTab === 'quotes' && (
+//             {activeTab === "quotes" && (
 //               <div className="space-y-4">
 //                 <BookQuotes bookId={book.bookid} />
 //               </div>
 //             )}
 
-//             {activeTab === 'reread' && (
+//             {activeTab === "reread" && (
 //               <div className="space-y-4">
 //                 <Reread bookid={book.bookid} />
 //               </div>
 //             )}
 
-//             {activeTab === 'ai' && (
+//             {activeTab === "ai" && (
 //               <div className="space-y-4">
 //                 <div className="ai-summary-container">
 //                   <h3 className="asummary-title">AI-Generated Book Summary</h3>
 //                   <p className="summary-description">
 //                     Get an AI-generated summary of "{book.book_name}" by {book.author_name}.
-//                     {/* This summary is created using Google's Gemini AI model. */}
 //                   </p>
-                  
-//                   <button 
-//                     onClick={handleGenerateSummary} 
-//                     className="generate-summary-button" 
-//                     disabled={loadingSummary}
-//                   >
-//                     {loadingSummary ? 
-//                       <><span className="spinner"></span> Generating...</> : 
-//                       "Generate Summary"}
+
+//                   <button onClick={handleGenerateSummary} className="generate-summary-button" disabled={loadingSummary}>
+//                     {loadingSummary ? (
+//                       <>
+//                         <span className="spinner"></span> Generating...
+//                       </>
+//                     ) : (
+//                       "Generate Summary"
+//                     )}
 //                   </button>
 
 //                   {summary && (
 //                     <div className="summary-output">
 //                       <h4 className="asummary-heading">Summary:</h4>
 //                       <div className="summary-content">
-//                         {summary.split('\n').map((paragraph, idx) => (
-//                           paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />
-//                         ))}
+//                         {summary
+//                           .split("\n")
+//                           .map((paragraph, idx) => (paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />))}
 //                       </div>
 //                     </div>
 //                   )}
@@ -580,7 +637,6 @@
 // }
 
 // export default BookDetails
-
 
 "use client"
 
@@ -617,6 +673,7 @@ const BookDetails = () => {
   const [isBorrowed, setIsBorrowed] = useState(false)
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("details")
+  const [showCoverOptions, setShowCoverOptions] = useState(false)
 
   // New state for genre editing
   const [isEditingGenre, setIsEditingGenre] = useState(false)
@@ -788,6 +845,26 @@ const BookDetails = () => {
     } catch (err) {
       console.error("Upload error:", err)
       alert("Failed to upload cover image.")
+    } finally {
+      setShowCoverOptions(false)
+    }
+  }
+
+  const handleRemoveCover = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/book/${book.bookid}/remove-cover`, {
+        method: "DELETE",
+      })
+
+      if (!res.ok) throw new Error("Remove failed")
+
+      setBook((prev) => ({ ...prev, cover_image: null }))
+      alert("Cover removed successfully!")
+    } catch (err) {
+      console.error("Remove error:", err)
+      alert("Failed to remove cover image.")
+    } finally {
+      setShowCoverOptions(false)
     }
   }
 
@@ -923,9 +1000,40 @@ const BookDetails = () => {
               <span>{book.book_name.charAt(0)}</span>
             </div>
 
-            <label htmlFor="cover-upload" className="edit-cover-button">
+            <div className="edit-cover-button" onClick={() => setShowCoverOptions(!showCoverOptions)}>
               <MdEdit className="edit-icon" />
-            </label>
+            </div>
+
+            {showCoverOptions && (
+              <div className="cover-options-dropdown">
+                <div
+                  onClick={() => {
+                    document.getElementById("cover-upload").click()
+                    setShowCoverOptions(false)
+                  }}
+                  className="dropdown-option"
+                >
+                  Edit Photo
+                </div>
+                <div
+                  onClick={() => {
+                    handleRemoveCover()
+                    setShowCoverOptions(false)
+                  }}
+                  className="dropdown-option remove"
+                >
+                  Remove Photo
+                </div>
+              </div>
+            )}
+
+            <input
+              type="file"
+              accept="image/*"
+              id="cover-upload"
+              style={{ display: "none" }}
+              onChange={handleCoverUpload}
+            />
           </div>
 
           {/* Log Reading Session Button */}
@@ -955,14 +1063,6 @@ const BookDetails = () => {
               </div>
             )}
           </div>
-
-          <input
-            type="file"
-            accept="image/*"
-            id="cover-upload"
-            style={{ display: "none" }}
-            onChange={handleCoverUpload}
-          />
 
           {/* Add Tags Button and Input */}
           <div className="tags-section">
@@ -1221,3 +1321,4 @@ const BookDetails = () => {
 }
 
 export default BookDetails
+

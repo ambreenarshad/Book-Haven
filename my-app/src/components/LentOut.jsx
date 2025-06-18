@@ -43,17 +43,28 @@ const LentOut = () => {
       <div className="books-grid">
         {books.map((book) => (
           <Link to={`/book/${book.bookid}`} key={book.bookid} className="book-card">
-            <div className="book-image">
-              {book.cover_image ? (
-                <img src={book.cover_image} alt={book.title} />
-              ) : (
-                <div className="placeholder-cover">
-                  <span>{book.title.charAt(0)}</span>
+            <div className="book-cover">
+                {book.cover_image ? (
+                  <img
+                    src={book.cover_image}
+                    alt={book.book_name}
+                    className="book-cover-image"
+                    onError={(e) => {
+                      // Hide the image and show the fallback when image fails to load
+                      e.target.style.display = 'none'
+                      e.target.nextElementSibling.style.display = 'flex'
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className="no-cover" 
+                  style={{ display: book.cover_image ? 'none' : 'flex' }}
+                >
+                  <span>{book.book_name.charAt(0)}</span>
                 </div>
-              )}
-            </div>
+              </div>
             <div className="book-info">
-              <h3 className="book-title">{book.title}</h3>
+              <h3 className="book-title">{book.book_name}</h3>
               <p className="book-author">{book.author}</p>
               <div className="lending-badge">
                 Lent to: {book.lendingInfo.personName}

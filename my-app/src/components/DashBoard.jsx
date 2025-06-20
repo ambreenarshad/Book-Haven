@@ -675,16 +675,43 @@ const Dashboard = () => {
           },
           credentials: "include"
         });
-        const genreData = await genreResponse.json();
-        if (Array.isArray(genreData)) {
-          const formattedData = genreData.map((item) => ({
+        // const genreData = await genreResponse.json();
+        // if (Array.isArray(genreData)) {
+        //   const formattedData = genreData.map((item) => ({
+        //     name: item._id || "Unknown",
+        //     value: item.count || 0,
+        //   }));
+        //   setGenreData(formattedData);
+        // } else {
+        //   setGenreData([]);
+        // }
+        const genreDataRaw = await genreResponse.json();
+        if (Array.isArray(genreDataRaw)) {
+          const formattedData = genreDataRaw.map((item) => ({
             name: item._id || "Unknown",
             value: item.count || 0,
           }));
-          setGenreData(formattedData);
+
+          // Sort descending by value
+          const sorted = [...formattedData].sort((a, b) => b.value - a.value);
+
+          // Take top 5
+          const topFive = sorted.slice(0, 5);
+
+          // Sum the rest into "Others"
+          const othersValue = sorted.slice(5).reduce((sum, item) => sum + item.value, 0);
+
+          const finalData = [...topFive];
+          if (othersValue > 0) {
+            finalData.push({ name: "Others", value: othersValue });
+          }
+
+          setGenreData(finalData);
         } else {
           setGenreData([]);
         }
+
+
 
         // Fetch chart data
         const chartResponse = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`, {

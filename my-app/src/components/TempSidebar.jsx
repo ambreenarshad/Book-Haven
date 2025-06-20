@@ -3,7 +3,7 @@ import "../side.css";
 import { Link } from "react-router-dom";
 
 // Import icons from react-icons
-import { FaTrash, FaHeart } from "react-icons/fa";
+import { FaTrash, FaHeart,FaClipboardList } from "react-icons/fa";
 import { TiThumbsOk } from "react-icons/ti";
 import { 
   MdDashboard, 
@@ -13,9 +13,12 @@ import {
   MdBookmark, 
   MdShare, 
   MdDownload, 
-  MdCategory
+  MdCategory,
+  MdLibraryBooks 
 } from "react-icons/md";
 import SidebarUserProfile from "./SidebarUserProfile";
+
+
 
 const Sidebar = ({ userData, onLogout }) => {
   
@@ -27,6 +30,9 @@ const Sidebar = ({ userData, onLogout }) => {
     { name: "Currently Reading", path: "/currently-reading", icon: <MdAutoStories /> },
     { name: "Completed", path: "/completed", icon: <MdCheckCircle /> },
     { name: "Wishlist", path: "/wishlist", icon: <MdBookmark /> },
+    { name: "TBR", path: "/tbr", icon: <FaClipboardList  /> },
+    
+    // MdLibraryBooks
     { name: "Favorites", path: "/favorites", icon: <FaHeart /> },
     { name: "Lent Out", path: "/lent-out", icon: <MdShare /> },
     { name: "Borrowed", path: "/borrowed", icon: <MdDownload /> },

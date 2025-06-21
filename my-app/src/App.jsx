@@ -471,6 +471,8 @@ const App = () => {
 
   const checkSession = async () => {
     try {
+      console.log("token = = = = ", token)
+      console.log("token = = = = ", token)
       const response = await fetch("https://book-haven-or3q.onrender.com/reader/check-session", {
         credentials: "include",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }

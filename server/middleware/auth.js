@@ -17,6 +17,7 @@ const auth = (req, res, next) => {
 
   // If no token is provided, return an error
   if (!token) {
+    console.log("Token = ", token)
     return res.status(401).json({ message: "Access denied. No token provided." });
   }
 

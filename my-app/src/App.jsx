@@ -473,6 +473,7 @@ const App = () => {
     try {
       const response = await fetch("https://book-haven-or3q.onrender.com/reader/check-session", {
         credentials: "include",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
       })
 
       if (response.ok) {

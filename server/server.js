@@ -116,7 +116,7 @@ app.use(
 app.options(
   "*",
   cors({
-    origin: ["http://localhost:3000", 'https://book-haven-app-azure.vercel.app'],
+    origin: ["http://localhost:3000", 'https://book-haven-app-azure.vercel.app','https://book-haven-psi.vercel.app' ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],

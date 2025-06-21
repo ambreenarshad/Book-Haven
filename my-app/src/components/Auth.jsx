@@ -95,13 +95,13 @@ const Auth = ({ onLogin }) => {
           // Update last_login date
           await fetch(`https://book-haven-or3q.onrender.com/reader/update-last-login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.token}`, },
             credentials: "include",
             body: JSON.stringify({ reader_id: data.reader_id })
           });
           
           // Call the onLogin callback to update the app state
-          if (onLogin) onLogin(data.reader_id);
+          if (onLogin) onLogin(data.reader_id, data.token);
           
           // Redirect based on admin status
           if (data.isAdmin) {

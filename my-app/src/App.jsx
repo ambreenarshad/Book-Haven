@@ -399,13 +399,13 @@ const App = () => {
     checkAdminStatus()
   }, [navigate, token])
 
-  const handleLogin = async (readerId) => {
+  const handleLogin = async (readerId, tokenUser) => {
     try {
       const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${tokenUser}`,
         },
         credentials: "include",
       })

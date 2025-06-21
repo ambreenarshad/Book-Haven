@@ -180,7 +180,7 @@
 //     /*Check for duplicate book*/
 //     try {
 //       // First check for existing books
-//       const checkResponse = await axios.get(`http://localhost:8000/book/check`, {
+//       const checkResponse = await axios.get(`https://book-haven-or3q.onrender.com/book/check`, {
 //         params: {
 //           readerId,
 //           title: title.trim().toLowerCase(),
@@ -217,7 +217,7 @@
 //     }
   
     
-//       const response = await axios.post("http://localhost:8000/book/add", formData, {
+//       const response = await axios.post("https://book-haven-or3q.onrender.com/book/add", formData, {
 //         headers: {
 //           "Content-Type": "multipart/form-data",
 //         },
@@ -730,7 +730,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     /*Check for duplicate book*/
     try {
       // First check for existing books
-      const checkResponse = await axios.get(`http://localhost:8000/book/check`, {
+      const checkResponse = await axios.get(`https://book-haven-or3q.onrender.com/book/check`, {
         params: {
           readerId,
           title: title.trim().toLowerCase(),
@@ -767,7 +767,7 @@ const AddBookModal = ({ isOpen, closeModal, readerId }) => {
     }
   
     
-      const response = await axios.post("http://localhost:8000/book/add", formData, {
+      const response = await axios.post("https://book-haven-or3q.onrender.com/book/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

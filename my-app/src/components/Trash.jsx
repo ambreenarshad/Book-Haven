@@ -23,7 +23,7 @@ const Trash = () => {
       const readerId = sessionStorage.getItem("reader_id");
       console.log("Reader ID from session:", readerId);
       try {
-        const res = await axios.get(`http://localhost:8000/book/trash?readerid=${readerId}`);
+        const res = await axios.get(`https://book-haven-or3q.onrender.com/book/trash?readerid=${readerId}`);
         setTrashedBooks(res.data);
       } catch (err) {
         console.error("Error fetching trashed books:", err);
@@ -35,7 +35,7 @@ const Trash = () => {
   const checkDuplicate = async (bookName, authorName) => {
     try {
       const readerId = sessionStorage.getItem("reader_id");
-      const response = await axios.get(`http://localhost:8000/book/check`, {
+      const response = await axios.get(`https://book-haven-or3q.onrender.com/book/check`, {
         params: {
           readerId,
           title: bookName,
@@ -82,7 +82,7 @@ const Trash = () => {
     }
   }
     try {
-      await axios.post("http://localhost:8000/book/trash/restore", { bookIds: selectedBooks });
+      await axios.post("https://book-haven-or3q.onrender.com/book/trash/restore", { bookIds: selectedBooks });
       setTrashedBooks((prev) => prev.filter((book) => !selectedBooks.includes(book.bookId)));
       setSelectedBooks([]); // clear selection
     } catch (err) {
@@ -100,7 +100,7 @@ const Trash = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.post("http://localhost:8000/book/trash/delete", { bookIds: selectedBooks });
+      await axios.post("https://book-haven-or3q.onrender.com/book/trash/delete", { bookIds: selectedBooks });
       setTrashedBooks((prev) => prev.filter((book) => !selectedBooks.includes(book.bookId)));
       setSelectedBooks([]); // Reset selected books
     } catch (err) {

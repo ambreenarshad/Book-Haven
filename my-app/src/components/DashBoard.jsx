@@ -81,7 +81,7 @@
 //         setIsLoading(true);
         
 //         // Fetch goals
-//         const goalsResponse = await fetch(`http://localhost:8000/reading-goals/${readerId}`, {
+//         const goalsResponse = await fetch(`https://book-haven-or3q.onrender.com/reading-goals/${readerId}`, {
 //           headers: {
 //             "Authorization": `Bearer ${token}`,
 //             "Accept": "application/json"
@@ -107,7 +107,7 @@
 //         });
 
 //         // Fetch summary
-//         const summaryResponse = await fetch(`http://localhost:8000/dashboard/summary/${readerId}`, {
+//         const summaryResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/summary/${readerId}`, {
 //           headers: {
 //             "Authorization": `Bearer ${token}`,
 //             "Accept": "application/json"
@@ -122,7 +122,7 @@
 //         });
 
 //         // Fetch currently reading books
-//         const readingResponse = await fetch(`http://localhost:8000/dashboard/currently-reading/${readerId}`, {
+//         const readingResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/currently-reading/${readerId}`, {
 //           headers: {
 //             "Authorization": `Bearer ${token}`,
 //             "Accept": "application/json"
@@ -133,7 +133,7 @@
 //         setCurrentlyReadingBooks(Array.isArray(readingData) ? readingData : []);
 
 //         // Fetch genre data
-//         const genreResponse = await fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`, {
+//         const genreResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/genre-counts/${readerId}`, {
 //           headers: {
 //             "Authorization": `Bearer ${token}`,
 //             "Accept": "application/json"
@@ -152,7 +152,7 @@
 //         }
 
 //         // Fetch chart data
-//         const chartResponse = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`, {
+//         const chartResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/timer/${readerId}`, {
 //           headers: {
 //             "Authorization": `Bearer ${token}`,
 //             "Accept": "application/json"
@@ -255,7 +255,7 @@
 //         weekly_progress: updatedGoals.weekly_progress === '' ? 0 : parseInt(updatedGoals.weekly_progress, 10)
 //       };
   
-//       const url = `http://localhost:8000/reading-goals/${readerId}`;
+//       const url = `https://book-haven-or3q.onrender.com/reading-goals/${readerId}`;
 //       const response = await fetch(url, {
 //         method: "PUT",
 //         headers: { "Content-Type": "application/json",
@@ -616,7 +616,7 @@ const Dashboard = () => {
         setIsLoading(true);
         
         // Fetch goals
-        const goalsResponse = await fetch(`http://localhost:8000/reading-goals/${readerId}`, {
+        const goalsResponse = await fetch(`https://book-haven-or3q.onrender.com/reading-goals/${readerId}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Accept": "application/json"
@@ -642,7 +642,7 @@ const Dashboard = () => {
         });
 
         // Fetch summary
-        const summaryResponse = await fetch(`http://localhost:8000/dashboard/summary/${readerId}`, {
+        const summaryResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/summary/${readerId}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Accept": "application/json"
@@ -657,7 +657,7 @@ const Dashboard = () => {
         });
 
         // Fetch currently reading books
-        const readingResponse = await fetch(`http://localhost:8000/dashboard/currently-reading/${readerId}`, {
+        const readingResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/currently-reading/${readerId}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Accept": "application/json"
@@ -668,7 +668,7 @@ const Dashboard = () => {
         setCurrentlyReadingBooks(Array.isArray(readingData) ? readingData : []);
 
         // Fetch genre data
-        const genreResponse = await fetch(`http://localhost:8000/dashboard/genre-counts/${readerId}`, {
+        const genreResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/genre-counts/${readerId}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Accept": "application/json"
@@ -714,7 +714,7 @@ const Dashboard = () => {
 
 
         // Fetch chart data
-        const chartResponse = await fetch(`http://localhost:8000/dashboard/timer/${readerId}`, {
+        const chartResponse = await fetch(`https://book-haven-or3q.onrender.com/dashboard/timer/${readerId}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Accept": "application/json"
@@ -817,7 +817,7 @@ const Dashboard = () => {
         weekly_progress: updatedGoals.weekly_progress === '' ? 0 : parseInt(updatedGoals.weekly_progress, 10)
       };
   
-      const url = `http://localhost:8000/reading-goals/${readerId}`;
+      const url = `https://book-haven-or3q.onrender.com/reading-goals/${readerId}`;
       const response = await fetch(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json",

@@ -34,21 +34,21 @@
 //           return
 //         }
 
-//         const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`)
+//         const response = await axios.get(`https://book-haven-or3q.onrender.com/book?readerid=${readerId}`)
 //         let fetchedBooks = response.data.books.filter((book) => book.reading_status !== "Trash")
 
 //         // Fetch favorite status for all books
-//         const favoritesResponse = await axios.get(`http://localhost:8000/book/favorites?readerid=${readerId}`)
+//         const favoritesResponse = await axios.get(`https://book-haven-or3q.onrender.com/book/favorites?readerid=${readerId}`)
 //         const favoriteBooks = favoritesResponse.data
 //         const favoriteBookIds = favoriteBooks.map((book) => book.bookid)
 
 //         // Fetch lending status for all books
-//         const lendingResponse = await axios.get(`http://localhost:8000/lending?readerid=${readerId}&status=lent`)
+//         const lendingResponse = await axios.get(`https://book-haven-or3q.onrender.com/lending?readerid=${readerId}&status=lent`)
 //         const lentBooksData = lendingResponse.data || []
 //         const lentBookIds = lentBooksData.map((item) => item.bookId)
 
 //         // Fetch borrowing status for all books
-//         const borrowingResponse = await axios.get(`http://localhost:8000/lending?readerid=${readerId}&status=borrowed`)
+//         const borrowingResponse = await axios.get(`https://book-haven-or3q.onrender.com/lending?readerid=${readerId}&status=borrowed`)
 //         const borrowedBooksData = borrowingResponse.data || []
 //         const borrowedBookIds = borrowedBooksData.map((item) => item.bookId)
 
@@ -102,7 +102,7 @@
 
 //     try {
 //       const readerId = sessionStorage.getItem("reader_id")
-//       const response = await axios.post("http://localhost:8000/book/favorite", {
+//       const response = await axios.post("https://book-haven-or3q.onrender.com/book/favorite", {
 //         bookId: book.bookid,
 //         readerId: readerId,
 //       })
@@ -171,7 +171,7 @@
 //                   e.stopPropagation() // prevent navigation
 //                   if (window.confirm("Are you sure you want to delete this book?")) {
 //                     axios
-//                       .post("http://localhost:8000/book/trash", {
+//                       .post("https://book-haven-or3q.onrender.com/book/trash", {
 //                         bookId: book.bookid,
 //                         readerId: sessionStorage.getItem("reader_id"),
 //                       })
@@ -275,21 +275,21 @@ const AllBooks = ({ statusFilter }) => {
           return
         }
 
-        const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`)
+        const response = await axios.get(`https://book-haven-or3q.onrender.com/book?readerid=${readerId}`)
         let fetchedBooks = response.data.books.filter((book) => book.reading_status !== "Trash")
 
         // Fetch favorite status for all books
-        const favoritesResponse = await axios.get(`http://localhost:8000/book/favorites?readerid=${readerId}`)
+        const favoritesResponse = await axios.get(`https://book-haven-or3q.onrender.com/book/favorites?readerid=${readerId}`)
         const favoriteBooks = favoritesResponse.data
         const favoriteBookIds = favoriteBooks.map((book) => book.bookid)
 
         // Fetch lending status for all books
-        const lendingResponse = await axios.get(`http://localhost:8000/lending?readerid=${readerId}&status=lent`)
+        const lendingResponse = await axios.get(`https://book-haven-or3q.onrender.com/lending?readerid=${readerId}&status=lent`)
         const lentBooksData = lendingResponse.data || []
         const lentBookIds = lentBooksData.map((item) => item.bookId)
 
         // Fetch borrowing status for all books
-        const borrowingResponse = await axios.get(`http://localhost:8000/lending?readerid=${readerId}&status=borrowed`)
+        const borrowingResponse = await axios.get(`https://book-haven-or3q.onrender.com/lending?readerid=${readerId}&status=borrowed`)
         const borrowedBooksData = borrowingResponse.data || []
         const borrowedBookIds = borrowedBooksData.map((item) => item.bookId)
 
@@ -343,7 +343,7 @@ const AllBooks = ({ statusFilter }) => {
 
     try {
       const readerId = sessionStorage.getItem("reader_id")
-      const response = await axios.post("http://localhost:8000/book/favorite", {
+      const response = await axios.post("https://book-haven-or3q.onrender.com/book/favorite", {
         bookId: book.bookid,
         readerId: readerId,
       })
@@ -412,7 +412,7 @@ const AllBooks = ({ statusFilter }) => {
                   e.stopPropagation() // prevent navigation
                   if (window.confirm("Are you sure you want to delete this book?")) {
                     axios
-                      .post("http://localhost:8000/book/trash", {
+                      .post("https://book-haven-or3q.onrender.com/book/trash", {
                         bookId: book.bookid,
                         readerId: sessionStorage.getItem("reader_id"),
                       })

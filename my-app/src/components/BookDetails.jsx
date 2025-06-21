@@ -40,7 +40,7 @@
 //   const [genreError, setGenreError] = useState("")
 
 //   useEffect(() => {
-//     fetch(`http://localhost:8000/book/${id}`)
+//     fetch(`https://book-haven-or3q.onrender.com/book/${id}`)
 //       .then((res) => res.json())
 //       .then((data) => {
 //         setBook(data.book)
@@ -58,7 +58,7 @@
 
 //   const checkLendingStatus = async () => {
 //     try {
-//       const response = await axios.get(`http://localhost:8000/lending/${id}?status=lent`)
+//       const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/${id}?status=lent`)
 //       setIsLentOut(response.data && response.data.status === "lent")
 //     } catch (error) {
 //       if (error.response && error.response.status !== 404) {
@@ -70,7 +70,7 @@
 
 //   const checkBorrowingStatus = async () => {
 //     try {
-//       const response = await axios.get(`http://localhost:8000/lending/${id}?status=borrowed`)
+//       const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/${id}?status=borrowed`)
 //       setIsBorrowed(response.data && response.data.status === "borrowed")
 //     } catch (error) {
 //       if (error.response && error.response.status !== 404) {
@@ -103,7 +103,7 @@
 //     }
 
 //     try {
-//       const response = await fetch(`http://localhost:8000/book/${id}/genre`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/book/${id}/genre`, {
 //         method: "PUT",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ genre: trimmedGenre }),
@@ -141,7 +141,7 @@
 //     }
 
 //     try {
-//       const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/tags`, {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ tag: newTag.trim() }),
@@ -167,7 +167,7 @@
 //   // Add this function to handle tag deletion
 //   const handleDeleteTag = async (tagToDelete) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/tags`, {
 //         method: "DELETE",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ tag: tagToDelete }),
@@ -191,7 +191,7 @@
 //     formData.append("cover", file)
 
 //     try {
-//       const res = await fetch(`http://localhost:8000/book/${book.bookid}/upload-cover`, {
+//       const res = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/upload-cover`, {
 //         method: "POST",
 //         body: formData,
 //       })
@@ -210,7 +210,7 @@
 //   const handleGenerateSummary = async () => {
 //     setLoadingSummary(true)
 //     try {
-//       const response = await fetch("http://localhost:8000/api/summary", {
+//       const response = await fetch("https://book-haven-or3q.onrender.com/api/summary", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -232,7 +232,7 @@
 //   const updateReview = async () => {
 //     setIsUpdating(true)
 //     try {
-//       const response = await fetch(`http://localhost:8000/book/${id}`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/book/${id}`, {
 //         method: "PUT",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ book_rating: rating, book_review: review }),
@@ -252,7 +252,7 @@
 
 //   const handleReread = async () => {
 //     try {
-//       const res = await fetch(`http://localhost:8000/book/${book.bookid}/reread`, {
+//       const res = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/reread`, {
 //         method: "POST",
 //       })
 
@@ -681,7 +681,7 @@ const BookDetails = () => {
   const [genreError, setGenreError] = useState("")
 
   useEffect(() => {
-    fetch(`http://localhost:8000/book/${id}`)
+    fetch(`https://book-haven-or3q.onrender.com/book/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setBook(data.book)
@@ -699,7 +699,7 @@ const BookDetails = () => {
 
   const checkLendingStatus = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/lending/${id}?status=lent`)
+      const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/${id}?status=lent`)
       setIsLentOut(response.data && response.data.status === "lent")
     } catch (error) {
       if (error.response && error.response.status !== 404) {
@@ -711,7 +711,7 @@ const BookDetails = () => {
 
   const checkBorrowingStatus = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/lending/${id}?status=borrowed`)
+      const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/${id}?status=borrowed`)
       setIsBorrowed(response.data && response.data.status === "borrowed")
     } catch (error) {
       if (error.response && error.response.status !== 404) {
@@ -744,7 +744,7 @@ const BookDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/book/${id}/genre`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${id}/genre`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ genre: trimmedGenre }),
@@ -782,7 +782,7 @@ const BookDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tag: newTag.trim() }),
@@ -808,7 +808,7 @@ const BookDetails = () => {
   // Add this function to handle tag deletion
   const handleDeleteTag = async (tagToDelete) => {
     try {
-      const response = await fetch(`http://localhost:8000/book/${book.bookid}/tags`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/tags`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tag: tagToDelete }),
@@ -832,7 +832,7 @@ const BookDetails = () => {
     formData.append("cover", file)
 
     try {
-      const res = await fetch(`http://localhost:8000/book/${book.bookid}/upload-cover`, {
+      const res = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/upload-cover`, {
         method: "POST",
         body: formData,
       })
@@ -852,7 +852,7 @@ const BookDetails = () => {
 
   const handleRemoveCover = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/book/${book.bookid}/remove-cover`, {
+      const res = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/remove-cover`, {
         method: "DELETE",
       })
 
@@ -871,7 +871,7 @@ const BookDetails = () => {
   const handleGenerateSummary = async () => {
     setLoadingSummary(true)
     try {
-      const response = await fetch("http://localhost:8000/api/summary", {
+      const response = await fetch("https://book-haven-or3q.onrender.com/api/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -893,7 +893,7 @@ const BookDetails = () => {
   const updateReview = async () => {
     setIsUpdating(true)
     try {
-      const response = await fetch(`http://localhost:8000/book/${id}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ book_rating: rating, book_review: review }),
@@ -913,7 +913,7 @@ const BookDetails = () => {
 
   const handleReread = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/book/${book.bookid}/reread`, {
+      const res = await fetch(`https://book-haven-or3q.onrender.com/book/${book.bookid}/reread`, {
         method: "POST",
       })
 

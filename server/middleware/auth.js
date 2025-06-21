@@ -11,6 +11,8 @@ const auth = (req, res, next) => {
   }
 
   // If no session, check for token in Authorization header
+  console.log("headers = ",  req.header("Authorization"))
+  console.log("headers replaced  = ",  req.header("Authorization")?.replace("Bearer ", ""))
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
   // If no token is provided, return an error

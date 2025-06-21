@@ -15,7 +15,7 @@ export default function TBRList({ readerId }) {
   // Fetch TBR items
   const fetchTBRItems = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/tbr/${readerId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${readerId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default function TBRList({ readerId }) {
 
     setIsAdding(true)
     try {
-      const response = await fetch("http://localhost:8000/tbr", {
+      const response = await fetch("https://book-haven-or3q.onrender.com/tbr", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function TBRList({ readerId }) {
   // Toggle completion status
   const toggleCompletion = async (itemId, currentStatus) => {
     try {
-      const response = await fetch(`http://localhost:8000/tbr/${itemId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${itemId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ export default function TBRList({ readerId }) {
   // Delete TBR item
   const deleteTBRItem = async (itemId) => {
     try {
-      const response = await fetch(`http://localhost:8000/tbr/${itemId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${itemId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

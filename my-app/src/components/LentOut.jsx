@@ -20,7 +20,7 @@ const LentOut = () => {
           return
         }
         
-        const response = await axios.get(`http://localhost:8000/lending/lent-out?readerid=${readerId}`)
+        const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/lent-out?readerid=${readerId}`)
         setBooks(response.data)
         setLoading(false)
       } catch (err) {

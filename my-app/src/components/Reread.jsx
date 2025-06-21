@@ -8,7 +8,7 @@ const Reread = ({ bookid }) => {
   useEffect(() => {
     const fetchRereadHistory = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/book/${bookid}/rereads`);
+        const res = await fetch(`https://book-haven-or3q.onrender.com/book/${bookid}/rereads`);
         const data = await res.json();
         setRereadHistory(data);
       } catch (err) {

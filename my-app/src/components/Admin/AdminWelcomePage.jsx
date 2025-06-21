@@ -45,7 +45,7 @@ const AdminWelcomePage = () => {
       setIsLoading(true);
       
       // Fetch dashboard data
-      const dashboardResponse = await fetch('http://localhost:8000/admin/dashboard', {
+      const dashboardResponse = await fetch('https://book-haven-or3q.onrender.com/admin/dashboard', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -72,7 +72,7 @@ const AdminWelcomePage = () => {
 
   const checkSystemStatus = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/system-status', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/admin/system-status', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'

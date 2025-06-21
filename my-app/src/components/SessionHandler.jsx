@@ -12,7 +12,7 @@ const SessionHandler = ({ userData, onLogout }) => {
     const controller = new AbortController();
     const checkSession = async () => {
       try {
-        const response = await fetch('http://localhost:8000/reader/check-session', {
+        const response = await fetch('https://book-haven-or3q.onrender.com/reader/check-session', {
           credentials: 'include',
           signal: controller.signal
         });

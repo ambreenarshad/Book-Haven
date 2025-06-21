@@ -68,7 +68,7 @@ const AdminProfileMenu = ({ userData, onLogout }) => {
     formData.append("readerId", reader.reader_id);
 
     try {
-      const response = await fetch('http://localhost:8000/profile-pic/upload-profile', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/profile-pic/upload-profile', {
         method: 'POST',
         body: formData,
         credentials: 'include'
@@ -108,7 +108,7 @@ const AdminProfileMenu = ({ userData, onLogout }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/profile-pic/update-password', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/profile-pic/update-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const AdminProfileMenu = ({ userData, onLogout }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/profile-pic/delete-account', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/profile-pic/delete-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

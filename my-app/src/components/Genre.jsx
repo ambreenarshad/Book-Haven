@@ -20,7 +20,7 @@ const Genre = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8000/book?readerid=${readerId}`);
+        const response = await axios.get(`https://book-haven-or3q.onrender.com/book?readerid=${readerId}`);
         
         // Extract unique genres
         const allBooks = response.data.books.filter(book => book.reading_status !== "Trash");

@@ -20,7 +20,7 @@ const Borrowed = () => {
           return
         }
 
-        const response = await axios.get(`http://localhost:8000/lending/borrowed?readerid=${readerId}`)
+        const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/borrowed?readerid=${readerId}`)
         setBooks(response.data)
         setLoading(false)
       } catch (err) {

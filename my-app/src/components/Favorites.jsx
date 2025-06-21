@@ -32,7 +32,7 @@ const Favorites = () => {
                     return;
                 }
                 
-                const response = await axios.get(`http://localhost:8000/book/favorites?readerid=${readerId}`);
+                const response = await axios.get(`https://book-haven-or3q.onrender.com/book/favorites?readerid=${readerId}`);
                 setFavoriteBooks(response.data);
                 setFilteredBooks(response.data);
                 setLoading(false);
@@ -63,7 +63,7 @@ const Favorites = () => {
         
         try {
             const readerId = sessionStorage.getItem("reader_id");
-            await axios.post("http://localhost:8000/book/favorite", {
+            await axios.post("https://book-haven-or3q.onrender.com/book/favorite", {
                 bookId: book.bookid,
                 readerId: readerId
             });
@@ -117,7 +117,7 @@ const Favorites = () => {
                                     e.stopPropagation(); // prevent navigation
                                     if (window.confirm("Are you sure you want to delete this book?")) {
                                         const readerId = sessionStorage.getItem("reader_id");
-                                        axios.post("http://localhost:8000/book/trash", {
+                                        axios.post("https://book-haven-or3q.onrender.com/book/trash", {
                                             bookId: book.bookid,
                                             readerId: readerId
                                         })

@@ -15,7 +15,7 @@ const UserManagement = () => {
 
   const fetchReaders = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/users', { credentials: 'include' });
+      const response = await fetch('https://book-haven-or3q.onrender.com/admin/users', { credentials: 'include' });
       const data = await response.json();
       setReaders(data.users);
       setFilteredReaders(data.users);
@@ -67,7 +67,7 @@ const UserManagement = () => {
 
     try {
       for (const readerId of selectedReaders) {
-        await fetch(`http://localhost:8000/admin/delete-account`, {
+        await fetch(`https://book-haven-or3q.onrender.com/admin/delete-account`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

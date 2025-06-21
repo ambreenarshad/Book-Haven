@@ -80,14 +80,14 @@ const ReadingTimerDialog = ({ onClose, curr_book }) => {
     
         try {
             // Update book pages (already existing)
-            await fetch(`http://localhost:8000/book/${bookId}/update-pages`, {
+            await fetch(`https://book-haven-or3q.onrender.com/book/${bookId}/update-pages`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ pagesRead: Number(pagesRead) }),
             });
     
             // Save timer session
-            const timerResponse = await fetch("http://localhost:8000/timer/log", {
+            const timerResponse = await fetch("https://book-haven-or3q.onrender.com/timer/log", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

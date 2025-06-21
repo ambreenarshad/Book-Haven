@@ -27,7 +27,7 @@ const RoleManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/users', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/admin/users', {
         credentials: 'include'
       });
 
@@ -62,7 +62,7 @@ const RoleManagement = () => {
   const confirmRoleChange = async () => {
     try {
       // First verify admin password
-      const verifyResponse = await fetch('http://localhost:8000/admin/verify-password', {
+      const verifyResponse = await fetch('https://book-haven-or3q.onrender.com/admin/verify-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ const RoleManagement = () => {
       }
 
       // Update user role
-      const updateResponse = await fetch(`http://localhost:8000/admin/users/${selectedUser.reader_id}`, {
+      const updateResponse = await fetch(`https://book-haven-or3q.onrender.com/admin/users/${selectedUser.reader_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

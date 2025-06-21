@@ -121,14 +121,14 @@ const AccountPage = ({ userData, onLogout }) => {
         formData.append("readerId", reader.reader_id);
   
         const imgRes = await axios.post(
-          "http://localhost:8000/profile-pic/upload-profile",
+          "https://book-haven-or3q.onrender.com/profile-pic/upload-profile",
           formData
         );
         setPreviewUrl(imgRes.data.profilePicUrl);
       }
   
       // Save updated reader info
-      await axios.post("http://localhost:8000/profile-pic/update-reader-info", {
+      await axios.post("https://book-haven-or3q.onrender.com/profile-pic/update-reader-info", {
         readerId: reader.reader_id,
         first_name: firstName,
         last_name: lastName,
@@ -138,7 +138,7 @@ const AccountPage = ({ userData, onLogout }) => {
       // If password is set, send update request for password
       if (changePasswordMode && password) {
         try {
-          const passwordResponse = await axios.post("http://localhost:8000/profile-pic/update-password", {
+          const passwordResponse = await axios.post("https://book-haven-or3q.onrender.com/profile-pic/update-password", {
             currentPassword,
             newPassword: password,
           },
@@ -187,7 +187,7 @@ const AccountPage = ({ userData, onLogout }) => {
     if (!reader?.reader_id) return;
   
     try {
-      await axios.post("http://localhost:8000/profile-pic/remove-profile", {
+      await axios.post("https://book-haven-or3q.onrender.com/profile-pic/remove-profile", {
         readerId: reader.reader_id,
       });
   
@@ -208,7 +208,7 @@ const AccountPage = ({ userData, onLogout }) => {
     if (!confirmDelete) return;
 
     try {
-      await axios.post("http://localhost:8000/profile-pic/delete-account", {
+      await axios.post("https://book-haven-or3q.onrender.com/profile-pic/delete-account", {
         reader_id: reader.reader_id,
       });
 

@@ -16,7 +16,7 @@ const BookQuotes = ({ bookId }) => {
   const fetchQuotes = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/book/${bookId}/quotes`);
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${bookId}/quotes`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,7 +42,7 @@ const BookQuotes = ({ bookId }) => {
     try {
       setIsSubmitting(true);
       
-      const response = await fetch(`http://localhost:8000/book/${bookId}/quotes`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/${bookId}/quotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -69,7 +69,7 @@ const BookQuotes = ({ bookId }) => {
     try {
       console.log(`Attempting to delete quote with ID: ${quoteId}`);
       
-      const response = await fetch(`http://localhost:8000/book/quotes/${quoteId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/book/quotes/${quoteId}`, {
         method: "DELETE"
       });
       

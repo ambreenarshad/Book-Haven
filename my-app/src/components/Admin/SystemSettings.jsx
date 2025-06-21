@@ -15,7 +15,7 @@ const SystemSettings = () => {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/system-settings', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/admin/system-settings', {
         credentials: 'include'
       });
       const data = await response.json();
@@ -33,7 +33,7 @@ const SystemSettings = () => {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:8000/admin/system-settings', {
+      const response = await fetch('https://book-haven-or3q.onrender.com/admin/system-settings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -17,7 +17,7 @@ const LendingInfo = ({ bookId, onStatusCleared, mode = "lend" }) => {
   useEffect(() => {
     const fetchLendingInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/lending/${bookId}?status=${status}`)
+        const response = await axios.get(`https://book-haven-or3q.onrender.com/lending/${bookId}?status=${status}`)
         if (response.data && response.data.status === status) {
           setLendingData(response.data)
         } else {
@@ -43,7 +43,7 @@ const LendingInfo = ({ bookId, onStatusCleared, mode = "lend" }) => {
 
     setIsClearing(true)
     try {
-      await axios.delete(`http://localhost:8000/lending/${bookId}?status=${status}`)
+      await axios.delete(`https://book-haven-or3q.onrender.com/lending/${bookId}?status=${status}`)
       setLendingData(null)
       onStatusCleared()
     } catch (error) {

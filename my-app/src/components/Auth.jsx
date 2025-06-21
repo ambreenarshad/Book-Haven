@@ -72,7 +72,7 @@ const Auth = ({ onLogin }) => {
     const endpoint = activeTab === "login" ? "/reader/login" : "/reader/register";
   
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com${endpoint}`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -86,12 +86,14 @@ const Auth = ({ onLogin }) => {
   
       if (response.ok) {
         if (activeTab === "login") {
+
+          console.log("tokennnnn = ", data.token)
           // Only set session data on successful login
           sessionStorage.setItem("reader_id", data.reader_id);
           sessionStorage.setItem("token", data.token);
           
           // Update last_login date
-          await fetch(`http://localhost:8000/reader/update-last-login`, {
+          await fetch(`https://book-haven-or3q.onrender.com/reader/update-last-login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

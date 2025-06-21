@@ -47,7 +47,7 @@
 //       const readerId = sessionStorage.getItem("reader_id");
 //       if (readerId) {
 //         try {
-//           const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+//           const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //             method: "GET",
 //             headers: { 
 //               "Content-Type": "application/json",
@@ -83,7 +83,7 @@
 
 //   const handleLogin = async (readerId) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //         method: "GET",
 //         headers: { 
 //           "Content-Type": "application/json",
@@ -135,7 +135,7 @@
 
 //   const fetchUserData = async (readerId) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+//       const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //         method: "GET",
 //         headers: { "Content-Type": "application/json",
 //           "Authorization": `Bearer ${token}`
@@ -155,7 +155,7 @@
 
 //   const checkSession = async () => {
 //     try {
-//       const response = await fetch('http://localhost:8000/reader/check-session', {
+//       const response = await fetch('https://book-haven-or3q.onrender.com/reader/check-session', {
 //         credentials: 'include'
 //       });
 
@@ -365,7 +365,7 @@ const App = () => {
       const readerId = sessionStorage.getItem("reader_id")
       if (readerId) {
         try {
-          const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+          const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -401,7 +401,7 @@ const App = () => {
 
   const handleLogin = async (readerId) => {
     try {
-      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -453,7 +453,7 @@ const App = () => {
 
   const fetchUserData = async (readerId) => {
     try {
-      const response = await fetch(`http://localhost:8000/reader/${readerId}`, {
+      const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       })
@@ -471,7 +471,7 @@ const App = () => {
 
   const checkSession = async () => {
     try {
-      const response = await fetch("http://localhost:8000/reader/check-session", {
+      const response = await fetch("https://book-haven-or3q.onrender.com/reader/check-session", {
         credentials: "include",
       })
 

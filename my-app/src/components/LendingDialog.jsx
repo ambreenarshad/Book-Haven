@@ -43,7 +43,7 @@ const LendingDialog = ({ onClose, bookId, onLendingComplete, mode = "lend" }) =>
 
     setIsSubmitting(true)
     try {
-      await axios.post("http://localhost:8000/lending", {
+      await axios.post("https://book-haven-or3q.onrender.com/lending", {
         bookId,
         personName: personName.trim(),
         status,

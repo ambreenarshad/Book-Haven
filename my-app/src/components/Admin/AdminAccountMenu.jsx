@@ -120,7 +120,7 @@ const AdminAccountMenu = ({ userData, onLogout }) => {
         formData.append("image", image);
         formData.append("readerId", reader.reader_id);
 
-        const imgRes = await fetch("http://localhost:8000/profile-pic/upload-profile", {
+        const imgRes = await fetch("https://book-haven-or3q.onrender.com/profile-pic/upload-profile", {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -137,7 +137,7 @@ const AdminAccountMenu = ({ userData, onLogout }) => {
         setPreviewUrl(data.profilePicUrl);
       }
 
-      const infoRes = await fetch("http://localhost:8000/profile-pic/update-reader-info", {
+      const infoRes = await fetch("https://book-haven-or3q.onrender.com/profile-pic/update-reader-info", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ const AdminAccountMenu = ({ userData, onLogout }) => {
 
       if (showPasswordModal && password) {
         try {
-          const passwordResponse = await fetch("http://localhost:8000/profile-pic/update-password", {
+          const passwordResponse = await fetch("https://book-haven-or3q.onrender.com/profile-pic/update-password", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ const AdminAccountMenu = ({ userData, onLogout }) => {
     if (!reader?.reader_id) return;
 
     try {
-      const response = await fetch("http://localhost:8000/profile-pic/remove-profile", {
+      const response = await fetch("https://book-haven-or3q.onrender.com/profile-pic/remove-profile", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ const AdminAccountMenu = ({ userData, onLogout }) => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch("http://localhost:8000/profile-pic/delete-account", {
+      const response = await fetch("https://book-haven-or3q.onrender.com/profile-pic/delete-account", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

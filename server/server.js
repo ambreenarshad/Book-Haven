@@ -129,14 +129,14 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true in production with HTTPS
-      maxAge: 1000 * 60 * 60 * 24, // 24 hours (1 day)
+      secure: true,          // ✅ true for HTTPS production
+      sameSite: 'none',      // ✅ for cross-origin cookies
       httpOnly: true,
-      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24,
     },
-    name: "bookhaven.sid", // Custom session name
-  }),
-)
+    name: 'bookhaven.sid',
+  })
+);
 
 // Add session debugging middleware
 app.use((req, res, next) => {

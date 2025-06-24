@@ -11,26 +11,30 @@ const SessionHandler = ({ userData, onLogout }) => {
   
     const controller = new AbortController();
     const checkSession = async () => {
-      try {
-        const response = await fetch('https://book-haven-or3q.onrender.com/reader/check-session', {
-          credentials: 'include',
-          signal: controller.signal
-        });
-  
-        if (!response.ok) {
-          sessionStorage.clear(); 
-          alert('Your session has expired. Please log in again.');
-          onLogout();
-          navigate('/');
-        }
-      } catch (error) {
-        console.error('Session check failed:', error);
-        sessionStorage.clear();
-        alert('Session error. Please log in again.');
-        onLogout();
-        navigate('/');
-      }
-    };
+  try {
+    const token = sessionStorage.getItem("token"); // wherever you store your token
+    const response = await fetch('https://book-haven-or3q.onrender.com/reader/check-session', {
+      credentials: 'include',
+      signal: controller.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      sessionStorage.clear();
+      alert('Your session has expired. Please log in again.');
+      onLogout();
+      navigate('/');
+    }
+  } catch (error) {
+    console.error('Session check failed:', error);
+    sessionStorage.clear();
+    alert('Session error. Please log in again.');
+    onLogout();
+    navigate('/');
+  }
+};
   
     const interval = setInterval(checkSession, 30000);
   

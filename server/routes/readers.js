@@ -6,9 +6,10 @@ const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const router = express.Router();
 const SystemSettings = require('../models/SystemSettings');
+const sessionAuth = require("../middleware/sessionAuth");
 
 // Test endpoint to check session status - MUST BE BEFORE /:id route
-router.get("/check-session", auth, (req, res) => {
+router.get("/check-session", auth,sessionAuth, (req, res) => {
   res.json({
     sessionExists: !!req.session,
     sessionId: req.sessionID,

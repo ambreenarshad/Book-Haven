@@ -1,7 +1,7 @@
  .dashboard-container {
   padding: 20px;
   width: 100%;
-  max-width: 1800px;
+  max-width: 100%;
   margin: 0 auto; 
   box-sizing: border-box;
 }
@@ -265,8 +265,8 @@ span {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   margin-bottom: 20px;
-  height: 350px;
-  max-height: 350px; 
+  height: 60vw;
+  max-height: 400px; 
   position: relative;
   overflow: hidden; 
   flex-wrap: wrap;
@@ -275,10 +275,12 @@ span {
   overflow-x: hidden;
 }
 
-.chart-container canvas {
-  max-height: 280px; 
+.chart-container canvas,
+.genre-chart-container canvas {
   width: 100% !important;
   height: auto !important;
+  max-width: 100%;
+  display: block;
 }
 
 .chart-container h3 {
@@ -374,7 +376,7 @@ span {
 
 .genre-chart-container {
   flex: 1;
-  min-width: 280px;
+  min-width: 100px;
   background-color: #f9f9f9;
   border-radius: 10px;
   padding: 20px;
@@ -623,12 +625,23 @@ span {
   .chart-container {
     height: 250px; 
     max-height: 250px;
+    min-width: 80%;
     padding: 10px;
   }
-  
-  .chart-container canvas {
-    max-height: 180px;
+  .genre-chart-container{
+     height: 250px; 
+    max-height: 250px;
+    min-width: 80%;
+    padding: 10px;
+
   }
+  .chart-container,
+.genre-chart-container {
+  height: auto !important;
+  max-height: none !important;
+  padding: 5px;
+  aspect-ratio: auto;
+}
   
   .chart-container h3 {
     font-size: 16px;
@@ -637,7 +650,12 @@ span {
   .dashboard-heading {
     font-size: 22px;
   }
-  
+  .currently-reading-container{
+     height: 250px; 
+    max-height: 250px;
+    min-width: 80%;
+    padding: 10px;
+  }
   .ReadingGoals-h2, .summary-heading, .chart-heading, .currently-reading-heading {
     font-size: 16px;
   }

@@ -215,10 +215,10 @@
   }
   @media (max-width: 768px) {
      .content {
-    margin-left: 70px; /* Match reduced sidebar */
+    margin-left: 40px; /* Match reduced sidebar */
   }
   .sidebar {
-    width: 70px; /* Narrower sidebar for mobile */
+    width: 40px; /* Narrower sidebar for mobile */
     padding: 1rem 0.5rem;
 
   }

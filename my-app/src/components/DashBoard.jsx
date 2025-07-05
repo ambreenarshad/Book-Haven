@@ -971,7 +971,7 @@ const Dashboard = () => {
                       data={genreData}
                       dataKey="value"
                       nameKey="name"
-                      outerRadius={90}
+                      outerRadius={60}
                       className="genre-pie-chart"
                       label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                     >

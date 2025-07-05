@@ -497,15 +497,16 @@ const App = () => {
       setTheme(storedTheme)
       document.documentElement.classList.toggle("dark", storedTheme === "dark")
 
-      const readerId = await checkSession()
+      // const readerId = await checkSession()
       const storedReaderId = sessionStorage.getItem("reader_id")
 
-      if (readerId) {
-        setCurrentReaderId(readerId)
-        await fetchUserData(readerId)
-        setIsAuthenticated(true)
-        setShowMainContent(true)
-      } else if (storedReaderId) {
+      // if (readerId) {
+      //   setCurrentReaderId(readerId)
+      //   await fetchUserData(readerId)
+      //   setIsAuthenticated(true)
+      //   setShowMainContent(true)
+      // } else
+      if (storedReaderId) {
         setCurrentReaderId(storedReaderId)
         await fetchUserData(storedReaderId)
         setIsAuthenticated(true)

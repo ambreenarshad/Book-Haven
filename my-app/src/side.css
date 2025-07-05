@@ -86,13 +86,14 @@
 }
 
 .sidebar-footer {
-    position: absolute; /* Position absolutely */
-    bottom: 30px; /* At the bottom */
-    left: 0;
-    right: 0; /* Stretch across sidebar */
-    padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: inherit; /* Match sidebar background */
+   position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 230px; /* Match the sidebar width */
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--sidebar-bg);
+  z-index: 1000;
   }
   
   .sidebar-user-profile {
@@ -242,7 +243,8 @@
   }
 
   .sidebar-footer {
-    padding: 0.5rem;
+    width: 40px;
+  padding: 0.5rem;
   }
 
   .user-info {

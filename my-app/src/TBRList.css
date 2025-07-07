@@ -153,3 +153,19 @@
 .tbr-delete-button:hover {
   background-color: #fef2f2;
 }
+/* Responsive fix for mobile screens */
+@media (max-width: 600px) {
+  .tbr-form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tbr-input {
+    width: 90%;
+    min-width: 0;
+  }
+
+  .tbr-add-button {
+    width: 100%;
+  }
+}

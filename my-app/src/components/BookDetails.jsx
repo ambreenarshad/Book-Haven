@@ -23,8 +23,6 @@ const BookDetails = () => {
   const [isUpdating, setIsUpdating] = useState(false)
   const [isTimerOpen, setIsTimerOpen] = useState(false)
   const [tags, setTags] = useState([])
-  const [summary, setSummary] = useState("")
-  const [loadingSummary, setLoadingSummary] = useState(false)
   const [newTag, setNewTag] = useState("")
   const [isAddingTag, setIsAddingTag] = useState(false)
   const [isLendingOpen, setIsLendingOpen] = useState(false)
@@ -225,28 +223,6 @@ const BookDetails = () => {
       alert("Failed to remove cover image.")
     } finally {
       setShowCoverOptions(false)
-    }
-  }
-
-  const handleGenerateSummary = async () => {
-    setLoadingSummary(true)
-    try {
-      const response = await fetch("https://book-haven-or3q.onrender.com/api/summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookName: book.book_name,
-          authorName: book.author_name,
-        }),
-      })
-
-      const data = await response.json()
-      setSummary(data.summary)
-    } catch (err) {
-      console.error("Failed to generate summary", err)
-      setSummary("Failed to generate summary. Please try again.")
-    } finally {
-      setLoadingSummary(false)
     }
   }
 
@@ -500,12 +476,6 @@ const BookDetails = () => {
               onClick={() => setActiveTab("reread")}
               className={activeTab === "reread" ? "active" : ""}
             />
-            <input
-              type="button"
-              value="AI Summary"
-              onClick={() => setActiveTab("ai")}
-              className={activeTab === "ai" ? "active" : ""}
-            />
           </div>
 
           <div className="tab-content">
@@ -639,38 +609,6 @@ const BookDetails = () => {
             {activeTab === "reread" && (
               <div className="space-y-4">
                 <Reread bookid={book.bookid} />
-              </div>
-            )}
-
-            {activeTab === "ai" && (
-              <div className="space-y-4">
-                <div className="ai-summary-container">
-                  <h3 className="asummary-title">AI-Generated Book Summary</h3>
-                  <p className="summary-description">
-                    Get an AI-generated summary of "{book.book_name}" by {book.author_name}.
-                  </p>
-
-                  <button onClick={handleGenerateSummary} className="generate-summary-button" disabled={loadingSummary}>
-                    {loadingSummary ? (
-                      <>
-                        <span className="spinner"></span> Generating...
-                      </>
-                    ) : (
-                      "Generate Summary"
-                    )}
-                  </button>
-
-                  {summary && (
-                    <div className="summary-output">
-                      <h4 className="asummary-heading">Summary:</h4>
-                      <div className="summary-content">
-                        {summary
-                          .split("\n")
-                          .map((paragraph, idx) => (paragraph ? <p key={idx}>{paragraph}</p> : <br key={idx} />))}
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             )}
           </div>

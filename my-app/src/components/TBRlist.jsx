@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { IoAdd, IoTrash, IoCheckmark } from "react-icons/io5"
+import "../TBRList.css"
 
 export default function TBRList({ readerId }) {
   const [tbrItems, setTbrItems] = useState([])
@@ -12,7 +13,6 @@ export default function TBRList({ readerId }) {
 
   const token = sessionStorage.getItem("token")
 
-  // Fetch TBR items
   const fetchTBRItems = async () => {
     try {
       const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${readerId}`, {
@@ -24,7 +24,6 @@ export default function TBRList({ readerId }) {
 
       if (response.ok) {
         const data = await response.json()
-        // Sort items: uncompleted first, then completed (muted) at bottom
         const sortedItems = data.sort((a, b) => {
           if (a.isCompleted === b.isCompleted) {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -40,7 +39,6 @@ export default function TBRList({ readerId }) {
     }
   }
 
-  // Add new TBR item
   const addTBRItem = async () => {
     if (!newTitle.trim()) return
 
@@ -72,7 +70,6 @@ export default function TBRList({ readerId }) {
     }
   }
 
-  // Toggle completion status
   const toggleCompletion = async (itemId, currentStatus) => {
     try {
       const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${itemId}`, {
@@ -88,8 +85,9 @@ export default function TBRList({ readerId }) {
 
       if (response.ok) {
         setTbrItems((prev) => {
-          const updated = prev.map((item) => (item._id === itemId ? { ...item, isCompleted: !currentStatus } : item))
-          // Re-sort after status change
+          const updated = prev.map((item) =>
+            item._id === itemId ? { ...item, isCompleted: !currentStatus } : item
+          )
           return updated.sort((a, b) => {
             if (a.isCompleted === b.isCompleted) {
               return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -103,7 +101,6 @@ export default function TBRList({ readerId }) {
     }
   }
 
-  // Delete TBR item
   const deleteTBRItem = async (itemId) => {
     try {
       const response = await fetch(`https://book-haven-or3q.onrender.com/tbr/${itemId}`, {
@@ -138,56 +135,30 @@ export default function TBRList({ readerId }) {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "300px" }}>
-        <div style={{ fontSize: "18px" }}>Loading your TBR list...</div>
+      <div className="tbr-container">
+        <div>Loading your TBR list...</div>
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "24px" }}>
-      <div
-        style={{
-          backgroundColor: "var(--card-bg, #ffffff)",
-          border: "1px solid var(--border-color, #e2e8f0)",
-          borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "24px",
-            borderBottom: "1px solid var(--border-color, #e2e8f0)",
-            paddingBottom: "16px",
-          }}
-        >
-          <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>My To Be Read List</h2>
-          <div style={{ fontSize: "14px", color: "var(--text-muted, #64748b)" }}>
+    <div className="tbr-container">
+      <div className="tbr-card">
+        <div className="tbr-header">
+          <h2>My To Be Read List</h2>
+          <div className="tbr-stats">
             {uncompletedCount} pending • {completedCount} completed
           </div>
         </div>
 
-        {/* Add new item form */}
-        <div style={{ display: "flex", gap: "12px", marginBottom: "24px" }}>
+        <div className="tbr-form">
           <input
             type="text"
             placeholder="Book title..."
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyPress={handleKeyPress}
-            style={{
-              flex: 1,
-              padding: "12px",
-              border: "1px solid var(--border-color, #e2e8f0)",
-              borderRadius: "8px",
-              fontSize: "14px",
-              outline: "none",
-            }}
+            className="tbr-input"
           />
           <input
             type="text"
@@ -195,129 +166,60 @@ export default function TBRList({ readerId }) {
             value={newAuthor}
             onChange={(e) => setNewAuthor(e.target.value)}
             onKeyPress={handleKeyPress}
-            style={{
-              width: "200px",
-              padding: "12px",
-              border: "1px solid var(--border-color, #e2e8f0)",
-              borderRadius: "8px",
-              fontSize: "14px",
-              outline: "none",
-            }}
+            className="tbr-input"
           />
           <button
             onClick={addTBRItem}
             disabled={!newTitle.trim() || isAdding}
+            className="tbr-add-button"
             style={{
-              padding: "12px 16px",
               backgroundColor: !newTitle.trim() || isAdding ? "#94a3b8" : "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
               cursor: !newTitle.trim() || isAdding ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
           >
             <IoAdd size={20} />
           </button>
         </div>
 
-        {/* TBR Items List */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <div className="tbr-list">
           {tbrItems.length === 0 ? (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "48px 0",
-                color: "var(--text-muted, #64748b)",
-              }}
-            >
-              <div style={{ fontSize: "18px", marginBottom: "8px" }}>Your TBR list is empty</div>
-              <div style={{ fontSize: "14px" }}>Add your first book above to get started!</div>
+            <div className="tbr-empty">
+              <div className="tbr-empty-title">Your TBR list is empty</div>
+              <div className="tbr-empty-subtitle">Add your first book above to get started!</div>
             </div>
           ) : (
             tbrItems.map((item) => (
               <div
                 key={item._id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  border: "1px solid var(--border-color, #e2e8f0)",
-                  backgroundColor: item.isCompleted ? "var(--muted-bg, #f8fafc)" : "transparent",
-                  opacity: item.isCompleted ? 0.6 : 1,
-                  transition: "all 0.2s ease",
-                }}
+                className={`tbr-item ${item.isCompleted ? "completed" : ""}`}
               >
-                {/* Checkbox */}
                 <div
                   onClick={() => toggleCompletion(item._id, item.isCompleted)}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    border: "2px solid var(--border-color, #e2e8f0)",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    backgroundColor: item.isCompleted ? "#22c55e" : "transparent",
-                    borderColor: item.isCompleted ? "#22c55e" : "var(--border-color, #e2e8f0)",
-                  }}
+                  className={`tbr-checkbox ${item.isCompleted ? "completed" : ""}`}
                 >
                   {item.isCompleted && <IoCheckmark color="white" size={14} />}
                 </div>
 
-                {/* Book Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div
-                    style={{
-                      fontWeight: "500",
-                      textDecoration: item.isCompleted ? "line-through" : "none",
-                      color: item.isCompleted ? "var(--text-muted, #64748b)" : "inherit",
-                    }}
-                  >
+                <div className="tbr-info">
+                  <div className={`tbr-title ${item.isCompleted ? "completed" : ""}`}>
                     {item.title}
                   </div>
                   {item.author && (
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        color: "var(--text-muted, #64748b)",
-                        textDecoration: item.isCompleted ? "line-through" : "none",
-                      }}
-                    >
+                    <div className={`tbr-author ${item.isCompleted ? "completed" : ""}`}>
                       by {item.author}
                     </div>
                   )}
                 </div>
 
-                {/* Completed indicator */}
                 {item.isCompleted && (
-                  <div style={{ color: "#22c55e" }}>
+                  <div className="tbr-check-icon">
                     <IoCheckmark size={16} />
                   </div>
                 )}
 
-                {/* Delete button */}
                 <button
                   onClick={() => deleteTBRItem(item._id)}
-                  style={{
-                    padding: "8px",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    color: "#ef4444",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#fef2f2")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+                  className="tbr-delete-button"
                 >
                   <IoTrash size={16} />
                 </button>

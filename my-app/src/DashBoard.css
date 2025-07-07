@@ -273,6 +273,7 @@ span {
   width: 80%;
   box-sizing: border-box;
   overflow-x: hidden;
+  z-index: 1;
 }
 
 .chart-container canvas,

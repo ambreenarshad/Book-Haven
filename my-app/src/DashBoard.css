@@ -90,27 +90,31 @@ span {
   z-index: 1000;
   width: 90%;
   max-width: 500px;
-}
 
-.modal-content {
+  /* Move layout styles from .modal-content here */
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-sizing: border-box;
 }
 
 .modal input {
-  padding: 5px;
+  padding: 8px;
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   margin-top: 15px;
 }
 
 .modal-buttons button {
+  flex: 1;
   padding: 10px;
   border: none;
   cursor: pointer;
@@ -118,12 +122,12 @@ span {
   background-color: black;
   color: white;
   min-width: 80px;
+  transition: background-color 0.3s ease;
 }
 
 .modal-buttons button:hover {
   background-color: gray;
 }
-
 
 .dark .ReadingGoals {
   background-color: #2a2a2a;

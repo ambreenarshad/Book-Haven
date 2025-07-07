@@ -87,4 +87,71 @@
     background-color: black;
     color: white;
   }
-   
+   @media screen and (max-width: 768px) {
+  .recommendations-container-r {
+    padding: 10px;
+  }
+
+  .genre-selector-r {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .genre-selector-r button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .recommendation-item-r {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .book-image-container-r {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+
+  .book-details-r {
+    width: 100%;
+  }
+
+  .book-details-r h3 {
+    font-size: 1em;
+  }
+
+  .book-details-r p {
+    font-size: 0.9em;
+  }
+
+  .book-details-r a {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .recommendation-header-r h1 {
+    font-size: 1.4em;
+  }
+
+  .recommendation-header-r p {
+    font-size: 0.95em;
+  }
+
+  .genre-selector-r button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .book-details-r p,
+  .book-details-r h3 {
+    font-size: 0.85em;
+  }
+
+  .book-cover-r {
+    width: 90px;
+  }
+}

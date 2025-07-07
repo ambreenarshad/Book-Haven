@@ -506,55 +506,58 @@ const Dashboard = () => {
       {isEditing && (
         <>
           <div className="modal-backdrop" onClick={handleClose}></div>
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Edit Your Goals</h3>
-              <label>
-                Yearly Goal: 
-                <input 
-                  type="text" 
-                  name="yearly_goal" 
-                  value={updatedGoals.yearly_goal}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-                  onPaste={handlePaste}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </label>
-              <label>
-                Monthly Goal: 
-                <input 
-                  type="text" 
-                  name="monthly_goal" 
-                  value={updatedGoals.monthly_goal}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-                  onPaste={handlePaste}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </label>
-              <label>
-                Weekly Goal: 
-                <input 
-                  type="text" 
-                  name="weekly_goal" 
-                  value={updatedGoals.weekly_goal}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-                  onPaste={handlePaste}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </label>
 
-              <div className="modal-buttons">
-                <button onClick={handleSave}>Save</button>
-                <button onClick={handleClose}>Cancel</button>
-              </div>
+          <div className="modal">
+            <h3>Edit Your Goals</h3>
+
+            <label>
+              Yearly Goal:
+              <input 
+                type="text" 
+                name="yearly_goal" 
+                value={updatedGoals.yearly_goal}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onPaste={handlePaste}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </label>
+
+            <label>
+              Monthly Goal:
+              <input 
+                type="text" 
+                name="monthly_goal" 
+                value={updatedGoals.monthly_goal}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onPaste={handlePaste}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </label>
+
+            <label>
+              Weekly Goal:
+              <input 
+                type="text" 
+                name="weekly_goal" 
+                value={updatedGoals.weekly_goal}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onPaste={handlePaste}
+                inputMode="numeric"
+                pattern="[0-9]*"
+              />
+            </label>
+
+            <div className="modal-buttons">
+              <button onClick={handleSave}>Save</button>
+              <button onClick={handleClose}>Cancel</button>
             </div>
           </div>
+
         </>
       )}
     </div>

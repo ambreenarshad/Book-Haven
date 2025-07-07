@@ -11,7 +11,6 @@
   color: white;
   padding: 1rem 0.5rem;
   overflow-y: auto; /* Sidebar scrolls only if its own content overflows */
-  z-index: 999; /* Less than header so header sits above */
 }
 
 .sidebar h2 {

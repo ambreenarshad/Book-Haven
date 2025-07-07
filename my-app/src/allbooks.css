@@ -42,7 +42,7 @@
     overflow: hidden;  /* Prevent content overflow */
     word-wrap: break-word; /* Ensure text stays inside */
     position: relative;
-    z-index: 10;
+    z-index: -1;
     margin: 0 auto; /* Center the card */
 }
 

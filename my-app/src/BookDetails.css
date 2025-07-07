@@ -207,7 +207,7 @@
 /* Tab Navigation */
 .tab-navigation {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   margin-bottom: 16px;
   border: 1px solid #ccc;
@@ -655,13 +655,17 @@ position: absolute;
 
 .dialog-overlay {
   position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(6px);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+   backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 15px;
 }
 
 .dialog-container {
@@ -1058,61 +1062,6 @@ position: absolute;
   background-color: var(--background);
   color: var(--foreground);
 }
-.ai-summary-container {
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.asummary-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.summary-description {
-  color: #666;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.generate-summary-button {
-  background-color: #000000;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-.dark .generate-summary-button {
-  background-color: #000000;
-  color: rgb(252, 252, 252);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-.generate-summary-button:hover {
-  background-color: rgb(67, 67, 67);
-}
-
-.generate-summary-button:disabled {
-  background-color: #b3cdf0;
-  cursor: not-allowed;
-}
 
 .spinner {
   display: inline-block;
@@ -1130,35 +1079,6 @@ position: absolute;
     transform: rotate(360deg);
   }
 }
-
-.summary-output {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.358);
-}
-
-.dark .summary-output {
-  color: #000;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background-color: rgb(255, 255, 255);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.892);
-}
-
-.asummary-heading {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #333;
-}
-
-.summary-content p {
-  margin-bottom: 0.75rem;
-  line-height: 1.6;
-}
-
 .date-fields-row {
   display: flex;
   justify-content: space-between;
@@ -1331,4 +1251,238 @@ position: absolute;
 
 .dark .edit-genre-button:hover {
   background-color: var(--card-bg);
+}
+/* Mobile Responsive Fixes for Book Details */
+@media (max-width: 768px) {
+  .book-container {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .book-image-container {
+    width: 100%;
+    align-items: center;
+  }
+
+  .Book-Segment {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .mybook-info {
+    width: 100%;
+    text-align: left; /* Changed from center to left for better readability */
+    padding: 0 5px;
+  }
+
+  .mybook-info p {
+    font-size: 15px;
+    line-height: .5;
+    margin: 4px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .mybook-info strong {
+    min-width: 120px; /* Give consistent width to labels */
+    margin-right: 4px;
+  }
+
+  /* Fix genre section alignment */
+  .genre-section p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .genre-display {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Rating stars alignment */
+  .rating-container {
+    flex-wrap: wrap;
+  }
+
+  .rating-container strong {
+    width: 100%;
+    margin-bottom: -30px;
+  }
+
+  /* Review section */
+  .review-textarea {
+    width: 100%;
+    min-height: 100px;
+  }
+
+  .save-review-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* Date fields */
+  .date-fields-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .date-field {
+    text-align: left;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+  }
+
+  .date-field:last-child {
+    border-bottom: none;
+  }
+
+  /* Tags container */
+  .tag-container {
+    justify-content: flex-start;
+  }
+
+  /* Tab navigation */
+  .tab-navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-navigation input[type="button"] {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* Action buttons */
+  .log-reading-button,
+  .re-read-button,
+  .add-tags-button,
+  .lend-button,
+  .borrow-buttonn {
+    max-width: 100%;
+    margin: 5px 0;
+  }
+
+  /* Lending section */
+  .lending-borrowing-buttons {
+    flex-direction: column;
+  }
+
+  /* Cover image */
+  .book-cover-large {
+    width: 150px;
+    height: 230px;
+  }
+
+  /* Edit cover dropdown */
+  .cover-options-dropdown {
+    right: 0;
+    min-width: 160px;
+  }
+  /* Quotes Container */
+  .quotes-container {
+    padding: 15px 0;
+    gap: 15px;
+  }
+
+  /* Quote Form */
+  .quote-form {
+    width: calc(100% - 24px); /* Accounts for padding */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    padding: 12px;
+  }
+
+  .quote-form-row {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .quote-textarea {
+    width: calc(100% - 24px); /* Accounts for textarea padding */
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .quote-form-bottom {
+    width: 100%;
+    padding: 8px 0 0 0;
+  }
+
+  .add-quote-button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Quotes List */
+  .quotes-list {
+    gap: 12px;
+  }
+
+  .quote-item {
+    padding: 12px 35px 12px 12px;
+    background-color: var(--card-bg);
+    border-left-width: 3px;
+  }
+
+  .quote-text {
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--foreground);
+  }
+
+  .quote-date {
+    font-size: 11px;
+  }
+
+  .delete-quote-button {
+    top: 8px;
+    right: 8px;
+    font-size: 18px;
+  }
+
+  /* Empty State */
+  .no-quotes {
+    padding: 15px 0;
+    font-size: 14px;
+  }
+
+  /* Loading/Error States */
+  .quote-loading,
+  .quotes-error {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+/* Very small screens (under 400px) */
+@media (max-width: 400px) {
+  .mybook-info p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .mybook-info strong {
+    min-width: auto;
+    margin-right: 0;
+  }
+
+  .genre-section p {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .genre-display {
+    margin-top: 5px;
+  }
+
+  .tag-container {
+    justify-content: center;
+  }
 }

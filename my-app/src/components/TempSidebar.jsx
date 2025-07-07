@@ -42,7 +42,7 @@ const Sidebar = ({ userData, onLogout }) => {
 
   return (
     <div className="sidebar">
-      <h2>Book Collection</h2>
+      {/* <h2>Book Collection</h2> */}
       <ul>
         {categories.map((category, index) => (
           <li key={index}>

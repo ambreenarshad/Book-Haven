@@ -19,9 +19,24 @@ const Header = ({ toggleTheme, isDarkMode, openModal }) => {
         </button>
 
         {/* User Account Button */}
-        <button>
+        {/* <button>
           <AiOutlineUser />
-        </button>
+        </button> */}
+        <button
+  style={{
+    backgroundColor: 'black',
+    border: '2px solid black',
+    color: 'white',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+  }}
+>
+  {/* <AiOutlineUser /> */}
+</button>
       </div>
     </header>
   );

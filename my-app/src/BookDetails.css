@@ -1253,7 +1253,7 @@ position: absolute;
   background-color: var(--card-bg);
 }
 /* Mobile Responsive Fixes for Book Details */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .book-container {
     flex-direction: column;
     padding: 10px;
@@ -1277,34 +1277,34 @@ position: absolute;
   }
 
   .mybook-info p {
-    font-size: 15px;
-    line-height: .5;
-    margin: 4px 0;
-    display: flex;
+    font-size: 14px;
+    line-height: 1;
     flex-wrap: wrap;
     align-items: center;
   }
 
   .mybook-info strong {
     min-width: 120px; /* Give consistent width to labels */
-    margin-right: 4px;
   }
 
   /* Fix genre section alignment */
   .genre-section p {
-    display: flex;
+    font-size: 14px;
+    line-height: 1;
     flex-wrap: wrap;
     align-items: center;
   }
 
   .genre-display {
-    flex: 1;
-    min-width: 0;
+    font-size: 14px;
+    line-height: 1;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   /* Rating stars alignment */
   .rating-container {
-    flex-wrap: wrap;
+    flex-wrap:wrap;
   }
 
   .rating-container strong {
@@ -1460,29 +1460,3 @@ position: absolute;
   }
 }
 
-/* Very small screens (under 400px) */
-@media (max-width: 400px) {
-  .mybook-info p {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-  }
-
-  .mybook-info strong {
-    min-width: auto;
-    margin-right: 0;
-  }
-
-  .genre-section p {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .genre-display {
-    margin-top: 5px;
-  }
-
-  .tag-container {
-    justify-content: center;
-  }
-}

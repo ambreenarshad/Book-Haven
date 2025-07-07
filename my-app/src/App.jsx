@@ -1,14 +1,14 @@
 // "use client"
 
-// import { useState, useEffect, useCallback } from "react"
+// import { useState, useEffect } from "react"
 // import { Routes, Route, useNavigate } from "react-router-dom"
-// import { IoLibrary } from "react-icons/io5";
+// import { IoLibrary } from "react-icons/io5"
+// import TBRList from "./components/TBRlist"
 
 // import Header from "./components/Header"
 // import AddBookModal from "./components/AddBookModal"
 // import Auth from "./components/Auth"
 // import Sidebar from "./components/TempSidebar"
-// import PlaceholderPage from "./components/PlaceholderPage"
 // import AllBooks from "./components/AllBooks"
 // import BookDetails from "./components/BookDetails"
 // import Dashboard from "./components/DashBoard"
@@ -39,107 +39,105 @@
 //   const [mainContentVisible, setMainContentVisible] = useState(false)
 //   const [isInitializing, setIsInitializing] = useState(true)
 //   const [isAdmin, setIsAdmin] = useState(false)
-//   const navigate = useNavigate();
-//   const token = sessionStorage.getItem("token");
+//   const navigate = useNavigate()
+//   const token = sessionStorage.getItem("token")
 
 //   useEffect(() => {
 //     const checkAdminStatus = async () => {
-//       const readerId = sessionStorage.getItem("reader_id");
+//       const readerId = sessionStorage.getItem("reader_id")
 //       if (readerId) {
 //         try {
 //           const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //             method: "GET",
-//             headers: { 
+//             headers: {
 //               "Content-Type": "application/json",
-//               "Authorization": `Bearer ${token}`
+//               Authorization: `Bearer ${token}`,
 //             },
-//             credentials: 'include'
-//           });
+//             credentials: "include",
+//           })
 
 //           if (response.ok) {
-//             const data = await response.json();
-//             setUserData(data);
-//             setIsAdmin(data.reader.isAdmin || false);
-//             setIsAuthenticated(true);
-//             setShowMainContent(true);
-//             setMainContentVisible(true);
-            
-//             if (data.reader.isAdmin && !window.location.pathname.startsWith('/admin')) {
-//               navigate('/admin/dashboard');
+//             const data = await response.json()
+//             setUserData(data)
+//             setIsAdmin(data.reader.isAdmin || false)
+//             setIsAuthenticated(true)
+//             setShowMainContent(true)
+//             setMainContentVisible(true)
+
+//             if (data.reader.isAdmin && !window.location.pathname.startsWith("/admin")) {
+//               navigate("/admin/dashboard")
 //             }
 //           } else {
-//             handleLogout();
+//             handleLogout()
 //           }
 //         } catch (error) {
-//           console.error("Error checking admin status:", error);
-//           handleLogout();
+//           console.error("Error checking admin status:", error)
+//           handleLogout()
 //         }
 //       }
-//       setIsInitializing(false);
-//     };
+//       setIsInitializing(false)
+//     }
 
-//     checkAdminStatus();
-//   }, [navigate, token]);
+//     checkAdminStatus()
+//   }, [navigate, token])
 
-//   const handleLogin = async (readerId) => {
+//   const handleLogin = async (readerId, tokenUser) => {
 //     try {
 //       const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //         method: "GET",
-//         headers: { 
+//         headers: {
 //           "Content-Type": "application/json",
-//           "Authorization": `Bearer ${token}`
+//           Authorization: `Bearer ${tokenUser}`,
 //         },
-//         credentials: 'include'
-//       });
+//         credentials: "include",
+//       })
 
 //       if (response.ok) {
-//         const data = await response.json();
-//         setCurrentReaderId(readerId);
-//         setUserData(data);
-//         setIsAdmin(data.reader.isAdmin || false);
-//         sessionStorage.setItem("reader_id", readerId);
-//         setShowAnimation(true);
-        
+//         const data = await response.json()
+//         setCurrentReaderId(readerId)
+//         setUserData(data)
+//         setIsAdmin(data.reader.isAdmin || false)
+//         sessionStorage.setItem("reader_id", readerId)
+//         setShowAnimation(true)
+
 //         if (data.reader.isAdmin) {
-//           navigate('/admin/dashboard');
+//           navigate("/admin/dashboard")
 //         }
 //       } else {
-//         handleLogout();
+//         handleLogout()
 //       }
 //     } catch (error) {
-//       console.error("Error during login:", error);
-//       handleLogout();
+//       console.error("Error during login:", error)
+//       handleLogout()
 //     }
-//   };
-  
+//   }
+
 //   const handleAnimationComplete = () => {
-//     setShowAnimation(false);
-//     setIsAuthenticated(true);
-//     setShowMainContent(true);
+//     setShowAnimation(false)
+//     setIsAuthenticated(true)
+//     setShowMainContent(true)
 
 //     setTimeout(() => {
-//       setMainContentVisible(true);
-//     }, 100);
+//       setMainContentVisible(true)
+//     }, 100)
 //   }
 
 //   const handleLogout = () => {
-//     setIsAuthenticated(false);
-//     setCurrentReaderId(null);
-//     setUserData(null);
-//     setShowMainContent(false);
-//     setMainContentVisible(false);
-//     setShowAnimation(false);
-//     sessionStorage.clear();
-//     navigate("/");
+//     setIsAuthenticated(false)
+//     setCurrentReaderId(null)
+//     setUserData(null)
+//     setShowMainContent(false)
+//     setMainContentVisible(false)
+//     setShowAnimation(false)
+//     sessionStorage.clear()
+//     navigate("/")
 //   }
 
 //   const fetchUserData = async (readerId) => {
 //     try {
 //       const response = await fetch(`https://book-haven-or3q.onrender.com/reader/${readerId}`, {
 //         method: "GET",
-//         headers: { "Content-Type": "application/json",
-//           "Authorization": `Bearer ${token}`
-//          },
+//         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
 //       })
 
 //       if (response.ok) {
@@ -155,20 +153,23 @@
 
 //   const checkSession = async () => {
 //     try {
-//       const response = await fetch('https://book-haven-or3q.onrender.com/reader/check-session', {
-//         credentials: 'include'
-//       });
+//       console.log("token = = = = ", token)
+//       console.log("token = = = = ", token)
+//       const response = await fetch("https://book-haven-or3q.onrender.com/reader/check-session", {
+//         credentials: "include",
+//         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+//       })
 
 //       if (response.ok) {
-//         const data = await response.json();
+//         const data = await response.json()
 //         if (data.isAuthenticated && data.readerId) {
-//           return data.readerId;
+//           return data.readerId
 //         }
 //       }
-//       return null;
+//       return null
 //     } catch (error) {
-//       console.error('Session check failed:', error);
-//       return null;
+//       console.error("Session check failed:", error)
+//       return null
 //     }
 //   }
 
@@ -178,15 +179,16 @@
 //       setTheme(storedTheme)
 //       document.documentElement.classList.toggle("dark", storedTheme === "dark")
 
-//       const readerId = await checkSession()
+//       // const readerId = await checkSession()
 //       const storedReaderId = sessionStorage.getItem("reader_id")
 
-//       if (readerId) {
-//         setCurrentReaderId(readerId)
-//         await fetchUserData(readerId)
-//         setIsAuthenticated(true)
-//         setShowMainContent(true)
-//       } else if (storedReaderId) {
+//       // if (readerId) {
+//       //   setCurrentReaderId(readerId)
+//       //   await fetchUserData(readerId)
+//       //   setIsAuthenticated(true)
+//       //   setShowMainContent(true)
+//       // } else
+//       if (storedReaderId) {
 //         setCurrentReaderId(storedReaderId)
 //         await fetchUserData(storedReaderId)
 //         setIsAuthenticated(true)
@@ -232,8 +234,11 @@
 //             </main>
 //           </div>
 //         ) : (
-//           showMainContent && !showAnimation && (
-//             <div className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}>
+//           showMainContent &&
+//           !showAnimation && (
+//             <div
+//               className={`app-container flex transition-opacity duration-1000 ease-in-out ${mainContentVisible ? "opacity-100" : "opacity-0"}`}
+//             >
 //               {isAdmin ? (
 //                 <AdminSidebar userData={userData} onLogout={handleLogout} />
 //               ) : (
@@ -241,10 +246,7 @@
 //               )}
 //               <div className="content flex-grow">
 //                 {isAdmin ? (
-//                   <AdminHeader
-//                     toggleTheme={toggleTheme}
-//                     isDarkMode={theme === "dark"}
-//                   />
+//                   <AdminHeader toggleTheme={toggleTheme} isDarkMode={theme === "dark"} />
 //                 ) : (
 //                   <Header
 //                     toggleTheme={toggleTheme}
@@ -272,7 +274,7 @@
 //                       <Route path="/currently-reading" element={<AllBooks statusFilter="Reading" />} />
 //                       <Route path="/completed" element={<AllBooks statusFilter="Completed" />} />
 //                       <Route path="/wishlist" element={<AllBooks statusFilter="To Read" />} />
-//                       <Route path="/tbr" element={<AllBooks statusFilter="To be Read" />} />
+//                       <Route path="/tbr" element={<TBRList readerId={currentReaderId} />} />
 //                       <Route path="/lent-out" element={<LentOut />} />
 //                       <Route path="/borrowed" element={<Borrowed />} />
 //                       <Route path="/genre" element={<Genre />} />
@@ -303,8 +305,7 @@
 //   <header className="gheader">
 //     <div className="container">
 //       <a href="/" className="logo">
-
-//        <IoLibrary style={{ marginBottom: '-2px'}}/> BookHaven
+//         <IoLibrary style={{ marginBottom: "-2px" }} /> BookHaven
 //       </a>
 //       <div className="theme-toggle-container">
 //         <button onClick={toggleTheme} className="theme-toggle">
@@ -316,6 +317,8 @@
 // )
 
 // export default App
+
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -338,7 +341,7 @@ import Recommendations from "./components/Recommendations"
 import LentOut from "./components/LentOut"
 import Borrowed from "./components/Borrowed"
 import AccountPage from "./components/AccountPage"
-import SessionHandler from "./components/SessionHandler"
+// import SessionHandler from "./components/SessionHandler"
 import AdminSidebar from "./components/Admin/AdminSidebar"
 import AdminHeader from "./components/Admin/AdminHeader"
 import AdminWelcomePage from "./components/Admin/AdminWelcomePage"
@@ -535,7 +538,7 @@ const App = () => {
     <>
       <div className={theme === "dark" ? "bg-gray-900 text-white min-h-screen" : "bg-white text-black min-h-screen"}>
         {showAnimation && <BookAnimation onAnimationComplete={handleAnimationComplete} />}
-        <SessionHandler userData={userData} onLogout={handleLogout} />
+        {/* <SessionHandler userData={userData} onLogout={handleLogout} /> */}
         {!isInitializing && !isAuthenticated && !showAnimation ? (
           <div className="app">
             <SiteHeader toggleTheme={toggleTheme} theme={theme} />

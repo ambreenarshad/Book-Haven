@@ -3,6 +3,7 @@
     max-width: 400px;
     margin: 0 auto;
     text-align: center;
+    margin-top: -40px;
   }
   
   .account-title {
@@ -220,4 +221,13 @@
     gap: 8px;
     margin-top: 16px; 
   }
-  
+  @media (max-width: 600px) {
+  .account-container {
+    margin: 0 auto;            /* center horizontally */
+    padding: 16px;
+    text-align: center;
+    margin-top: -40px;
+    align-items: center;          /* Center horizontally */
+    transform: translateX(-3%);   /* Slight shift to the left */
+  }
+}

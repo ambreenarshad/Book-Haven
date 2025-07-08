@@ -1,13 +1,27 @@
-
 .recommendation-header-r{
     position: relative;
     margin-left: 1px;
 }
-.fetched-books-r{
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
+.recommendations-container-r {
+  display: flex;
+  flex-direction: column;
+  align-items:flex-start;
+  justify-content: flex-start; /* You can change to center if you want vertical centering */
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-top: -35px;
 }
+.fetched-books-r {
+  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .genre-selector-r {
     display: flex;
     flex-wrap: wrap;
@@ -90,6 +104,7 @@
    @media screen and (max-width: 768px) {
   .recommendations-container-r {
     padding: 10px;
+    margin-top: -35px;
   }
 
   .genre-selector-r {
@@ -98,8 +113,8 @@
   }
 
   .genre-selector-r button {
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 6px 10px;
+    font-size: 12px;
   }
 
   .recommendation-item-r {
@@ -117,12 +132,9 @@
     width: 100%;
   }
 
+ .book-details-r p,
   .book-details-r h3 {
-    font-size: 1em;
-  }
-
-  .book-details-r p {
-    font-size: 0.9em;
+    font-size: 0.85em;
   }
 
   .book-details-r a {
@@ -130,27 +142,19 @@
     margin-top: 8px;
     font-size: 0.9em;
   }
+  .recommendation-list-r {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 85%;
 }
-
-@media screen and (max-width: 480px) {
-  .recommendation-header-r h1 {
+.recommendation-header-r h1 {
     font-size: 1.4em;
   }
 
   .recommendation-header-r p {
     font-size: 0.95em;
   }
-
-  .genre-selector-r button {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .book-details-r p,
-  .book-details-r h3 {
-    font-size: 0.85em;
-  }
-
   .book-cover-r {
     width: 90px;
   }

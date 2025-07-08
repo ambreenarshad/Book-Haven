@@ -510,44 +510,6 @@ body {
   }
 }
 
-
-
-/* @media (max-width: 600px) {
-  .header {
-    padding: 0.25rem 1rem; 
-    flex-wrap: nowrap !important;
-    min-height: 50px;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-  }
-
-  .header-title {
-    font-size: 1.1rem;  
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    min-width: 0;
-    max-width: calc(100% - 120px); 
-  }
-
-  .header-buttons {
-    flex-shrink: 0;
-    gap: 0.3rem;
-    display: flex;
-    align-items: center;
-  }
-
-  .header-buttons button {
-    font-size: 1.1rem;
-    flex-shrink: 0;
-    min-width: 35px;
-    padding: 5px;
-  }
-} */
-
-
 /* Add this to your main.css file */
 
 /* Mobile header adjustments */

@@ -22,7 +22,7 @@ const Header = ({ toggleTheme, isDarkMode, openModal }) => {
         {/* <button>
           <AiOutlineUser />
         </button> */}
-        <button
+        {/* <button
   style={{
     backgroundColor: 'black',
     border: '2px solid black',
@@ -35,6 +35,10 @@ const Header = ({ toggleTheme, isDarkMode, openModal }) => {
     cursor: 'pointer',
   }}
 >
+
+</button> */}
+
+<button className="dynamic-btn">
   {/* <AiOutlineUser /> */}
 </button>
       </div>

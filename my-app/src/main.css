@@ -537,3 +537,21 @@ body {
     padding: 5px;
   }
 }
+
+
+.dynamic-btn {
+  background-color: #000;   /* light mode default */
+  border: 2px solid #000;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dark .dynamic-btn {
+  background-color: #333;   /* dark mode */
+  border-color: #333;
+}

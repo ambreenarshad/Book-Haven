@@ -324,10 +324,6 @@ html, body {
 }
 
 @media screen and (max-width: 480px) {
-  .header {
-    flex-direction: column;
-    padding: 0.5rem;
-  }
   
   .gheader .container {
     flex-direction: row;

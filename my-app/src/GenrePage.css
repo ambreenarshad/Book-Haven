@@ -70,8 +70,11 @@ Genre Page Styles
   .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 13.5px;
-    justify-content:center;}
+    /* gap: 13.5px; */
+    gap:30px;
+    justify-content:center;
+    padding: 10px;
+  }
   
   .book-card {
     background-color: var(--card-bg);
@@ -84,6 +87,7 @@ Genre Page Styles
     flex-direction: column;
     height: 100%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
     /* border: 2px solid #a4a2a2; */
   }
   
@@ -151,7 +155,7 @@ Genre Page Styles
   }
   
   
-  @media (min-width: 768px) {
+  /* @media (min-width: 768px) {
     .genre-content {
       flex-direction: row;
       align-items: flex-start;
@@ -167,7 +171,110 @@ Genre Page Styles
       flex: 1;
       margin-top: 0;
     }
-  }
+  } */
+
+@media (max-width: 768px) {
+    .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px; /* Good gap for tablet view */
+        padding: 10px;
+    }
+    
+    .genre-container {
+        padding: 1.5rem;
+    }
+    
+    .genre-list {
+        gap: 1.2rem; /* Slightly reduced gap for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px; /* Decent gap for small screens */
+        padding: 10px;
+    }
+    
+    .genre-container {
+        padding: 1rem;
+    }
+    
+    .genre-list {
+        gap: 1rem; /* Further reduced gap for mobile */
+        padding: 0.25rem;
+    }
+    
+    .genre-card {
+        margin: 0.15rem; /* Reduce margin on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .books-grid {
+        grid-template-columns: 1fr; /* Single column for very small screens */
+        gap: 25px; /* INCREASED gap for better mobile spacing */
+        padding: 15px; /* Increased padding for better mobile experience */
+        justify-items: center;
+    }
+    
+    .book-card {
+        width: 100%;
+        max-width: 280px; /* Slightly larger max-width for mobile */
+        margin-bottom: 15px; /* Increased fallback margin */
+    }
+    
+    .genre-container {
+        padding: 0.8rem;
+    }
+    
+    .genre-list {
+        gap: 0.8rem; /* Smaller gap for very small screens */
+        padding: 0.2rem;
+    }
+    
+    .genre-card {
+        margin: 0.1rem; /* Minimal margin on very small screens */
+        min-width: 140px; /* Slightly smaller min-width for mobile */
+    }
+}
+
+/* Alternative mobile approach - use this if the above doesn't work well */
+@media (max-width: 480px) {
+    .books-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        align-items: center;
+        padding: 15px;
+    }
+    
+    .book-card {
+        width: 100%;
+        max-width: 280px;
+        flex-shrink: 0;
+        margin-bottom: 10px; /* Additional spacing */
+    }
+}
+
+@media (min-width: 768px) {
+    .genre-content {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .genre-list {
+        flex-direction: column;
+        min-width: 200px;
+        max-width: 250px;
+    }
+    
+    .genre-books {
+        flex: 1;
+        margin-top: 0;
+    }
+}
+
   
   
   :root {

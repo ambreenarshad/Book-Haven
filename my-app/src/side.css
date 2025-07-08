@@ -625,6 +625,7 @@
   /* Show mobile menu button ONLY on mobile */
   .mobile-menu-button {
     display: flex !important; /* Force display on mobile */
+    margin-top: 4px;
   }
 
   /* Show overlay when menu is open */

@@ -71,7 +71,7 @@ Genre Page Styles
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     /* gap: 13.5px; */
-    gap:30px;
+    gap:55px;
     justify-content:center;
     padding: 10px;
   }

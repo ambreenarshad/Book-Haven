@@ -154,7 +154,12 @@
 /* Mobile-Specific Adjustments */
 @media (max-width: 480px) {
   .dialog-box {
-    width: 75%;
+    width: 90% !important;
+    margin-top: -55px;
+    padding: 16px !important;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
   
   .timer-buttons {

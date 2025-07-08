@@ -626,8 +626,13 @@
   .mobile-menu-button {
     display: flex !important; /* Force display on mobile */
     margin-top: 4px;
+    top: 8px;
+    left: 8px;
+    padding: 6px;
+    font-size: 0.9rem;
+    width: 32px;
+    height: 32px;
   }
-
   /* Show overlay when menu is open */
   .mobile-menu-overlay {
     display: block;
@@ -635,9 +640,8 @@
 
   /* Adjust header for mobile menu button */
   .header {
-    padding-left: 50px !important;
+    padding-left: 45px !important;
   }
-
   /* Mobile sidebar styles */
   .sidebar {
     width: 250px;
@@ -744,28 +748,6 @@
 
   .sidebar:not(.mobile-open) .sidebar-user-profile {
     display: none;
-  }
-}
-
-/* Very small screens */
-@media (max-width: 480px) {
-  .mobile-menu-button {
-    top: 8px;
-    left: 8px;
-    padding: 6px;
-    font-size: 0.9rem;
-    width: 32px;
-    height: 32px;
-  }
-
-  .header {
-    padding-left: 45px !important;
-  }
-
-  .sidebar.mobile-open .user-dropdown {
-    bottom: 70px;
-    left: 15px;
-    right: 15px;
   }
 }
 

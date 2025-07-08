@@ -112,8 +112,11 @@ body {
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  min-height: 100vh; /* Important for full screen centering */
 }
-
+html, body {
+  height: 100%;
+}
 .Welcome-h1 {
   padding-left: 9rem !important; /* Adjust the value as needed */
 }
@@ -327,23 +330,18 @@ body {
   }
   
   .gheader .container {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
   }
   
   .gheader .logo {
-    padding-left: 0 !important;
     text-align: center;
   }
   
-  .main {
-    padding: 1rem;
-    margin-top: 80px;
-  }
   
   .auth-form {
     padding: 1rem;
     max-width: 100%;
+     box-sizing: border-box;
   }
   
   .tabs button {
@@ -359,7 +357,6 @@ body {
   }
   
   .theme-toggle-container {
-    margin-right: 0;
     justify-content: center;
     margin-top: 0.5rem;
   }

@@ -554,7 +554,7 @@
 }
 
 /* Mobile Menu Button - Hidden on desktop */
-.mobile-menu-button {
+/* .mobile-menu-button {
   display: none;
   position: fixed;
   top: 15px;
@@ -568,6 +568,27 @@
   cursor: pointer;
   font-size: 1.2rem;
   transition: background-color 0.3s ease;
+} */
+
+.mobile-menu-button {
+  display: none;
+  position: fixed;
+  top: 10px; /* Reduced from 15px */
+  left: 10px; /* Reduced from 15px */
+  z-index: 10000;
+  background: var(--sidebar-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px; /* Reduced from 10px */
+  cursor: pointer;
+  font-size: 1rem; /* Reduced from 1.2rem */
+  transition: background-color 0.3s ease;
+  width: 36px; /* Fixed width */
+  height: 36px; /* Fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile-menu-button:hover {
@@ -589,27 +610,52 @@
 @media (max-width: 768px) {
   /* Show mobile menu button */
   .mobile-menu-button {
-    display: block;
+    display: flex !important; /* Force display with flex */
   }
 
-  /* Show overlay when menu is open */
-  .mobile-menu-overlay {
-    display: block;
+  /* Adjust header to accommodate mobile menu button */
+  .header {
+    padding-left: 50px !important; /* Add space for menu button */
   }
 
-  /* Content adjustment for mobile */
-  .content {
-    margin-left: 0; /* Remove left margin on mobile */
-    padding-top: 60px; /* Add top padding for the menu button */
+  .header-title {
+    margin-left: 0; /* Remove any existing margin */
   }
 
-  /* Sidebar mobile styles */
+  /* Fix sidebar height and scrolling */
   .sidebar {
-    width: 250px; /* Full width for mobile menu */
-    padding: 1rem 0.5rem;
-    transform: translateX(-100%); /* Hide sidebar by default */
+    width: 250px;
+    height: 100vh; /* Full viewport height */
+    padding: 1rem 0.5rem 0; /* Remove bottom padding */
+    transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent outer scrolling */
+  }
+
+  /* Make the main navigation scrollable */
+  .sidebar ul {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    padding-bottom: 10px; /* Small padding at bottom */
+    margin: 0;
+  }
+
+  /* Fix sidebar footer positioning */
+  .sidebar-footer {
+    position: relative !important; /* Change from fixed to relative */
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    margin-top: auto; /* Push to bottom */
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--sidebar-bg);
+    z-index: auto;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 
   /* Show sidebar when mobile menu is open */
@@ -623,27 +669,21 @@
   }
 
   .sidebar.mobile-open ul li a {
-    justify-content: flex-start; /* Align to left */
-    padding: 8px;
+    justify-content: flex-start;
+    padding: 12px 8px; /* Increase padding for better touch targets */
   }
 
   .sidebar.mobile-open ul li a .icon {
-    margin-right: 10px; /* Restore margin */
+    margin-right: 10px;
     font-size: 1.2rem;
   }
 
   .sidebar.mobile-open ul li a span.label {
-    display: inline; /* Show text */
-  }
-
-  /* Footer adjustments for mobile menu */
-  .sidebar.mobile-open .sidebar-footer {
-    width: 230px; /* Match sidebar width */
-    padding: 15px;
+    display: inline;
   }
 
   .sidebar.mobile-open .user-info {
-    display: flex; /* Show user info */
+    display: flex;
   }
 
   .sidebar.mobile-open .user-icon {
@@ -656,7 +696,134 @@
     padding: 8px;
   }
 
-  /* Dropdown positioning for mobile menu */
+  /* Fix dropdown positioning for mobile menu */
+  .sidebar.mobile-open .user-dropdown {
+    position: fixed;
+    bottom: 80px; /* Adjusted positioning */
+    left: 20px;
+    right: 20px;
+    width: auto;
+    max-width: 250px;
+    z-index: 10001;
+  }
+
+  /* Content adjustment for mobile */
+  .content {
+    margin-left: 0;
+    padding-top: 70px; /* Increased to accommodate menu button */
+  }
+
+  /* When sidebar is in icon-only mode (closed state) */
+  .sidebar:not(.mobile-open) {
+    width: 0; /* Completely hide when closed */
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .sidebar:not(.mobile-open) .sidebar-footer {
+    display: none; /* Hide footer when sidebar is closed */
+  }
+
+  /* Ensure mobile menu appears above everything */
+  .sidebar.mobile-open {
+    z-index: 9999;
+  }
+
+  /* Show overlay when menu is open */
+  .mobile-menu-overlay {
+    display: block;
+  }
+}
+
+/* Additional fix for very small screens */
+@media (max-width: 480px) {
+  .mobile-menu-button {
+    top: 8px;
+    left: 8px;
+    padding: 6px;
+    font-size: 0.9rem;
+    width: 32px;
+    height: 32px;
+  }
+
+  .header {
+    padding-left: 45px !important;
+  }
+
+  .sidebar.mobile-open .user-dropdown {
+    bottom: 70px;
+    left: 15px;
+    right: 15px;
+  }
+}
+
+
+/* @media (max-width: 768px) {
+
+  .mobile-menu-button {
+    display: block;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  .content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .sidebar {
+    width: 250px;
+    padding: 1rem 0.5rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar.mobile-open h2 {
+    display: block;
+  }
+
+  .sidebar.mobile-open ul li a {
+    justify-content: flex-start;
+    padding: 8px;
+  }
+
+  .sidebar.mobile-open ul li a .icon {
+    margin-right: 10px; 
+    font-size: 1.2rem;
+  }
+
+  .sidebar.mobile-open ul li a span.label {
+    display: inline; 
+  }
+
+
+  .sidebar.mobile-open .sidebar-footer {
+    width: 230px;
+    padding: 15px;
+  }
+
+  .sidebar.mobile-open .user-info {
+    display: flex; 
+  }
+
+  .sidebar.mobile-open .user-icon {
+    font-size: 2rem;
+    margin-right: 12px;
+  }
+
+  .sidebar.mobile-open .user-profile-button {
+    justify-content: flex-start;
+    padding: 8px;
+  }
+
+
   .sidebar.mobile-open .user-dropdown {
     position: fixed;
     bottom: 70px;
@@ -665,7 +832,7 @@
     z-index: 10001;
   }
 
-  /* When sidebar is closed (icon-only mode) */
+  
   .sidebar:not(.mobile-open) h2 {
     display: none;
   }
@@ -703,19 +870,17 @@
     padding: 0.5rem 0;
   }
 
-  /* Icon-only sidebar width */
   .sidebar:not(.mobile-open) {
     width: 40px;
   }
 
-  /* Content margin for icon-only sidebar */
   .content {
     margin-left: 40px;
   }
 
-  /* Ensure mobile menu appears above everything */
+
   .sidebar.mobile-open {
     z-index: 9999;
   }
-}
+} */
 

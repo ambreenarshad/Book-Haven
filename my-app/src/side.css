@@ -577,7 +577,7 @@
     left: auto !important;
     width: 100% !important;
     margin-top: auto;
-    padding: 10px 10px 10px 10px; /* Back to original padding */
+    padding: 10px 10px 15px 1px; /* Back to original padding */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     background: var(--sidebar-bg);
     flex-shrink: 0;

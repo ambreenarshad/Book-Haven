@@ -48,18 +48,18 @@
   position: fixed;
   width: 90vw; /* Use viewport units for better responsiveness */
   max-width: 400px;
-  min-width: 280px; /* Ensure minimum width */
+  min-width: 250px; /* Ensure minimum width */
   padding: 20px;
   background: var(--dialog-bg);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   color: var(--dialog-text);
-  max-height: 90vh;
+  height: 50dvh;
   overflow-y: auto;
   /* Center positioning */
   /* Make sure it's above other content */
   /* Perfect centering */
-  margin: auto;
+  margin: auto ;
   /* Positioning */
   left: 0;
   right: 0;
@@ -155,7 +155,7 @@
 @media (max-width: 480px) {
   .dialog-box {
     width: 90% !important;
-    margin-top: -55px;
+    margin-top: -120px;
     padding: 16px !important;
     max-height: 90vh;
     overflow-y: auto;

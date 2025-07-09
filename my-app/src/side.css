@@ -499,154 +499,56 @@
     border-radius: 50%;
     object-fit: cover;
   }
-  @media (max-width: 768px) {
-     .content {
-    margin-left: 40px; /* Match reduced sidebar */
-  }
-  .sidebar {
-    width: 40px; /* Narrower sidebar for mobile */
-    padding: 1rem 0.5rem;
-
-  }
-
-  .sidebar h2 {
-    display: none; /* Hide title */
-  }
-
-  .sidebar ul li a {
-    justify-content: center; /* Center icon */
-    padding: 8px 0;
-  }
-
-  .sidebar ul li a .icon {
-    margin: 0; /* Remove space beside icon */
-    font-size: 1.5rem;
-  }
-
-  .sidebar ul li a span {
-    display: none; /* Hide text if you're using <span> for label */
-  }
-
-  .sidebar-footer {
-    width: 40px;
-    padding: 0.5rem;
-  }
-
-  .user-info {
-    display: none; /* Hide name and email */
-  }
-
-  .user-icon {
-    font-size: 1.8rem;
-    margin: 0 auto;
-  }
-
-  .user-profile-button {
-    justify-content: center;
-    padding: 0.5rem 0;
-  }
-
-  /* FIXED: Mobile dropdown positioning and z-index */
-  .user-dropdown {
-    position: fixed; /* Changed from absolute to fixed */
-    bottom: 70px; /* Position above the sidebar footer */
-    left: 50px; /* Position to the right of the narrow sidebar */
-    width: 180px; /* Slightly smaller for mobile */
-    background-color: #2c3e50;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); /* Stronger shadow for mobile */
-    z-index: 9999; /* Very high z-index to ensure it's on top */
-  }
   
-  /* Alternative positioning if you prefer it to appear above the user icon */
-  .user-dropdown.above-icon {
-    position: fixed;
-    bottom: 20px; /* Adjust based on your footer height */
-    left: 50px;
-    width: 180px;
-    z-index: 9999;
-  }
-}
-
-/* Mobile Menu Button - Hidden on desktop */
-/* .mobile-menu-button {
-  display: none;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 10000;
-  background: var(--sidebar-bg);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease;
-} */
-
-.mobile-menu-button {
-  display: none; /* Hidden by default on desktop */
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 10000;
-  background: var(--sidebar-bg);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  width: 36px;
-  height: 36px;
-  align-items: center;
-  justify-content: center;
-}
-
-.mobile-menu-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.mobile-menu-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
-}
-
 
 @media (max-width: 768px) {
   /* Show mobile menu button ONLY on mobile */
   .mobile-menu-button {
-    display: flex !important; /* Force display on mobile */
-    margin-top: 4px;
-    top: 8px;
-    left: 8px;
-    padding: 6px;
-    font-size: 0.9rem;
-    width: 32px;
-    height: 32px;
+    display: flex !important;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 10000;
+    background: var(--sidebar-bg);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
   }
-  /* Show overlay when menu is open */
+
+  .mobile-menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
   .mobile-menu-overlay {
     display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
   }
 
   /* Adjust header for mobile menu button */
   .header {
     padding-left: 45px !important;
   }
+
   /* Mobile sidebar styles */
   .sidebar {
     width: 250px;
     height: 100vh;
-    padding: 1rem 0.5rem 0;
+    top: 0; /* Start from top of screen on mobile */
+    padding: 60px 0.5rem 0; /* Add top padding for mobile button */
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 9999;
@@ -660,25 +562,27 @@
     transform: translateX(0);
   }
 
-  /* Make navigation scrollable */
+  /* Make navigation scrollable but leave space for footer */
   .sidebar ul {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 10px;
+    padding-bottom: 10px; /* Back to original spacing */
+    margin-bottom: 0;
   }
 
-  /* Ensure sidebar footer is visible in mobile */
+  /* CRITICAL FIX: Ensure sidebar footer is always visible on mobile when sidebar is open */
   .sidebar-footer {
     position: relative !important;
     bottom: auto !important;
     left: auto !important;
     width: 100% !important;
     margin-top: auto;
-    padding: 15px;
+    padding: 10px 10px 10px 10px; /* Back to original padding */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     background: var(--sidebar-bg);
     flex-shrink: 0;
-    display: block !important; /* Ensure it's visible */
+    display: block !important;
+    margin-bottom: 50px; /* Add bottom margin to move it higher */
   }
 
   /* Mobile open state - show all elements */
@@ -700,8 +604,10 @@
     display: inline;
   }
 
+  /* CRITICAL FIX: Force user info to show on mobile */
   .sidebar.mobile-open .user-info {
-    display: flex !important; /* Force display */
+    display: flex !important;
+    flex-direction: column;
   }
 
   .sidebar.mobile-open .user-icon {
@@ -711,11 +617,13 @@
 
   .sidebar.mobile-open .user-profile-button {
     justify-content: flex-start;
-    padding: 8px;
+    padding: 8px; /* Back to original padding */
+    display: flex !important;
   }
 
+  /* CRITICAL FIX: Ensure user profile is visible */
   .sidebar.mobile-open .sidebar-user-profile {
-    display: block !important; /* Ensure user profile is visible */
+    display: block !important;
   }
 
   /* Dropdown positioning for mobile */
@@ -742,138 +650,12 @@
     overflow: hidden;
   }
 
-  .sidebar:not(.mobile-open) .sidebar-footer {
+  /* Remove these rules that were hiding the footer */
+  /* .sidebar:not(.mobile-open) .sidebar-footer {
     display: none;
   }
-
+  
   .sidebar:not(.mobile-open) .sidebar-user-profile {
     display: none;
-  }
+  } */
 }
-
-/* @media (max-width: 768px) {
-
-  .mobile-menu-button {
-    display: block;
-  }
-
-  .mobile-menu-overlay {
-    display: block;
-  }
-
-  .content {
-    margin-left: 0;
-    padding-top: 60px;
-  }
-
-  .sidebar {
-    width: 250px;
-    padding: 1rem 0.5rem;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 9999;
-  }
-
-  .sidebar.mobile-open {
-    transform: translateX(0);
-  }
-
-  .sidebar.mobile-open h2 {
-    display: block;
-  }
-
-  .sidebar.mobile-open ul li a {
-    justify-content: flex-start;
-    padding: 8px;
-  }
-
-  .sidebar.mobile-open ul li a .icon {
-    margin-right: 10px; 
-    font-size: 1.2rem;
-  }
-
-  .sidebar.mobile-open ul li a span.label {
-    display: inline; 
-  }
-
-
-  .sidebar.mobile-open .sidebar-footer {
-    width: 230px;
-    padding: 15px;
-  }
-
-  .sidebar.mobile-open .user-info {
-    display: flex; 
-  }
-
-  .sidebar.mobile-open .user-icon {
-    font-size: 2rem;
-    margin-right: 12px;
-  }
-
-  .sidebar.mobile-open .user-profile-button {
-    justify-content: flex-start;
-    padding: 8px;
-  }
-
-
-  .sidebar.mobile-open .user-dropdown {
-    position: fixed;
-    bottom: 70px;
-    left: 50px;
-    width: 180px;
-    z-index: 10001;
-  }
-
-  
-  .sidebar:not(.mobile-open) h2 {
-    display: none;
-  }
-
-  .sidebar:not(.mobile-open) ul li a {
-    justify-content: center;
-    padding: 8px 0;
-  }
-
-  .sidebar:not(.mobile-open) ul li a .icon {
-    margin: 0;
-    font-size: 1.5rem;
-  }
-
-  .sidebar:not(.mobile-open) ul li a span.label {
-    display: none;
-  }
-
-  .sidebar:not(.mobile-open) .sidebar-footer {
-    width: 40px;
-    padding: 0.5rem;
-  }
-
-  .sidebar:not(.mobile-open) .user-info {
-    display: none;
-  }
-
-  .sidebar:not(.mobile-open) .user-icon {
-    font-size: 1.8rem;
-    margin: 0 auto;
-  }
-
-  .sidebar:not(.mobile-open) .user-profile-button {
-    justify-content: center;
-    padding: 0.5rem 0;
-  }
-
-  .sidebar:not(.mobile-open) {
-    width: 40px;
-  }
-
-  .content {
-    margin-left: 40px;
-  }
-
-
-  .sidebar.mobile-open {
-    z-index: 9999;
-  }
-} */
-

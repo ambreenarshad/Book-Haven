@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import "../side.css";
 import { Link } from "react-router-dom";
@@ -80,7 +79,11 @@ const Sidebar = ({ userData, onLogout }) => {
 
         {/* User profile at bottom of sidebar */}
         <div className="sidebar-footer">
-          <SidebarUserProfile userData={userData} onLogout={onLogout} />
+          <SidebarUserProfile 
+            userData={userData} 
+            onLogout={onLogout} 
+            onMobileMenuClose={closeMobileMenu}
+          />
         </div>
       </div>
     </>

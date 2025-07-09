@@ -1,20 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-import { FiSettings } from "react-icons/fi"; // 👈 Settings icon
+import { FiSettings } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "../side.css"
-const SidebarUserProfile = ({ userData, onLogout }) => {
+
+const SidebarUserProfile = ({ userData, onLogout, onMobileMenuClose }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  // Log the structure of userData to verify it's available
-  console.log("user data in sidebar: ", userData);
 
-  // Check the properties of userData for debugging
-  console.log("user first name: ", userData?.reader?.first_name); // Access first_name under 'reader'
-  console.log("user last name: ", userData?.reader?.last_name); // Access last_name under 'reader'
-  console.log("user email: ", userData?.reader?.email); // Access email under 'reader'
+  console.log("user data in sidebar: ", userData);
+  console.log("user first name: ", userData?.reader?.first_name);
+  console.log("user last name: ", userData?.reader?.last_name);
+  console.log("user email: ", userData?.reader?.email);
   console.log("userimage:", userData?.reader?.profilePicUrl);
 
   // Close dropdown when clicking outside
@@ -37,15 +36,19 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
 
   const handleLogout = () => {
     setIsOpen(false);
+    if (onMobileMenuClose) onMobileMenuClose(); // Close mobile menu
     onLogout();
   };
+
   const goToAccount = () => {
     setIsOpen(false);
-    navigate("/account"); // Change this path to your actual account route
+    if (onMobileMenuClose) onMobileMenuClose(); // Close mobile menu
+    navigate("/account");
   };
+
   // Render a fallback UI if userData is not available yet
   if (!userData?.reader) {
-    return <div>Loading...</div>;  // You can show a loading spinner or any other fallback
+    return <div>Loading...</div>;
   }
 
   return (
@@ -65,11 +68,9 @@ const SidebarUserProfile = ({ userData, onLogout }) => {
         )}
         <div className="user-info">
           <span className="user-name">
-            {/* Using optional chaining to safely access first_name and last_name under 'reader' */}
             {userData?.reader?.first_name ? `${userData.reader.first_name} ${userData.reader.last_name}` : "User"}
           </span>
           <span className="user-email">
-            {/* Optional chaining for email */}
             {userData?.reader?.email || "No email available"}
           </span>
         </div>

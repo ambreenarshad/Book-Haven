@@ -171,17 +171,6 @@ body {
   box-sizing: border-box;
 }
 
-
-
-.tag {
-  background: #ddd ;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 .remove-tag-btn {
   background: none;
   border: none;
@@ -233,6 +222,7 @@ body {
   padding: 4px 8px;
   border-radius: 5px;
   font-size: 0.9rem;
+  color: #000;
 }
 
 

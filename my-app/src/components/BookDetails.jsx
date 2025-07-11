@@ -267,10 +267,6 @@ const BookDetails = () => {
   }
 
   const handleOpenTimer = () => {
-    if (isLentOut) {
-      alert("This book is currently lent out. You cannot log reading sessions until it is returned.")
-      return
-    }
     setIsTimerOpen(true)
   }
 

@@ -264,6 +264,7 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
+  z-index: 9999;
 }
 
 .close-button {
@@ -447,6 +448,7 @@ body {
     max-height: 90vh;
     overflow-y: auto;
     box-sizing: border-box;
+    z-index: 9999;
   }
   .modal-container input,
   .modal-container select,

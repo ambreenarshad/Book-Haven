@@ -334,67 +334,6 @@
     }
 }
 
-/* Extra small screens */
-/* @media (max-width: 576px) {
-    .book-list {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-    }
-    
-    .book-card {
-        width: 150px;
-        height: 300px;
-        padding: 10px;
-    }
-    
-    .book-cover {
-        width: 100px;
-        height: 140px;
-    }
-    
-    .trash-icon, .dark .trash-icon {
-        top: 10px;
-        right: 10px;
-    }
-    
-    .favorite-icon {
-        top: 35px;
-        right: 10px;
-    }
-    
-    .status-badge, .dark .status-badge {
-        padding: 3px 6px;
-        font-size: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .book-list {
-        grid-template-columns: 1fr; 
-        gap: 15px;
-    }
-    
-    .book-card {
-        width: 100%;
-        max-width: 200px;
-        height: 330px;
-    }
-    
-    .book-cover {
-        width: 110px;
-        height: 150px;
-    }
-    
-    .all-books h1 {
-        font-size: 20px;
-    }
-    
-    .all-books p {
-        font-size: 14px;
-    }
-} */
-
-
 @media (max-width: 480px) {
     .book-list {
         grid-template-columns: 1fr; 
